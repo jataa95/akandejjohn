@@ -33,7 +33,26 @@
     requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add("is-in")));
   });
   const heroMedia = $("[data-hero-media]");
-  if (heroMedia) setTimeout(() => heroMedia.classList.add("is-in"), 450);
+  const stage = $("[data-parallax]");
+  if (heroMedia) setTimeout(() => { heroMedia.classList.add("is-in"); stage?.classList.add("is-in"); }, 450);
+
+  // Parallax: each floating image drifts at its own data-speed while the hero is on screen
+  const floats = $$("[data-speed]");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (stage && floats.length && !reduce) {
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const rect = stage.getBoundingClientRect();
+      if (rect.bottom < -200 || rect.top > innerHeight + 200) return;
+      const offset = -scrollY * (innerWidth < 760 ? 0.6 : 1); // 0 at the top of the page, so images start where the CSS puts them
+      floats.forEach((el) => el.style.setProperty("--y", `${(offset * +el.dataset.speed).toFixed(1)}px`));
+    };
+    const req = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    update();
+    addEventListener("scroll", req, { passive: true });
+    addEventListener("resize", req);
+  }
   // Pause the hero loop when it's off screen
   const heroVid = $(".hero__video");
   if (heroVid && "IntersectionObserver" in window) {
