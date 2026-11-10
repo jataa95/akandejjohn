@@ -32,8 +32,13 @@
     });
     requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add("is-in")));
   });
-  const collage = $("[data-collage]");
-  if (collage) setTimeout(() => collage.classList.add("is-in"), 450);
+  const heroMedia = $("[data-hero-media]");
+  if (heroMedia) setTimeout(() => heroMedia.classList.add("is-in"), 450);
+  // Pause the hero loop when it's off screen
+  const heroVid = $(".hero__video");
+  if (heroVid && "IntersectionObserver" in window) {
+    new IntersectionObserver(([e]) => { e.isIntersecting ? heroVid.play().catch(() => {}) : heroVid.pause(); }).observe(heroVid);
+  }
 
   // Reveal on scroll
   const items = $$(".reveal");

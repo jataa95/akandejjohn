@@ -83,22 +83,25 @@ section { padding: clamp(4rem, 9vw, 8rem) var(--pad); border-top: 1px solid var(
 .split.is-in .ch { transform: none; opacity: 1; }
 .hero__tag { text-align: center; color: var(--dim); margin: 1.6rem 0 0; max-width: 34rem; }
 
-.collage { position: relative; width: min(100%, 920px); height: clamp(320px, 44vw, 600px); margin-top: clamp(2rem, 4vw, 3rem); }
-.card {
-  all: unset; position: absolute; cursor: zoom-in; overflow: hidden;
-  box-shadow: 0 30px 60px -20px rgba(0,0,0,.85);
-  transition: transform 1s var(--ease), z-index 0s;
+.hero__media {
+  position: relative; margin: clamp(2rem, 4vw, 3rem) 0 0;
+  width: min(78vw, 400px); aspect-ratio: 9 / 16;
+  padding: 10px; border: 1px solid var(--line);
+  background: linear-gradient(160deg, rgba(184,154,98,.18), rgba(43,28,20,.4));
+  box-shadow: 0 50px 100px -30px rgba(0,0,0,.9);
+  opacity: 0; transform: translateY(40px) scale(.97);
+  transition: opacity 1.4s var(--ease), transform 1.4s var(--ease);
 }
-.card img { width: 100%; height: 100%; object-fit: cover; }
-.card:focus-visible { outline: 1px solid var(--gold); outline-offset: 4px; }
-.card--a { width: 34%; aspect-ratio: 3/4; left: 2%; top: 9%; transform: rotate(-7deg); filter: brightness(.85); }
-.card--b { width: 30%; aspect-ratio: 3/4; left: 29%; top: 3%; transform: rotate(-2deg); filter: brightness(.9); }
-.card--c { width: 40%; aspect-ratio: 3/4; left: 52%; top: 0; transform: rotate(4deg); border: 8px solid var(--gold-soft); z-index: 2; }
-.card:hover { transform: rotate(0) translateY(-10px) scale(1.04); z-index: 5; filter: none; }
-.collage .card { opacity: 0; translate: 0 40px; transition: transform 1s var(--ease), opacity 1.2s var(--ease), translate 1.2s var(--ease), filter .6s; }
-.collage.is-in .card { opacity: 1; translate: 0 0; }
-.collage.is-in .card--b { transition-delay: 0s, .15s, .15s, 0s; }
-.collage.is-in .card--c { transition-delay: 0s, .3s, .3s, 0s; }
+.hero__media.is-in { opacity: 1; transform: none; }
+.hero__video { width: 100%; height: 100%; object-fit: cover; background: var(--brown); }
+.hero__live {
+  position: absolute; top: 1.4rem; left: 1.4rem; display: flex; align-items: center; gap: .5rem;
+  text-transform: uppercase; font-size: .62rem; padding: .35rem .7rem; border-radius: 999px;
+  background: rgba(11,9,8,.6); backdrop-filter: blur(6px); color: var(--cream);
+}
+.hero__live i { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: pulse 1.8s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .25; } }
+.hero__media figcaption { position: absolute; left: 0; right: 0; bottom: -2.4rem; text-align: center; }
 
 /* ============ Section heads ============ */
 .head { display: flex; justify-content: space-between; align-items: flex-start; gap: 2rem; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
@@ -239,6 +242,6 @@ section { padding: clamp(4rem, 9vw, 8rem) var(--pad); border-top: 1px solid var(
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
-  .reveal, .collage .card, .split .ch { opacity: 1 !important; transform: none !important; translate: none !important; }
+  .reveal, .hero__media, .split .ch { opacity: 1 !important; transform: none !important; translate: none !important; }
   html { scroll-behavior: auto; }
 }
