@@ -191,26 +191,6 @@
         : "Copy the message above, then paste it into the Instagram chat.";
     });
   }
-  // Artist statement: words light up as the quote scrolls through the screen
-  $$("[data-words]").forEach((el) => {
-    const words = el.textContent.trim().split(/\s+/);
-    el.textContent = "";
-    const spans = words.map((w, i) => {
-      const s = document.createElement("span");
-      s.className = "w"; s.textContent = w;
-      el.append(s, i < words.length - 1 ? " " : "");
-      return s;
-    });
-    if (reduce) { spans.forEach((s) => s.classList.add("is-lit")); return; }
-    const light = () => {
-      const r = el.getBoundingClientRect();
-      const p = Math.min(1, Math.max(0, (innerHeight * 0.85 - r.top) / (r.height + innerHeight * 0.35)));
-      const n = Math.round(p * spans.length);
-      spans.forEach((s, i) => s.classList.toggle("is-lit", i < n));
-    };
-    light(); addEventListener("scroll", light, { passive: true }); addEventListener("resize", light);
-  });
-
   // Call to action: slow zoom-out of the background once on screen
   const cta = $(".cta");
   if (cta && "IntersectionObserver" in window) {
