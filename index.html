@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
   <link href="https://api.fontshare.com/v2/css?f[]=gambarino@400&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Italiana&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body data-page="home">
@@ -23,31 +23,25 @@
   <!-- NAVIGATION -->
   <header class="nav" data-nav>
     <div class="nav__inner">
+      <a class="nav__brand" href="index.html" aria-label="John Akande, home">John Akande</a>
       <nav class="nav__links" aria-label="Primary">
-        <a href="works.html">Works</a>
         <a href="about.html">About</a>
-        <a href="https://www.instagram.com/akandejjohn/" target="_blank" rel="noopener">Instagram</a>
+        <a href="works.html">Works</a>
+        <a href="commission.html">Commission</a>
+        <a class="nav__cta" href="contact.html"><span>Contact</span></a>
       </nav>
-      <a class="nav__brand" href="index.html" aria-current="page">
-        <span class="nav__name">John Akande</span>
-        <span class="nav__sub">Figurative Artist &middot; Lagos</span>
-      </a>
-      <div class="nav__end">
-        <span class="nav__clock mono">Lagos <span data-clock>--:--</span></span>
-        <a class="nav__cta" href="contact.html">Enquire <span aria-hidden="true">&rarr;</span></a>
-        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle>
-          <span class="nav__toggle-label">Menu</span><i aria-hidden="true"></i>
-        </button>
-      </div>
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle>
+        <span class="nav__toggle-label">Menu</span><i aria-hidden="true"></i>
+      </button>
     </div>
   </header>
 
   <div class="menu" id="menu" data-menu>
     <ol class="menu__list">
-      <li><a href="index.html" aria-current="page"><span class="mono">01</span>Home</a></li>
+      <li><a href="about.html"><span class="mono">01</span>About</a></li>
       <li><a href="works.html"><span class="mono">02</span>Works</a></li>
-      <li><a href="about.html"><span class="mono">03</span>About</a></li>
-      <li><a href="contact.html"><span class="mono">04</span>Enquire</a></li>
+      <li><a href="commission.html"><span class="mono">03</span>Commission</a></li>
+      <li><a href="contact.html"><span class="mono">04</span>Contact</a></li>
     </ol>
     <div class="menu__foot mono">
       <span>Lagos, Nigeria &middot; <span data-clock>--:--</span> WAT</span>
@@ -64,8 +58,8 @@
       </h1>
       <p class="hero__tag mono reveal">Paintings where sound becomes colour &mdash;<br />expressing Black culture, its identity, and the music that carries it.</p>
       <div class="hero__actions reveal">
-        <a class="btn" href="works.html">View the works <span aria-hidden="true">&rarr;</span></a>
-        <a class="btn btn--ghost" href="contact.html">Enquire</a>
+        <a class="btn" href="works.html">View the works <span class="btn__arrow" aria-hidden="true"></span></a>
+        <a class="btn btn--ghost" href="commission.html">Commission a piece <span class="btn__arrow" aria-hidden="true"></span></a>
       </div>
 
       <div class="hero__stage" data-parallax>
@@ -87,6 +81,23 @@
         </figure>
       </div>
       <a class="hero__scroll mono" href="#featured">Scroll <span aria-hidden="true">&darr;</span></a>
+    </section>
+
+    <!-- BRIEF ABOUT -->
+    <section class="intro paper" aria-labelledby="intro-title">
+      <figure class="intro__img reveal">
+        <img src="assets/img/little-dreamer-ii-detail.jpg" alt="Detail of John Akande&rsquo;s brushwork from Little Dreamer II" loading="lazy" decoding="async" />
+        <figcaption class="mono">Little Dreamer II &mdash; detail</figcaption>
+      </figure>
+      <div class="intro__body">
+        <p class="mono eyebrow reveal">About the artist</p>
+        <p class="intro__lede reveal" id="intro-title">John Akande is a contemporary Nigerian figurative artist whose practice explores human expression, cultural identity, music and the complexities of everyday life.</p>
+        <div class="intro__cols mono reveal">
+          <p>Formally trained at <b>Yaba College of Technology, Lagos</b>, he works primarily in <b>acrylic on canvas</b>, alongside mixed media, combining <b>realism</b> and <b>expressionism</b> to build emotionally engaging visual narratives.</p>
+          <p>Music holds a significant place in his practice. His works have been exhibited in <b>Nigeria</b> and internationally, including <b>Malta</b>, in group exhibitions and online presentations.</p>
+        </div>
+        <a class="btn btn--ghost reveal" href="about.html">Read the biography <span class="btn__arrow" aria-hidden="true"></span></a>
+      </div>
     </section>
 
     <!-- MARQUEE -->
@@ -135,16 +146,16 @@
           </figcaption>
         </figure>
       </div>
-      <p class="featured__more reveal"><a class="btn btn--gold" href="works.html">View all 16 works <span aria-hidden="true">&rarr;</span></a></p>
+      <p class="featured__more reveal"><a class="btn btn--gold" href="works.html">View all 16 works <span class="btn__arrow" aria-hidden="true"></span></a></p>
     </section>
 
     <!-- STATEMENT -->
     <section class="quote">
       <p class="mono eyebrow reveal">Artist statement</p>
-      <blockquote class="quote__text reveal">&ldquo;This body of work explores music as a living force, embedded in human existence.&rdquo;</blockquote>
+      <blockquote class="quote__text reveal">&ldquo;I see painting as a means of giving visual form to experiences that words cannot always fully express.&rdquo;</blockquote>
       <div class="quote__foot">
-        <p class="mono reveal">I investigate how rhythm shapes identity, how performance reveals vulnerability, and how music functions as cultural memory and therapy. <span class="quote__sig">&mdash; John Akande</span></p>
-        <a class="link reveal" href="about.html">About the artist &rarr;</a>
+        <p class="mono reveal">Music occupies a central place in my practice, not merely as a subject to be represented but as a language through which I explore human connection, memory, emotion and belonging. <span class="quote__sig">&mdash; John Akande</span></p>
+        <a class="btn btn--gold reveal" href="about.html#statement">Read the statement <span class="btn__arrow" aria-hidden="true"></span></a>
       </div>
     </section>
 
@@ -169,7 +180,7 @@
     <div class="foot__cta">
       <p class="mono foot__eyebrow">Acquisitions &middot; Commissions &middot; Exhibitions &middot; Live painting</p>
       <h2 class="reveal">Own a work<br />that <em>sings.</em></h2>
-      <a class="btn btn--gold reveal" href="contact.html">Start an enquiry <span aria-hidden="true">&rarr;</span></a>
+      <a class="btn btn--gold reveal" href="contact.html">Start an enquiry <span class="btn__arrow" aria-hidden="true"></span></a>
     </div>
 
     <div class="foot__grid">
@@ -180,9 +191,10 @@
       <nav class="foot__col" aria-label="Footer">
         <span class="mono foot__label">Explore</span>
         <a href="index.html">Home</a>
-        <a href="works.html">Works</a>
         <a href="about.html">About</a>
-        <a href="contact.html">Enquire</a>
+        <a href="works.html">Works</a>
+        <a href="commission.html">Commission</a>
+        <a href="contact.html">Contact</a>
       </nav>
       <div class="foot__col">
         <span class="mono foot__label">Follow</span>

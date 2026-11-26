@@ -2,9 +2,9 @@
 
 Portfolio website for **John Akande** (@akandejjohn), a figurative artist based in Lagos.
 
-A static site with no build step. Pages: `index.html` (home), `works.html` (the catalogue), `about.html` and `contact.html` (enquiries). They share `styles.css`, `script.js` and `assets/`.
+A static site with no build step. Pages: `index.html` (home), `works.html` (the catalogue), `about.html` (biography and artist statement), `commission.html` and `contact.html` (enquiries). They share `styles.css`, `script.js` and `assets/`.
 
-The navigation and footer are repeated in each page, so a change to either needs making in all four files.
+The navigation and footer are repeated in each page, so a change to either needs making in all five files.
 
 ## Preview locally
 

@@ -14,6 +14,7 @@
   const nav = $("[data-nav]");
   const onScroll = () => nav?.classList.toggle("is-scrolled", window.scrollY > 30);
   onScroll(); addEventListener("scroll", onScroll, { passive: true });
+  if (nav) setTimeout(() => nav.classList.add("is-ready"), 300);
 
   // Full-screen menu
   const toggle = $("[data-menu-toggle]"), menu = $("[data-menu]");
@@ -27,7 +28,7 @@
     toggle.addEventListener("click", () => setOpen(!document.body.classList.contains("menu-open")));
     $$("a", menu).forEach((a) => a.addEventListener("click", () => setOpen(false)));
     addEventListener("keydown", (e) => { if (e.key === "Escape") setOpen(false); });
-    addEventListener("resize", () => { if (innerWidth > 960) setOpen(false); });
+    addEventListener("resize", () => { if (innerWidth > 860) setOpen(false); });
   }
 
   // Split hero name into letters
@@ -153,7 +154,13 @@
     const workField = $("[data-work-field]", form);
     const F = form.elements;
     const labels = { acquisition: "acquiring", commission: "a commission", exhibition: "an exhibition or press feature", live: "live painting" };
-    const wanted = new URLSearchParams(location.search).get("work");
+    const params = new URLSearchParams(location.search);
+    const wantedType = params.get("type");
+    if (wantedType) {
+      const radio = [...F.type].find((r) => r.value === wantedType);
+      if (radio) radio.checked = true;
+    }
+    const wanted = params.get("work");
     if (wanted) {
       const opt = [...F.work.options].find((o) => o.text === wanted);
       if (opt) opt.selected = true;
