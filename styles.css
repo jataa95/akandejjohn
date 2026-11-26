@@ -894,7 +894,7 @@ section + section { border-top: 1px solid var(--rule); }
 
 /* ---------- Credit: built by oj.dzn ---------- */
 .ojdzn-credit { display: flex; justify-content: center; align-items: center; gap: .4rem; padding: .9rem var(--pad) 1rem; background: var(--black); border-top: 1px solid rgba(236,228,214,.08); color: rgba(236,228,214,.55); font-size: .8rem; letter-spacing: .02em; }
-.ojdzn-credit a { display: inline-flex; padding: .35rem .5rem; margin: -.35rem -.5rem; border-radius: 999px; transition: background .3s, opacity .3s; }
-.ojdzn-credit a:hover { background: rgba(236,228,214,.07); }
-.ojdzn-credit a:focus-visible { outline: 2px solid var(--cream); outline-offset: 2px; }
+.ojdzn-credit a { display: inline-flex; outline: none; -webkit-tap-highlight-color: transparent; transition: opacity .3s; }
+.ojdzn-credit a:hover { opacity: .75; }
+.ojdzn-credit a:focus, .ojdzn-credit a:focus-visible, .ojdzn-credit a:active { outline: none; box-shadow: none; background: none; }
 .ojdzn-credit img { display: block; height: 18px; width: auto; }
