@@ -294,20 +294,26 @@
         .catch(() => {});
     }
   }
-  // Hero: full studio film with sound
-  const film = $("[data-film]"), filmOpen = $("[data-film-open]");
-  if (film && filmOpen) {
-    const fv = $("[data-film-video]", film);
-    const heroLoop = $(".hero__video");
-    filmOpen.addEventListener("click", () => {
-      film.showModal();
-      heroLoop?.pause();
-      fv.currentTime = 0;
-      fv.play().catch(() => {});
+  // Hero: mute / unmute plays the film's soundtrack (normal speed) over the muted loop
+  const muteBtn = $("[data-hero-mute]"), heroAudio = $("[data-hero-audio]");
+  if (muteBtn && heroAudio) {
+    let wantSound = false;
+    const setUI = (on) => {
+      muteBtn.setAttribute("aria-pressed", on);
+      muteBtn.setAttribute("aria-label", on ? "Mute" : "Unmute");
+    };
+    muteBtn.addEventListener("click", () => {
+      wantSound = !wantSound;
+      if (wantSound) heroAudio.play().then(() => setUI(true)).catch(() => { wantSound = false; setUI(false); });
+      else { heroAudio.pause(); setUI(false); }
     });
-    const stop = () => { fv.pause(); heroLoop?.play().catch(() => {}); };
-    $("[data-film-close]", film).addEventListener("click", () => film.close());
-    film.addEventListener("click", (e) => { if (e.target === film || e.target.classList.contains("film-dialog__inner")) film.close(); });
-    film.addEventListener("close", stop);
+    // pause the sound while the hero is off screen or the tab is hidden, resume when it is back
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(([e]) => {
+        if (!wantSound) return;
+        e.isIntersecting ? heroAudio.play().catch(() => {}) : heroAudio.pause();
+      }, { threshold: 0.15 }).observe(muteBtn.closest(".hero__media"));
+    }
+    document.addEventListener("visibilitychange", () => { if (document.hidden) heroAudio.pause(); else if (wantSound) heroAudio.play().catch(() => {}); });
   }
 })();
