@@ -295,7 +295,7 @@ section + section { border-top: 1px solid var(--rule); }
 /* ============ Brief about (home) ============ */
 .intro { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(2rem, 6vw, 6rem); align-items: center; }
 .intro__img { margin: 0; }
-.intro__img img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; box-shadow: 0 30px 60px -36px rgba(29,22,18,.6); }
+.intro__img img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 40%; box-shadow: 0 30px 60px -36px rgba(29,22,18,.6); }
 .intro__img figcaption { color: var(--fg-dim); margin-top: .8rem; }
 .intro__lede { font-size: clamp(1.7rem, 3.3vw, 3rem); line-height: 1.08; margin: 0 0 clamp(1.75rem, 3vw, 2.5rem); max-width: 24ch; }
 .intro__cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem 2.5rem; color: var(--fg-dim); padding-top: 1.5rem; border-top: 1px solid var(--rule); margin-bottom: 2.25rem; }
@@ -328,6 +328,17 @@ section + section { border-top: 1px solid var(--rule); }
 .page-head__lede { grid-column: 1 / -1; font-size: clamp(1.6rem, 3.4vw, 3rem); line-height: 1.08; max-width: 26ch; margin: 1.5rem 0 0; }
 .page-head__lede--sm { font-family: var(--mono); font-size: .82rem; line-height: 1.7; max-width: 34rem; color: var(--fg-dim); }
 @media (max-width: 860px) { .page-head { grid-template-columns: 1fr; } }
+/* About: portrait beside the headline */
+.page-head:has(.page-head__portrait) { grid-template-columns: minmax(0, 1fr) minmax(0, 26rem); grid-template-rows: auto auto 1fr; align-items: start; }
+.page-head:has(.page-head__portrait) .eyebrow { grid-column: 1; }
+.page-head:has(.page-head__portrait) .page-head__lede { grid-column: 1; }
+.page-head__portrait { grid-column: 2; grid-row: 1 / span 3; margin: 0; align-self: end; }
+.page-head__portrait img { width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: cover; object-position: 50% 35%; box-shadow: 0 40px 70px -40px rgba(29,22,18,.7); }
+.page-head__portrait figcaption { color: var(--fg-dim); margin-top: .8rem; text-transform: uppercase; letter-spacing: .2em; font-size: .6rem; }
+@media (max-width: 860px) {
+  .page-head:has(.page-head__portrait) { grid-template-columns: 1fr; }
+  .page-head__portrait { grid-column: 1; grid-row: auto; max-width: 420px; margin-top: 1.5rem; }
+}
 
 /* ============ Work cards ============ */
 .work { margin: 0; }
