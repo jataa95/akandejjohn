@@ -24,7 +24,7 @@ BANK_ACCOUNTS = [
                                                  ("SWIFT code", "ABNGNGLA")]),
 ]
 TH = "https://www.threads.net/@akandejjohn"
-SITE = "https://akandejjohn.vercel.app"
+SITE = "https://johnakandestudio.com"
 IMGS = json.load(open(os.path.join(os.path.dirname(__file__), "imgs.json")))
 TODAY = datetime.date.today().isoformat()
 

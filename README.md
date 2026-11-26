@@ -1,6 +1,6 @@
 # akandejjohn
 
-Portfolio website for **John Akande** (@akandejjohn), a figurative artist based in Lagos.
+Portfolio website for **John Akande** (@akandejjohn), a figurative artist based in Lagos: https://johnakandestudio.com
 
 A static site: plain HTML, `styles.css`, `script.js` and `assets/`. Nothing needs building to deploy it.
 
@@ -42,6 +42,8 @@ python3 tools/build_pages.py
 Pages edited by hand will be overwritten the next time the script runs, so make lasting changes in the script.
 
 ## Search, sharing and icons
+
+The site's address is set by `SITE` at the top of `tools/build_pages.py`; canonical links, the sitemap and share previews use it.
 
 - `sitemap.xml` and `robots.txt` help search engines find every page. Both are written by the script.
 - Each page has its own share preview (`assets/og/`), and each painting's page uses the painting itself.

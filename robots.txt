@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://akandejjohn.vercel.app/sitemap.xml
+Sitemap: https://johnakandestudio.com/sitemap.xml
