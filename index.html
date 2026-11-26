@@ -99,6 +99,10 @@
         <figure class="hero__media" data-hero-media>
           <video class="hero__video" src="/assets/video/hero-loop.mp4" poster="/assets/img/hero-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="John Akande painting in his studio"></video>
           <span class="hero__live mono"><i></i>In the studio, Lagos</span>
+          <button class="hero__sound" type="button" data-film-open aria-haspopup="dialog">
+            <span class="hero__sound-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
+            <span class="mono">Watch with sound <b>1:10</b></span>
+          </button>
         </figure>
       </div>
       <a class="hero__scroll mono" href="#about-brief">Scroll <span aria-hidden="true">&darr;</span></a>
@@ -367,6 +371,15 @@
         <a class="link" data-lb-enquire hidden>Enquire about this work &rarr;</a>
       </figcaption>
     </figure>
+  </dialog>
+
+  <!-- STUDIO FILM WITH SOUND -->
+  <dialog class="film-dialog" data-film aria-label="Studio film with sound">
+    <button class="lightbox__close mono" data-film-close>Close &times;</button>
+    <div class="film-dialog__inner">
+      <video data-film-video src="/assets/video/hero-film.mp4" poster="/assets/img/hero-poster.jpg" playsinline controls preload="none"></video>
+      <p class="mono film-dialog__cap">The making of <i>Rhythm of Our Heritage</i> &middot; Lagos</p>
+    </div>
   </dialog>
 
   <script src="/script.js" defer></script>

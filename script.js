@@ -294,4 +294,20 @@
         .catch(() => {});
     }
   }
+  // Hero: full studio film with sound
+  const film = $("[data-film]"), filmOpen = $("[data-film-open]");
+  if (film && filmOpen) {
+    const fv = $("[data-film-video]", film);
+    const heroLoop = $(".hero__video");
+    filmOpen.addEventListener("click", () => {
+      film.showModal();
+      heroLoop?.pause();
+      fv.currentTime = 0;
+      fv.play().catch(() => {});
+    });
+    const stop = () => { fv.pause(); heroLoop?.play().catch(() => {}); };
+    $("[data-film-close]", film).addEventListener("click", () => film.close());
+    film.addEventListener("click", (e) => { if (e.target === film || e.target.classList.contains("film-dialog__inner")) film.close(); });
+    film.addEventListener("close", stop);
+  }
 })();
