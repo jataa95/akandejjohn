@@ -394,7 +394,6 @@ home = head("John Akande — Figurative Artist, Lagos",
         <a class="btn" href="works.html">View the works <span class="btn__arrow" aria-hidden="true"></span></a>
         <a class="btn btn--ghost" href="commission.html">Commission a piece <span class="btn__arrow" aria-hidden="true"></span></a>
       </div>
-      <a class="hero__scroll mono" href="#about-brief">Scroll <span aria-hidden="true">&darr;</span></a>
     </section>
 
     <!-- BRIEF ABOUT -->
