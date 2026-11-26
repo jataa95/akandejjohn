@@ -424,9 +424,9 @@ section + section { border-top: 1px solid var(--rule); }
 
 /* ============ Biography (About) ============ */
 .bio { padding-top: 0; display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: clamp(2.5rem, 7vw, 7rem); align-items: start; }
-.bio__side { position: sticky; top: 6.5rem; border-top: 1px solid var(--rule); padding-top: 2rem; }
+.bio__side { position: sticky; top: 6.5rem; border-top: 1px solid var(--rule); padding-top: .5rem; }
 .bio .phone { max-width: 320px; }
-.bio__facts { margin: 2rem 0 0; display: grid; gap: 0; }
+.bio__facts { margin: 0; display: grid; gap: 0; }
 .bio__facts div { display: grid; grid-template-columns: 6.5rem 1fr; gap: 1rem; padding: .75rem 0; border-bottom: 1px solid var(--rule); }
 .bio__facts dt { text-transform: uppercase; letter-spacing: .18em; font-size: .62rem; color: var(--accent); padding-top: .15rem; }
 .bio__facts dd { margin: 0; color: var(--fg); }
@@ -438,6 +438,14 @@ section + section { border-top: 1px solid var(--rule); }
   .bio { grid-template-columns: 1fr; }
   .bio__side { position: static; }
 }
+
+/* ============ Studio film (About) ============ */
+.film { display: grid; grid-template-columns: minmax(0, 30rem) auto; justify-content: center; gap: clamp(2.5rem, 8vw, 8rem); align-items: center; background: radial-gradient(60% 70% at 80% 50%, rgba(61,42,30,.55), transparent 70%); }
+.film__text { max-width: 30rem; }
+.film__text h2 { margin-bottom: 1.5rem; }
+.film__text p.mono:not(.eyebrow) { color: var(--fg-dim); margin: 0; }
+.film__video { width: min(320px, 80vw); box-shadow: 0 50px 80px -40px rgba(0,0,0,.9); outline: 1px solid var(--rule); outline-offset: 10px; }
+@media (max-width: 760px) { .film { grid-template-columns: 1fr; } .film__video { justify-self: center; } }
 
 /* ============ Artist statement (About) ============ */
 .statement { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(2.5rem, 7vw, 7rem); align-items: start; background: radial-gradient(60% 50% at 0% 0%, rgba(61,42,30,.5), transparent 70%); }

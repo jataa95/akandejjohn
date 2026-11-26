@@ -63,13 +63,6 @@
 
     <section class="bio" aria-label="Biography">
       <div class="bio__side">
-        <div class="phone reveal">
-          <video data-story src="assets/video/studio-story.mp4" poster="assets/img/studio-poster.jpg" playsinline preload="none"></video>
-          <button class="play" data-play aria-label="Play the studio film">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-            <span class="mono">Studio film &middot; 0:58</span>
-          </button>
-        </div>
         <dl class="bio__facts mono reveal">
           <div><dt>Born</dt><dd>Lagos, Nigeria</dd></div>
           <div><dt>Education</dt><dd>Yaba College of Technology, Lagos</dd></div>
@@ -90,6 +83,22 @@
       </div>
     </section>
     </div>
+
+    <!-- STUDIO FILM -->
+    <section class="film" aria-labelledby="film-title">
+      <div class="film__text reveal">
+        <p class="mono eyebrow">Studio film &middot; 0:58</p>
+        <h2 id="film-title">In the studio</h2>
+        <p class="mono">John at work in Lagos, talking about where the music in his paintings comes from: growing up without access to instruments, and the friend&rsquo;s home where he found them.</p>
+      </div>
+      <div class="phone film__video reveal">
+        <video data-story src="assets/video/studio-story.mp4" poster="assets/img/studio-poster.jpg" playsinline preload="none"></video>
+        <button class="play" data-play aria-label="Play the studio film">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <span class="mono">Play &middot; 0:58</span>
+        </button>
+      </div>
+    </section>
 
     <!-- ARTIST STATEMENT -->
     <section class="statement" id="statement" aria-labelledby="statement-title">
