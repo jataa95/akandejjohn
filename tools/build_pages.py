@@ -221,7 +221,7 @@ def footer(cta=True, faq=False):
       <div class="cta__copy">
         <p class="mono eyebrow reveal">Acquisitions &amp; commissions</p>
         <h2 class="cta__title reveal" id="cta-title">Bring a painting <em>home.</em></h2>
-        <p class="mono cta__lede reveal">Fourteen original paintings are available now, and new works can be made to commission in John&rsquo;s Lagos studio. Every enquiry is answered by John personally.</p>
+        <p class="mono cta__lede reveal">{N_AVAIL_WORD} original paintings are available now, and new works can be made to commission in John&rsquo;s Lagos studio. Every enquiry is answered by John personally.</p>
         <div class="cta__actions reveal">
           <a class="btn btn--light" href="contact.html">Start an enquiry {A}</a>
           <a class="btn btn--gold" href="works.html">Browse available works {A}</a>
@@ -303,7 +303,8 @@ def work_card(row, extra_cls="", lazy=True, sizes="(max-width: 760px) 92vw, (max
     slug, title, size, price, sold, (w, h) = row
     studio = slug.endswith("studio")
     usd = price.strip("$").replace(",", "")
-    status = '<span class="work__sold">Sold</span>' if sold else f'<span class="work__price" data-usd="{usd}">{e(price)}</span>'
+    status = ('<span class="work__sold">Sold</span>' if sold else
+              f'<span class="work__price" data-usd="{usd}">{e(price)}</span>' if price else '<span class="work__price">Price on request</span>')
     alt = ("Rhythm of Our Heritage leaning against a white studio wall, before framing" if studio
            else f"{title}, acrylic on canvas by John Akande")
     cap = "Before framing" if studio else f"{size} · Acrylic on canvas"
@@ -325,6 +326,7 @@ paintings = [r for r in META if not r[0].endswith("studio")]
 n_total = len(paintings)
 n_sold = sum(1 for r in paintings if r[4])
 n_avail = n_total - n_sold
+N_AVAIL_WORD = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'][n_avail - 1].capitalize() if n_avail <= 20 else str(n_avail)
 
 
 HS = ["rhythm-of-our-heritage", "young-virtuoso-i", "where-it-began-i", "where-music-takes-root", "my-fathers-footstep-i",
@@ -350,7 +352,7 @@ sel_slides = "\n".join(sel_slide(i, s) for i, s in enumerate(HS))
 first_title = e(by_slug[HS[0]][1]); first_size = e(by_slug[HS[0]][2])
 
 # ---------------------------------------------------------------- HOME
-titles = ["Rhythm of Our Heritage", "Young Virtuoso", "Where It Began", "Rhythm Unites Us",
+titles = ["Rhythm of Our Heritage", "Fear of the Unknown", "Young Virtuoso", "Where It Began", "Rhythm Unites Us",
           "Where Music Takes Root", "Quiet Beginning", "When Time Was Simple", "My Father’s Footstep"]
 marq = "".join(f"<span>{e(t)}</span><i aria-hidden=\"true\">&#10022;</i>" for t in titles)
 
@@ -402,7 +404,7 @@ home = head("John Akande — Figurative Artist, Lagos",
         <p class="intro__lede reveal" id="intro-title">John Akande is a contemporary Nigerian figurative artist whose practice explores human expression, cultural identity, music and the complexities of everyday life.</p>
         <div class="intro__cols mono reveal">
           <p>Formally trained at <b>Yaba College of Technology, Lagos</b>, he works primarily in <b>acrylic on canvas</b>, alongside mixed media, combining <b>realism</b> and <b>expressionism</b> to build emotionally engaging visual narratives.</p>
-          <p>Music holds a significant place in his practice. His works have been exhibited in <b>Nigeria</b> and internationally, including <b>Malta</b>, in group exhibitions and online presentations.</p>
+          <p>Music holds a significant place in his practice. His works have been exhibited in <b>Nigeria</b> and internationally, in group exhibitions and online presentations.</p>
         </div>
         <a class="btn btn--ghost reveal" href="about.html">Read the biography <span class="btn__arrow" aria-hidden="true"></span></a>
       </div>
@@ -505,7 +507,7 @@ about = head("About — John Akande",
           <div><dt>Born</dt><dd>Lagos, Nigeria</dd></div>
           <div><dt>Education</dt><dd>Yaba College of Technology, Lagos</dd></div>
           <div><dt>Medium</dt><dd>Acrylic on canvas, mixed media</dd></div>
-          <div><dt>Exhibited</dt><dd>Nigeria &middot; Malta &middot; Online</dd></div>
+          <div><dt>Exhibited</dt><dd>Nigeria &middot; International &middot; Online</dd></div>
         </dl>
       </div>
       <div class="bio__text">
@@ -513,7 +515,7 @@ about = head("About — John Akande",
           <p class="reveal">Working primarily with acrylic on canvas, alongside mixed-media approaches, John Akande combines elements of realism and expressionism to construct emotionally engaging visual narratives. His paintings are distinguished by expressive brushwork, layered textures, vibrant yet deliberate colour relationships and a strong sensitivity to composition. Through the human figure, he explores themes of memory, identity, relationships, belonging and the emotional dimensions of human existence.</p>
           <p class="reveal">Music holds a significant place in his practice, informed by his personal encounters with musical environments and his appreciation of its cultural and emotional significance. His paintings frequently examine musicians, musical instruments and shared moments of musical experience, using them as subjects through which to investigate human connection, heritage and the passage of personal and collective memories.</p>
           <p class="reveal">Drawing from Nigerian cultural experiences while engaging with universal human themes, Akande seeks to create works that resonate beyond geographical and cultural boundaries. His practice reflects an ongoing commitment to storytelling through painting, using the visual language of the human figure to communicate experiences, emotions and narratives that connect people across cultures.</p>
-          <p class="reveal">His works have been exhibited in Nigeria and internationally, including Malta, and have featured in group exhibitions and online presentations.</p>
+          <p class="reveal">His works have been exhibited in Nigeria and internationally, and have featured in group exhibitions and online presentations.</p>
           <div class="bio__cta reveal">
             <a class="btn" href="works.html">See the works <span class="btn__arrow" aria-hidden="true"></span></a>
             <a class="btn btn--ghost" href="commission.html">Commission a piece <span class="btn__arrow" aria-hidden="true"></span></a>
@@ -687,7 +689,7 @@ steps = [
     ("Delivery", "Collection or shipping of the finished painting is arranged with you."),
 ]
 steps_html = "\n".join(f"""        <li class="reveal"><span class="steps__n">0{i+1}</span><h3>{t}</h3><p class="mono">{d}</p></li>""" for i, (t, d) in enumerate(steps))
-sizes = sorted(paintings, key=lambda r: int(r[3].strip("$").replace(",", "")))
+sizes = sorted([r for r in paintings if r[3]], key=lambda r: int(r[3].strip("$").replace(",", "")))
 commission = head("Commission — John Akande",
                   "Commission an original painting, portrait or live painting from Lagos-based figurative artist John Akande.",
                   "commission") + nav("commission.html") + f"""
@@ -751,7 +753,8 @@ for k, row in enumerate(order):
     related_html = "\n".join(work_card(r, sizes="(max-width: 760px) 92vw, 31vw") for r in related)
     more_title = f"More from <em>{e(ser)}</em>" if siblings else "More from the <em>catalogue</em>"
     status_pill = '<span class="art__status art__status--sold">Sold</span>' if sold else '<span class="art__status">Available</span>'
-    price_html = ('<dd class="art__sold">Sold</dd>' if sold else f'<dd><span class="art__price" data-usd="{usd}">{e(price)}</span></dd>')
+    price_html = ('<dd class="art__sold">Sold</dd>' if sold else
+                  f'<dd><span class="art__price" data-usd="{usd}">{e(price)}</span></dd>' if price else '<dd>On request</dd>')
     actions = (f'''<a class="btn" href="contact.html?type=commission">Commission a similar work <span class="btn__arrow" aria-hidden="true"></span></a>''' if sold else
                f'''<a class="btn" href="contact.html?work={e(title).replace(" ", "%20")}">Enquire about this work <span class="btn__arrow" aria-hidden="true"></span></a>''')
     studio_extra = ""
@@ -769,7 +772,7 @@ for k, row in enumerate(order):
         "artform": "Painting", "artMedium": "Acrylic", "artworkSurface": "Canvas",
         "width": {"@type": "Distance", "name": f"{pw} in"}, "height": {"@type": "Distance", "name": f"{ph} in"},
         "image": f"{SITE}/{img_base(slug)}.jpg", "url": f"{SITE}/works/{slug}.html",
-        "offers": {"@type": "Offer", "price": usd, "priceCurrency": "USD", "url": f"{SITE}/works/{slug}.html",
+        "offers": {"@type": "Offer", **({"price": usd, "priceCurrency": "USD"} if price else {}), "url": f"{SITE}/works/{slug}.html",
                    "availability": "https://schema.org/SoldOut" if sold else "https://schema.org/InStock"},
     }
     crumbs = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
@@ -800,7 +803,7 @@ for k, row in enumerate(order):
             <div><dt>Price</dt>{price_html}</div>
             <div><dt>Artist</dt><dd>John Akande, Lagos</dd></div>
           </dl>
-{"" if sold else currency_switch(compact=True)}
+{"" if sold or not price else currency_switch(compact=True)}
           <p class="art__note">Part of a body of work exploring music as a living force: how rhythm shapes identity, how performance reveals vulnerability, and how music functions as cultural memory and therapy.</p>
           <div class="art__actions">
             {actions}
