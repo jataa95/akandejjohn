@@ -191,4 +191,117 @@
         : "Copy the message above, then paste it into the Instagram chat.";
     });
   }
+  // Artist statement: words light up as the quote scrolls through the screen
+  $$("[data-words]").forEach((el) => {
+    const words = el.textContent.trim().split(/\s+/);
+    el.textContent = "";
+    const spans = words.map((w, i) => {
+      const s = document.createElement("span");
+      s.className = "w"; s.textContent = w;
+      el.append(s, i < words.length - 1 ? " " : "");
+      return s;
+    });
+    if (reduce) { spans.forEach((s) => s.classList.add("is-lit")); return; }
+    const light = () => {
+      const r = el.getBoundingClientRect();
+      const p = Math.min(1, Math.max(0, (innerHeight * 0.85 - r.top) / (r.height + innerHeight * 0.35)));
+      const n = Math.round(p * spans.length);
+      spans.forEach((s, i) => s.classList.toggle("is-lit", i < n));
+    };
+    light(); addEventListener("scroll", light, { passive: true }); addEventListener("resize", light);
+  });
+
+  // Call to action: slow zoom-out of the background once on screen
+  const cta = $(".cta");
+  if (cta && "IntersectionObserver" in window) {
+    const cio = new IntersectionObserver(([e]) => { if (e.isIntersecting) { cta.classList.add("is-in"); cio.disconnect(); } }, { threshold: 0.2 });
+    cio.observe(cta);
+  }
+
+  // Selected works: horizontal gallery
+  const hs = $("[data-hs]");
+  if (hs) {
+    const viewport = $("[data-hs-viewport]", hs), track = $("[data-hs-track]", hs);
+    const bar = $("[data-hs-bar]", hs), idx = $("[data-hs-index]", hs);
+    const prev = $("[data-hs-prev]", hs), next = $("[data-hs-next]", hs);
+    const items = $$(".hs__item", hs);
+    const pinnedMQ = matchMedia("(min-width: 861px)");
+    let pinned = false, distance = 0, x = 0;
+    const padL = () => parseFloat(getComputedStyle(viewport).paddingLeft) || 0;
+
+    const setUI = (p) => {
+      bar.style.width = `${(p * 100).toFixed(2)}%`;
+      // the current work is the last one whose left edge has reached the gallery's left margin
+      const left = viewport.getBoundingClientRect().left + padL() + 40;
+      let cur = 0;
+      items.forEach((it, i) => { if (it.getBoundingClientRect().left <= left) cur = i; });
+      if (p >= 0.999) cur = items.length - 1;
+      idx.textContent = String(cur + 1).padStart(2, "0");
+      prev.disabled = p <= 0.001;
+      next.disabled = p >= 0.999;
+    };
+    const update = () => {
+      if (pinned) {
+        const top = hs.getBoundingClientRect().top;
+        const p = distance ? Math.min(1, Math.max(0, -top / distance)) : 0;
+        x = p * distance;
+        track.style.transform = `translate3d(${-x}px,0,0)`;
+        setUI(p);
+      } else {
+        const max = viewport.scrollWidth - viewport.clientWidth;
+        setUI(max > 0 ? viewport.scrollLeft / max : 0);
+      }
+    };
+    const measure = () => {
+      pinned = pinnedMQ.matches && !reduce;
+      hs.classList.toggle("is-pinned", pinned);
+      track.style.transform = "";
+      hs.style.height = "";
+      if (pinned) {
+        distance = Math.max(0, track.scrollWidth - (viewport.clientWidth - padL() * 2));
+        hs.style.height = `${innerHeight + distance}px`;
+      }
+      update();
+    };
+    // step one work left or right
+    const step = (dir) => {
+      const left = viewport.getBoundingClientRect().left + padL();
+      const offsets = items.map((it) => it.getBoundingClientRect().left - left);
+      const target = dir > 0 ? offsets.find((o) => o > 8) : [...offsets].reverse().find((o) => o < -8);
+      if (pinned) {
+        const goal = target === undefined ? (dir > 0 ? distance : 0) : Math.min(distance, Math.max(0, x + target));
+        scrollTo({ top: hs.offsetTop + goal, behavior: "smooth" });
+      } else {
+        viewport.scrollBy({ left: target === undefined ? dir * viewport.clientWidth : target, behavior: "smooth" });
+      }
+    };
+    prev.addEventListener("click", () => step(-1));
+    next.addEventListener("click", () => step(1));
+
+    // drag to scroll with a mouse when the gallery is not pinned
+    let drag = null;
+    viewport.addEventListener("pointerdown", (e) => {
+      if (pinned || e.pointerType !== "mouse") return;
+      drag = { x: e.clientX, l: viewport.scrollLeft, moved: false };
+    });
+    addEventListener("pointermove", (e) => {
+      if (!drag) return;
+      const dx = e.clientX - drag.x;
+      if (Math.abs(dx) > 4) { drag.moved = true; viewport.classList.add("is-dragging"); }
+      viewport.scrollLeft = drag.l - dx;
+    });
+    addEventListener("pointerup", () => {
+      if (!drag) return;
+      const moved = drag.moved;
+      drag = null;
+      viewport.classList.remove("is-dragging");
+      if (moved) viewport.addEventListener("click", (e) => e.stopPropagation(), { capture: true, once: true });
+    });
+
+    viewport.addEventListener("scroll", () => { if (!pinned) update(); }, { passive: true });
+    addEventListener("scroll", () => { if (pinned) requestAnimationFrame(update); }, { passive: true });
+    addEventListener("resize", measure);
+    addEventListener("load", measure);
+    measure();
+  }
 })();

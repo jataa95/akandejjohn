@@ -80,7 +80,23 @@
           <span class="hero__live mono"><i></i>In the studio, Lagos</span>
         </figure>
       </div>
-      <a class="hero__scroll mono" href="#featured">Scroll <span aria-hidden="true">&darr;</span></a>
+      <a class="hero__scroll mono" href="#voice">Scroll <span aria-hidden="true">&darr;</span></a>
+    </section>
+
+    <!-- ARTIST STATEMENT -->
+    <section class="voice" id="voice" aria-labelledby="voice-title">
+      <div class="voice__inner">
+        <p class="mono eyebrow voice__eyebrow" id="voice-title">Artist statement</p>
+        <span class="voice__mark" aria-hidden="true">&ldquo;</span>
+        <blockquote class="voice__quote" data-words>I see painting as a means of giving visual form to experiences that words cannot always fully express, inviting viewers to recognise something of their own humanity within the stories I tell.</blockquote>
+        <div class="voice__foot">
+          <div class="voice__by">
+            <img src="assets/img/john-akande.jpg" alt="" width="1200" height="1600" loading="lazy" decoding="async" />
+            <span><strong>John Akande</strong><span class="mono">Figurative artist, Lagos</span></span>
+          </div>
+          <a class="btn btn--gold" href="about.html#statement">Read the full statement <span class="btn__arrow" aria-hidden="true"></span></a>
+        </div>
+      </div>
     </section>
 
     <!-- BRIEF ABOUT -->
@@ -105,85 +121,151 @@
       <div class="marquee__track"><span>Rhythm of Our Heritage</span><i aria-hidden="true">&#10022;</i><span>Young Virtuoso</span><i aria-hidden="true">&#10022;</i><span>Where It Began</span><i aria-hidden="true">&#10022;</i><span>Rhythm Unites Us</span><i aria-hidden="true">&#10022;</i><span>Where Music Takes Root</span><i aria-hidden="true">&#10022;</i><span>Quiet Beginning</span><i aria-hidden="true">&#10022;</i><span>When Time Was Simple</span><i aria-hidden="true">&#10022;</i><span>My Father’s Footstep</span><i aria-hidden="true">&#10022;</i><span>Rhythm of Our Heritage</span><i aria-hidden="true">&#10022;</i><span>Young Virtuoso</span><i aria-hidden="true">&#10022;</i><span>Where It Began</span><i aria-hidden="true">&#10022;</i><span>Rhythm Unites Us</span><i aria-hidden="true">&#10022;</i><span>Where Music Takes Root</span><i aria-hidden="true">&#10022;</i><span>Quiet Beginning</span><i aria-hidden="true">&#10022;</i><span>When Time Was Simple</span><i aria-hidden="true">&#10022;</i><span>My Father’s Footstep</span><i aria-hidden="true">&#10022;</i></div>
     </div>
 
-    <!-- FEATURED -->
-    <section class="featured" id="featured">
-      <header class="head">
-        <div>
-          <p class="mono eyebrow reveal">The catalogue</p>
-          <h2 class="reveal">Selected Works</h2>
+    <!-- SELECTED WORKS: horizontal gallery -->
+    <section class="hs" id="featured" aria-labelledby="hs-title" data-hs>
+      <div class="hs__sticky">
+        <header class="hs__head">
+          <div>
+            <p class="mono eyebrow">The catalogue</p>
+            <h2 id="hs-title">Selected Works</h2>
+          </div>
+          <div class="hs__meta">
+            <p class="mono hs__note">16 paintings in acrylic on canvas. <b>14 available.</b></p>
+            <div class="hs__controls">
+              <span class="mono hs__count"><b data-hs-index>01</b> / 09</span>
+              <button class="hs__btn" type="button" data-hs-prev aria-label="Previous work"><i aria-hidden="true"></i></button>
+              <button class="hs__btn hs__btn--next" type="button" data-hs-next aria-label="Next work"><i aria-hidden="true"></i></button>
+            </div>
+          </div>
+        </header>
+        <div class="hs__viewport" data-hs-viewport>
+          <ol class="hs__track" data-hs-track>
+            <li class="hs__item" style="--ar:1242/1063">
+              <button data-lightbox data-src="assets/img/works/rhythm-of-our-heritage.jpg" data-title="Rhythm of Our Heritage" data-meta="7 × 5 ft · Acrylic on canvas · Sold" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory.">
+                <img src="assets/img/works/rhythm-of-our-heritage.jpg" alt="Rhythm of Our Heritage, acrylic on canvas by John Akande" width="1242" height="1063" loading="lazy" decoding="async" draggable="false" />
+              </button>
+              <div class="hs__cap">
+                <span class="mono hs__n">01</span>
+                <strong>Rhythm of Our Heritage</strong>
+                <span class="mono hs__info">7 × 5 ft &middot; <span class="hs__sold">Sold</span></span>
+              </div>
+            </li>
+            <li class="hs__item" style="--ar:901/1264">
+              <button data-lightbox data-src="assets/img/works/young-virtuoso-i.jpg" data-title="Young Virtuoso I" data-meta="30 × 40 in · Acrylic on canvas · $3,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Young Virtuoso I">
+                <img src="assets/img/works/young-virtuoso-i.jpg" alt="Young Virtuoso I, acrylic on canvas by John Akande" width="901" height="1264" loading="lazy" decoding="async" draggable="false" />
+              </button>
+              <div class="hs__cap">
+                <span class="mono hs__n">02</span>
+                <strong>Young Virtuoso I</strong>
+                <span class="mono hs__info">30 × 40 in &middot; <span>$3,000</span></span>
+              </div>
+            </li>
+            <li class="hs__item" style="--ar:930/1287">
+              <button data-lightbox data-src="assets/img/works/where-it-began-i.jpg" data-title="Where It Began I" data-meta="48 × 60 in · Acrylic on canvas · $8,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Where It Began I">
+                <img src="assets/img/works/where-it-began-i.jpg" alt="Where It Began I, acrylic on canvas by John Akande" width="930" height="1287" loading="lazy" decoding="async" draggable="false" />
+              </button>
+              <div class="hs__cap">
+                <span class="mono hs__n">03</span>
+                <strong>Where It Began I</strong>
+                <span class="mono hs__info">48 × 60 in &middot; <span>$8,000</span></span>
+              </div>
+            </li>
+            <li class="hs__item" style="--ar:890/1264">
+              <button data-lightbox data-src="assets/img/works/rhythm-unites-us-i.jpg" data-title="Rhythm Unites Us I" data-meta="54 × 42 in · Acrylic on canvas · $6,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Rhythm Unites Us I">
+                <img src="assets/img/works/rhythm-unites-us-i.jpg" alt="Rhythm Unites Us I, acrylic on canvas by John Akande" width="890" height="1264" loading="lazy" decoding="async" draggable="false" />
+              </button>
+              <div class="hs__cap">
+                <span class="mono hs__n">04</span>
+                <strong>Rhythm Unites Us I</strong>
+                <span class="mono hs__info">54 × 42 in &middot; <span>$6,000</span></span>
+              </div>
+            </li>
+            <li class="hs__item" style="--ar:966/1361">
+              <button data-lightbox data-src="assets/img/works/where-music-takes-root.jpg" data-title="Where Music Takes Root" data-meta="54 × 42 in · Acrylic on canvas · $6,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Where Music Takes Root">
+                <img src="assets/img/works/where-music-takes-root.jpg" alt="Where Music Takes Root, acrylic on canvas by John Akande" width="966" height="1361" loading="lazy" decoding="async" draggable="false" />
+              </button>
+              <div class="hs__cap">
+                <span class="mono hs__n">05</span>
+                <strong>Where Music Takes Root</strong>
+                <span class="mono hs__info">54 × 42 in &middot; <span>$6,000</span></span>
+              </div>
+            </li>
+            <li class="hs__item" style="--ar:981/1375">
+              <button data-lightbox data-src="assets/img/works/young-virtuoso-iii.jpg" data-title="Young Virtuoso III" data-meta="36 × 48 in · Acrylic on canvas · $4,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Young Virtuoso III">
+                <img src="assets/img/works/young-virtuoso-iii.jpg" alt="Young Virtuoso III, acrylic on canvas by John Akande" width="981" height="1375" loading="lazy" decoding="async" draggable="false" />
+              </button>
+              <div class="hs__cap">
+                <span class="mono hs__n">06</span>
+                <strong>Young Virtuoso III</strong>
+                <span class="mono hs__info">36 × 48 in &middot; <span>$4,000</span></span>
+              </div>
+            </li>
+            <li class="hs__item" style="--ar:1195/1600">
+              <button data-lightbox data-src="assets/img/works/quiet-beginning-i.jpg" data-title="Quiet Beginning I" data-meta="36 × 48 in · Acrylic on canvas · $4,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Quiet Beginning I">
+                <img src="assets/img/works/quiet-beginning-i.jpg" alt="Quiet Beginning I, acrylic on canvas by John Akande" width="1195" height="1600" loading="lazy" decoding="async" draggable="false" />
+              </button>
+              <div class="hs__cap">
+                <span class="mono hs__n">07</span>
+                <strong>Quiet Beginning I</strong>
+                <span class="mono hs__info">36 × 48 in &middot; <span>$4,000</span></span>
+              </div>
+            </li>
+            <li class="hs__item" style="--ar:1600/1429">
+              <button data-lightbox data-src="assets/img/works/when-time-was-simple.jpg" data-title="When Time Was Simple" data-meta="54 × 48 in · Acrylic on canvas · $6,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="When Time Was Simple">
+                <img src="assets/img/works/when-time-was-simple.jpg" alt="When Time Was Simple, acrylic on canvas by John Akande" width="1600" height="1429" loading="lazy" decoding="async" draggable="false" />
+              </button>
+              <div class="hs__cap">
+                <span class="mono hs__n">08</span>
+                <strong>When Time Was Simple</strong>
+                <span class="mono hs__info">54 × 48 in &middot; <span>$6,000</span></span>
+              </div>
+            </li>
+            <li class="hs__item" style="--ar:1088/1600">
+              <button data-lightbox data-src="assets/img/works/my-fathers-footstep-i.jpg" data-title="My Father’s Footstep I" data-meta="42 × 60 in · Acrylic on canvas · $6,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="My Father’s Footstep I">
+                <img src="assets/img/works/my-fathers-footstep-i.jpg" alt="My Father’s Footstep I, acrylic on canvas by John Akande" width="1088" height="1600" loading="lazy" decoding="async" draggable="false" />
+              </button>
+              <div class="hs__cap">
+                <span class="mono hs__n">09</span>
+                <strong>My Father’s Footstep I</strong>
+                <span class="mono hs__info">42 × 60 in &middot; <span>$6,000</span></span>
+              </div>
+            </li>
+            <li class="hs__end">
+              <a href="works.html">
+                <span class="mono">The full catalogue</span>
+                <strong>View all<br />16 works</strong>
+                <i aria-hidden="true"></i>
+              </a>
+            </li>
+          </ol>
         </div>
-        <p class="mono head__note reveal">16 paintings in acrylic on canvas &mdash; young musicians, warm interiors and the instruments that open a world. <b>14 available.</b></p>
-      </header>
-      <div class="featured__grid">
-        <figure class="work featured__main reveal" data-status="sold">
-          <button data-lightbox data-src="assets/img/works/rhythm-of-our-heritage.jpg" data-title="Rhythm of Our Heritage" data-meta="7 × 5 ft · Acrylic on canvas · Sold" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory.">
-            <img src="assets/img/works/rhythm-of-our-heritage.jpg" alt="Rhythm of Our Heritage, acrylic on canvas by John Akande" width="1242" height="1063" loading="lazy" decoding="async" />
-          </button>
-          <figcaption>
-            <span class="work__title">Rhythm of Our Heritage</span>
-            <span class="work__sold">Sold</span>
-            <span class="work__meta mono">7 × 5 ft · Acrylic on canvas</span>
-          </figcaption>
-        </figure>
-        <figure class="work reveal" data-status="available">
-          <button data-lightbox data-src="assets/img/works/young-virtuoso-i.jpg" data-title="Young Virtuoso I" data-meta="30 × 40 in · Acrylic on canvas · $3,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Young Virtuoso I">
-            <img src="assets/img/works/young-virtuoso-i.jpg" alt="Young Virtuoso I, acrylic on canvas by John Akande" width="901" height="1264" loading="lazy" decoding="async" />
-          </button>
-          <figcaption>
-            <span class="work__title">Young Virtuoso I</span>
-            <span class="work__price">$3,000</span>
-            <span class="work__meta mono">30 × 40 in · Acrylic on canvas</span>
-          </figcaption>
-        </figure>
-        <figure class="work reveal" data-status="available">
-          <button data-lightbox data-src="assets/img/works/my-fathers-footstep-i.jpg" data-title="My Father’s Footstep I" data-meta="42 × 60 in · Acrylic on canvas · $6,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="My Father’s Footstep I">
-            <img src="assets/img/works/my-fathers-footstep-i.jpg" alt="My Father’s Footstep I, acrylic on canvas by John Akande" width="1088" height="1600" loading="lazy" decoding="async" />
-          </button>
-          <figcaption>
-            <span class="work__title">My Father’s Footstep I</span>
-            <span class="work__price">$6,000</span>
-            <span class="work__meta mono">42 × 60 in · Acrylic on canvas</span>
-          </figcaption>
-        </figure>
-      </div>
-      <p class="featured__more reveal"><a class="btn btn--gold" href="works.html">View all 16 works <span class="btn__arrow" aria-hidden="true"></span></a></p>
-    </section>
-
-    <!-- STATEMENT -->
-    <section class="quote">
-      <p class="mono eyebrow reveal">Artist statement</p>
-      <blockquote class="quote__text reveal">&ldquo;I see painting as a means of giving visual form to experiences that words cannot always fully express.&rdquo;</blockquote>
-      <div class="quote__foot">
-        <p class="mono reveal">Music occupies a central place in my practice, not merely as a subject to be represented but as a language through which I explore human connection, memory, emotion and belonging. <span class="quote__sig">&mdash; John Akande</span></p>
-        <a class="btn btn--gold reveal" href="about.html#statement">Read the statement <span class="btn__arrow" aria-hidden="true"></span></a>
+        <div class="hs__progress" aria-hidden="true"><span data-hs-bar></span></div>
       </div>
     </section>
 
   </main>
 
   <!-- CALL TO ACTION -->
-  <section class="cta paper" aria-labelledby="cta-title">
-    <div class="cta__main">
+  <section class="cta" aria-labelledby="cta-title">
+    <div class="cta__bg" aria-hidden="true"><img src="assets/img/works/rhythm-of-our-heritage.jpg" alt="" loading="lazy" decoding="async" /></div>
+    <div class="cta__inner">
       <div class="cta__copy">
         <p class="mono eyebrow reveal">Acquisitions &amp; commissions</p>
-        <h2 class="cta__title reveal" id="cta-title">Bring a painting<br /><em>home.</em></h2>
+        <h2 class="cta__title reveal" id="cta-title">Bring a painting <em>home.</em></h2>
         <p class="mono cta__lede reveal">Fourteen original paintings are available now, and new works can be made to commission in John&rsquo;s Lagos studio. Every enquiry is answered by John personally.</p>
         <div class="cta__actions reveal">
-          <a class="btn" href="contact.html">Start an enquiry <span class="btn__arrow" aria-hidden="true"></span></a>
-          <a class="btn btn--ghost" href="works.html">Browse available works <span class="btn__arrow" aria-hidden="true"></span></a>
+          <a class="btn btn--light" href="contact.html">Start an enquiry <span class="btn__arrow" aria-hidden="true"></span></a>
+          <a class="btn btn--gold" href="works.html">Browse available works <span class="btn__arrow" aria-hidden="true"></span></a>
         </div>
       </div>
-      <a class="cta__art reveal" href="contact.html?work=Young%20Virtuoso%20II" aria-label="Enquire about Young Virtuoso II">
-        <span class="cta__frame"><img src="assets/img/works/young-virtuoso-ii.jpg" alt="Young Virtuoso II, a boy playing the cello in a gilded frame" loading="lazy" decoding="async" /></span>
-        <span class="cta__caption mono"><b>Young Virtuoso II</b><span>30 &times; 40 in &middot; Available</span></span>
-      </a>
-    </div>
-    <nav class="cta__ways" aria-label="Ways to work with John">
+      <nav class="cta__panel reveal" aria-label="Ways to work with John">
+        <p class="mono cta__panel-title">How can John help?</p>
         <a class="cta__way" href="contact.html?type=acquisition"><span class="mono">01</span><strong>Acquire</strong><em class="mono">an available painting</em><i aria-hidden="true">&nearr;</i></a>
         <a class="cta__way" href="contact.html?type=commission"><span class="mono">02</span><strong>Commission</strong><em class="mono">a work made for you</em><i aria-hidden="true">&nearr;</i></a>
         <a class="cta__way" href="contact.html?type=exhibition"><span class="mono">03</span><strong>Exhibit</strong><em class="mono">shows, fairs &amp; press</em><i aria-hidden="true">&nearr;</i></a>
         <a class="cta__way" href="contact.html?type=live"><span class="mono">04</span><strong>Live painting</strong><em class="mono">at your event</em><i aria-hidden="true">&nearr;</i></a>
-    </nav>
+      </nav>
+    </div>
   </section>
 
   <!-- FOOTER -->
