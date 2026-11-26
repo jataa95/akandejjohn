@@ -3,6 +3,9 @@
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // Intro monogram plays once per browser session
+  try { sessionStorage.setItem("ja-intro", "1"); } catch {}
+
   // Year + Lagos clock (every [data-clock] on the page)
   $$("[data-year]").forEach((el) => (el.textContent = new Date().getFullYear()));
   const clocks = $$("[data-clock]");
@@ -125,7 +128,7 @@
       lbNote.textContent = btn.dataset.note || "";
       if (lbEnquire) {
         lbEnquire.hidden = !btn.dataset.enquire;
-        if (btn.dataset.enquire) lbEnquire.href = `contact.html?work=${encodeURIComponent(btn.dataset.enquire)}`;
+        if (btn.dataset.enquire) lbEnquire.href = `/contact.html?work=${encodeURIComponent(btn.dataset.enquire)}`;
       }
       dialog.showModal();
     }));

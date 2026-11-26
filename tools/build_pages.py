@@ -1,0 +1,874 @@
+"""Builds the site's HTML pages from the catalogue data.
+
+The site is plain static files; this script only regenerates them. Edit the page
+templates or the data below, then run from the repository root:
+
+    python3 tools/build_pages.py
+
+Data: tools/works.json (title, size, price, sold, image size for each painting) and
+tools/imgs.json (the WebP widths generated for each image).
+"""
+import json, html, os, re, datetime
+
+ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..") + "/"
+META = json.load(open(os.path.join(os.path.dirname(__file__), "works.json")))
+e = lambda s: html.escape(s, quote=True)
+IG = "https://www.instagram.com/akandejjohn/"
+TH = "https://www.threads.net/@akandejjohn"
+SITE = "https://akandejjohn.vercel.app"
+IMGS = json.load(open(os.path.join(os.path.dirname(__file__), "imgs.json")))
+TODAY = datetime.date.today().isoformat()
+
+def img_base(slug):
+    return "assets/img/john-akande" if slug == "john-akande" else f"assets/img/works/{slug}"
+
+def big(slug):
+    """Largest WebP, used by the artwork viewer."""
+    return f"{img_base(slug)}-{IMGS[slug]['ws'][-1]}.webp"
+
+def mid(slug):
+    ws = IMGS[slug]["ws"]
+    return f"{img_base(slug)}-{800 if 800 in ws else ws[-1]}.webp"
+
+def pic(slug, alt, sizes, cls="", lazy=True, attrs=""):
+    """<img> with WebP srcset at several widths and the JPEG as fallback."""
+    m = IMGS[slug]
+    srcset = ", ".join(f"{img_base(slug)}-{W}.webp {W}w" for W in m["ws"])
+    c = f' class="{cls}"' if cls else ""
+    return (f'<img{c} src="{img_base(slug)}.jpg" srcset="{srcset}" sizes="{sizes}" alt="{alt}" '
+            f'width="{m["w"]}" height="{m["h"]}"{' loading="lazy"' if lazy else ''} decoding="async"{attrs} />')
+
+def page_slug(slug):
+    return "rhythm-of-our-heritage" if slug == "rhythm-of-our-heritage-studio" else slug
+
+def absolutize(doc):
+    """Root-relative URLs, so pages in /works/ resolve assets and links the same way."""
+    def fix(url):
+        if re.match(r"^(https?:|mailto:|tel:|data:|#|/)", url) or not url:
+            return url
+        return "/" + url
+    doc = re.sub(r'\b(href|src|data-src|poster)="([^"]*)"', lambda m: f'{m.group(1)}="{fix(m.group(2))}"', doc)
+    doc = re.sub(r'\bsrcset="([^"]*)"', lambda m: 'srcset="' + ", ".join(
+        fix(p.strip().split(" ")[0]) + (" " + p.strip().split(" ", 1)[1] if " " in p.strip() else "")
+        for p in m.group(1).split(",")) + '"', doc)
+    return doc
+
+def currency_switch(compact=False):
+    return f"""        <div class="currency{' currency--compact' if compact else ''}">
+          <span class="mono currency__label" id="currency-label">Prices in</span>
+          <div class="currency__switch" role="group" aria-labelledby="currency-label" data-currency-switch>
+            <button type="button" aria-pressed="true" data-currency="USD"><b>$</b> USD</button>
+            <button type="button" aria-pressed="false" data-currency="EUR"><b>&euro;</b> EUR</button>
+            <button type="button" aria-pressed="false" data-currency="GBP"><b>&pound;</b> GBP</button>
+            <button type="button" aria-pressed="false" data-currency="NGN"><b>&#8358;</b> NGN</button>
+          </div>
+          <p class="mono currency__note" data-currency-note aria-live="polite">Prices are set in US dollars.</p>
+        </div>"""
+
+PERSON_LD = {
+    "@context": "https://schema.org", "@type": "Person", "name": "John Akande",
+    "jobTitle": "Figurative artist", "birthPlace": "Lagos, Nigeria",
+    "alumniOf": {"@type": "CollegeOrUniversity", "name": "Yaba College of Technology"},
+    "url": SITE + "/", "image": SITE + "/assets/img/john-akande.jpg", "sameAs": [IG, TH],
+}
+
+STATEMENT = (
+    "This body of work explores music as a living force, embedded in human existence. In it, I investigate how "
+    "<b>rhythm shapes identity</b>, how <b>performance reveals vulnerability</b>, and how music functions as "
+    "<b>cultural memory and therapy</b>."
+)
+STATEMENT_2 = (
+    "It contributes to contemporary African art discourse by positioning music not only as a subject matter but also "
+    "as a conceptual framework, highlighting performance as vulnerability and sound as a cultural continuity."
+)
+
+PAGES = [("about.html", "About"), ("works.html", "Works"), ("commission.html", "Commission"), ("contact.html", "Contact")]
+
+
+def head(title, desc, page, path=None, og=None, ld=None, og_type="website"):
+    path = path if path is not None else ("" if page == "home" else f"{page}.html")
+    url = f"{SITE}/{path}"
+    og = og or f"{SITE}/assets/og/og-{page}.jpg"
+    ld_html = "".join(f'\n  <script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>' for x in (ld or []))
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content="{e(desc)}" />
+  <meta name="theme-color" content="#f3eee4" />
+  <link rel="canonical" href="{url}" />
+  <meta property="og:site_name" content="John Akande" />
+  <meta property="og:title" content="{title}" />
+  <meta property="og:description" content="{e(desc)}" />
+  <meta property="og:image" content="{og}" />
+  <meta property="og:url" content="{url}" />
+  <meta property="og:type" content="{og_type}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32.png" />
+  <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <script>try{{if(sessionStorage.getItem("ja-intro"))document.documentElement.classList.add("intro-seen")}}catch(e){{}}</script>{ld_html}
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+  <link href="https://api.fontshare.com/v2/css?f[]=gambarino@400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Italiana&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="{page}">
+  <div class="intro-mark" aria-hidden="true"><span>JA</span><i></i></div>
+  <a class="skip" href="#main">Skip to content</a>
+"""
+
+
+def nav(active):
+    cur = lambda f: ' aria-current="page"' if f == active else ""
+    menu_links = "\n".join(
+        f'      <li><a href="{f}"{cur(f)}><span class="mono">0{i+1}</span>{label}</a></li>'
+        for i, (f, label) in enumerate(PAGES)
+    )
+    return f"""
+  <!-- NAVIGATION -->
+  <header class="nav" data-nav>
+    <div class="nav__inner">
+      <a class="nav__brand" href="index.html" aria-label="John Akande, home">John Akande</a>
+      <nav class="nav__links" aria-label="Primary">
+        <a href="about.html"{cur("about.html")}>About</a>
+        <a href="works.html"{cur("works.html")}>Works</a>
+        <a href="commission.html"{cur("commission.html")}>Commission</a>
+        <a class="nav__cta" href="contact.html"{cur("contact.html")}><span>Contact</span></a>
+      </nav>
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle>
+        <span class="nav__toggle-label">Menu</span><i aria-hidden="true"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="menu" id="menu" data-menu>
+    <ol class="menu__list">
+{menu_links}
+    </ol>
+    <div class="menu__foot mono">
+      <span>Lagos, Nigeria &middot; <span data-clock>--:--</span> WAT</span>
+      <span><a href="{IG}" target="_blank" rel="noopener">Instagram</a> &middot; <a href="{TH}" target="_blank" rel="noopener">Threads</a></span>
+    </div>
+  </div>
+"""
+
+
+def footer(cta=True):
+    A = '<span class="btn__arrow" aria-hidden="true"></span>'
+    ways = [("acquisition", "Acquire", "an available painting"), ("commission", "Commission", "a work made for you"),
+            ("exhibition", "Exhibit", "shows, fairs &amp; press"), ("live", "Live painting", "at your event")]
+    ways_html = "\n".join(
+        f'''        <a class="cta__way" href="contact.html?type={v}"><span class="mono">0{i+1}</span><strong>{t}</strong><em class="mono">{d}</em><i aria-hidden="true">&nearr;</i></a>'''
+        for i, (v, t, d) in enumerate(ways))
+    cta_html = f"""
+  <!-- CALL TO ACTION -->
+  <section class="cta" aria-labelledby="cta-title">
+    <div class="cta__bg" aria-hidden="true">{pic("rhythm-of-our-heritage", "", "100vw")}</div>
+    <div class="cta__inner">
+      <div class="cta__copy">
+        <p class="mono eyebrow reveal">Acquisitions &amp; commissions</p>
+        <h2 class="cta__title reveal" id="cta-title">Bring a painting <em>home.</em></h2>
+        <p class="mono cta__lede reveal">Fourteen original paintings are available now, and new works can be made to commission in John&rsquo;s Lagos studio. Every enquiry is answered by John personally.</p>
+        <div class="cta__actions reveal">
+          <a class="btn btn--light" href="contact.html">Start an enquiry {A}</a>
+          <a class="btn btn--gold" href="works.html">Browse available works {A}</a>
+        </div>
+      </div>
+      <nav class="cta__panel reveal" aria-label="Ways to work with John">
+        <p class="mono cta__panel-title">How can John help?</p>
+{ways_html}
+      </nav>
+    </div>
+  </section>
+""" if cta else ""
+    return cta_html + f"""
+  <!-- FOOTER -->
+  <footer class="foot">
+    <a class="foot__mark" href="index.html" aria-label="John Akande, home">John Akande</a>
+    <div class="foot__grid">
+      <div class="foot__about">
+        <p>Contemporary Nigerian figurative artist exploring music, identity and the complexities of everyday life, in acrylic on canvas.</p>
+        <a class="foot__ig" href="{IG}" target="_blank" rel="noopener"><span class="mono">Follow the studio</span><span>@akandejjohn <i aria-hidden="true">&nearr;</i></span></a>
+      </div>
+      <nav class="foot__col" aria-label="Footer">
+        <span class="mono foot__label">Explore</span>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="works.html">Works</a>
+        <a href="commission.html">Commission</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="foot__col">
+        <span class="mono foot__label">Enquiries</span>
+        <a href="contact.html?type=acquisition">Acquire a work</a>
+        <a href="contact.html?type=commission">Commissions</a>
+        <a href="contact.html?type=exhibition">Exhibitions &amp; press</a>
+        <a href="contact.html?type=live">Live painting</a>
+      </div>
+      <div class="foot__col">
+        <span class="mono foot__label">Studio</span>
+        <span>Lagos, Nigeria</span>
+        <span class="mono foot__time"><i aria-hidden="true"></i><span data-clock>--:--</span> WAT</span>
+        <a href="{IG}" target="_blank" rel="noopener">Instagram &nearr;</a>
+        <a href="{TH}" target="_blank" rel="noopener">Threads &nearr;</a>
+      </div>
+    </div>
+    <div class="foot__base mono">
+      <span>&copy; <span data-year>2026</span> John Akande. All artworks &copy; the artist.</span>
+      <span class="foot__tag">Paintings where sound becomes colour</span>
+      <a href="#top" class="foot__top" aria-label="Back to top"><span>Top</span><i aria-hidden="true"></i></a>
+    </div>
+  </footer>
+"""
+
+
+LIGHTBOX = """
+  <!-- LIGHTBOX -->
+  <dialog class="lightbox" data-lightbox-dialog aria-label="Artwork viewer">
+    <button class="lightbox__close mono" data-lightbox-close>Close &times;</button>
+    <figure>
+      <img alt="" data-lb-img />
+      <figcaption>
+        <strong data-lb-title></strong>
+        <span class="mono" data-lb-meta></span>
+        <p data-lb-note></p>
+        <a class="link" data-lb-enquire hidden>Enquire about this work &rarr;</a>
+      </figcaption>
+    </figure>
+  </dialog>
+"""
+
+END = """
+  <script src="script.js" defer></script>
+  <script src="/_vercel/insights/script.js" defer></script>
+</body>
+</html>
+"""
+
+
+def work_card(row, extra_cls="", lazy=True, sizes="(max-width: 760px) 92vw, (max-width: 1000px) 46vw, 31vw"):
+    slug, title, size, price, sold, (w, h) = row
+    studio = slug.endswith("studio")
+    usd = price.strip("$").replace(",", "")
+    status = '<span class="work__sold">Sold</span>' if sold else f'<span class="work__price" data-usd="{usd}">{e(price)}</span>'
+    alt = ("Rhythm of Our Heritage leaning against a white studio wall, before framing" if studio
+           else f"{title}, acrylic on canvas by John Akande")
+    cap = "Before framing" if studio else f"{size} · Acrylic on canvas"
+    href = f"works/{page_slug(slug)}.html"
+    return f"""        <figure class="work{extra_cls} reveal" data-status="{'sold' if sold else 'available'}">
+          <a class="work__media" href="{href}" tabindex="-1" aria-hidden="true">
+            {pic(slug, e(alt), sizes, lazy=lazy)}
+          </a>
+          <figcaption>
+            <a class="work__title" href="{href}">{e(title)}</a>
+            {status}
+            <span class="work__meta mono">{e(cap)}</span>
+          </figcaption>
+        </figure>"""
+
+
+by_slug = {r[0]: r for r in META}
+paintings = [r for r in META if not r[0].endswith("studio")]
+n_total = len(paintings)
+n_sold = sum(1 for r in paintings if r[4])
+n_avail = n_total - n_sold
+
+
+HS = ["rhythm-of-our-heritage", "young-virtuoso-i", "where-it-began-i", "where-music-takes-root", "my-fathers-footstep-i",
+      "rhythm-unites-us-i", "young-virtuoso-iii", "quiet-beginning-i", "when-time-was-simple"]
+HS_MOBILE = 5  # phones show only the first five, then a button to the Works page
+def sel_row(i, slug):
+    slug_, title, size, price, sold, (w, h) = by_slug[slug]
+    status = '<span class="sel__sold">Sold</span>' if sold else '<span class="sel__price">Available</span>'
+    return f"""          <li{' class="sel__extra"' if i >= HS_MOBILE else ''}>
+            <a class="sel__row" data-sel="{i}" data-title="{e(title)}" href="works/{slug}.html">
+              {pic(slug, "", "72px", cls="sel__thumb")}
+              <span class="mono sel__n">{i+1:02d}</span>
+              <span class="sel__title">{e(title)}</span>
+              <span class="mono sel__size">{e(size)}</span>
+              {status}
+              <i class="sel__go" aria-hidden="true"></i>
+            </a>
+          </li>"""
+def sel_slide(i, slug):
+    return "            " + pic(slug, "", "(min-width: 961px) 34vw, 1px", cls="sel__img" + (" is-active" if i == 0 else ""), lazy=i != 0, attrs=f' data-sel-img="{i}"')
+sel_rows = "\n".join(sel_row(i, s) for i, s in enumerate(HS))
+sel_slides = "\n".join(sel_slide(i, s) for i, s in enumerate(HS))
+first_title = e(by_slug[HS[0]][1]); first_size = e(by_slug[HS[0]][2])
+
+# ---------------------------------------------------------------- HOME
+titles = ["Rhythm of Our Heritage", "Young Virtuoso", "Where It Began", "Rhythm Unites Us",
+          "Where Music Takes Root", "Quiet Beginning", "When Time Was Simple", "My Father’s Footstep"]
+marq = "".join(f"<span>{e(t)}</span><i aria-hidden=\"true\">&#10022;</i>" for t in titles)
+
+home = head("John Akande — Figurative Artist, Lagos",
+            "John Akande (@akandejjohn) is a Nigerian figurative artist based in Lagos whose paintings explore the relationship between visual art and sound.",
+            "home", ld=[PERSON_LD, {"@context": "https://schema.org", "@type": "WebSite", "name": "John Akande", "url": SITE + "/"}]) + nav("index.html") + f"""
+  <main id="main">
+    <!-- HERO -->
+    <section class="hero paper" id="top">
+      <p class="hero__eyebrow mono reveal">Figurative painter &middot; Lagos, Nigeria</p>
+      <h1 class="hero__name" aria-label="John Akande">
+        <span class="split" data-split>JOHN AKANDE</span>
+      </h1>
+      <p class="hero__tag mono reveal">Paintings where sound becomes colour &mdash;<br />expressing Black culture, its identity, and the music that carries it.</p>
+      <div class="hero__actions reveal">
+        <a class="btn" href="works.html">View the works <span class="btn__arrow" aria-hidden="true"></span></a>
+        <a class="btn btn--ghost" href="commission.html">Commission a piece <span class="btn__arrow" aria-hidden="true"></span></a>
+      </div>
+
+      <div class="hero__stage" data-parallax>
+        <button class="float f1" data-speed="-0.35" style="--r:-6deg" data-lightbox data-src="{big("young-virtuoso-i")}" data-title="Young Virtuoso I" data-meta="30 × 40 in · Acrylic on canvas · Available" data-note="A girl in pink plays the violin among the instruments of a quiet interior." data-enquire="Young Virtuoso I">
+          {pic("young-virtuoso-i", "Young Virtuoso I: a girl in a pink dress plays the violin", "(max-width: 760px) 1px, 270px", lazy=False)}
+        </button>
+        <div class="float float--ghost f2" data-speed="0.12" style="--r:4deg" aria-hidden="true">
+          <img src="{mid("young-virtuoso-i")}" alt="" loading="lazy" decoding="async" />
+        </div>
+        <button class="float f3" data-speed="-0.5" style="--r:5deg" data-lightbox data-src="{big("my-fathers-footstep-i")}" data-title="My Father’s Footstep I" data-meta="42 × 60 in · Acrylic on canvas · Available" data-note="A boy rests beside a red cello in the warm light of a window." data-enquire="My Father’s Footstep I">
+          {pic("my-fathers-footstep-i", "My Father’s Footstep I: a boy asleep beside a red cello", "(max-width: 760px) 1px, 290px", lazy=False)}
+        </button>
+        <div class="float float--ghost f4" data-speed="0.1" style="--r:-4deg" aria-hidden="true">
+          <img src="{mid("my-fathers-footstep-i")}" alt="" loading="lazy" decoding="async" />
+        </div>
+        <figure class="hero__media" data-hero-media>
+          <video class="hero__video" src="assets/video/hero-loop.mp4" poster="assets/img/hero-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="John Akande painting in his studio"></video>
+          <span class="hero__live mono"><i></i>In the studio, Lagos</span>
+        </figure>
+      </div>
+      <a class="hero__scroll mono" href="#about-brief">Scroll <span aria-hidden="true">&darr;</span></a>
+    </section>
+
+    <!-- BRIEF ABOUT -->
+    <section class="intro paper" id="about-brief" aria-labelledby="intro-title">
+      <figure class="intro__img reveal">
+        {pic("john-akande", "Portrait of John Akande in a black-and-white tweed jacket, hand at his chin", "(max-width: 860px) 92vw, 40vw")}
+        <figcaption class="mono">John Akande &mdash; Lagos, Nigeria</figcaption>
+      </figure>
+      <div class="intro__body">
+        <p class="mono eyebrow reveal">About the artist</p>
+        <p class="intro__lede reveal" id="intro-title">John Akande is a contemporary Nigerian figurative artist whose practice explores human expression, cultural identity, music and the complexities of everyday life.</p>
+        <div class="intro__cols mono reveal">
+          <p>Formally trained at <b>Yaba College of Technology, Lagos</b>, he works primarily in <b>acrylic on canvas</b>, alongside mixed media, combining <b>realism</b> and <b>expressionism</b> to build emotionally engaging visual narratives.</p>
+          <p>Music holds a significant place in his practice. His works have been exhibited in <b>Nigeria</b> and internationally, including <b>Malta</b>, in group exhibitions and online presentations.</p>
+        </div>
+        <a class="btn btn--ghost reveal" href="about.html">Read the biography <span class="btn__arrow" aria-hidden="true"></span></a>
+      </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">{marq}{marq}</div>
+    </div>
+
+    <!-- SELECTED WORKS -->
+    <section class="sel paper" id="featured" aria-labelledby="sel-title" data-sel-root>
+      <header class="sel__head">
+        <div>
+          <p class="mono eyebrow reveal">The catalogue</p>
+          <h2 class="reveal" id="sel-title">Selected Works</h2>
+        </div>
+        <div class="sel__intro reveal">
+          <p class="mono">A selection from a body of work on music, memory and belonging, in acrylic on canvas.</p>
+        </div>
+      </header>
+      <div class="sel__body">
+        <div class="sel__stage reveal" aria-hidden="true">
+          <div class="sel__frame">
+{sel_slides}
+          </div>
+          <div class="sel__caption">
+            <span class="mono sel__count"><b data-sel-index>01</b> / {len(HS):02d}</span>
+            <span class="sel__now" data-sel-title>{first_title}</span>
+            <span class="mono sel__nowsize" data-sel-size>{first_size} &middot; Acrylic on canvas</span>
+          </div>
+        </div>
+        <div class="sel__side">
+          <ol class="sel__list">
+{sel_rows}
+          </ol>
+          <div class="sel__more reveal">
+            <p class="mono">{n_total} paintings in the catalogue. <b>{n_avail} available.</b></p>
+            <a class="btn" href="works.html">View all works <span class="btn__arrow" aria-hidden="true"></span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+""" + footer() + LIGHTBOX + END
+
+# ---------------------------------------------------------------- WORKS
+works_cards = [work_card(META[0], " work--feature", lazy=False), work_card(META[1], lazy=False)]
+works_cards += [work_card(r) for r in META[2:]]
+works = head("Works — John Akande",
+             f"The catalogue: {n_total} paintings in acrylic on canvas by John Akande, with sizes, prices and availability.",
+             "works") + nav("works.html") + f"""
+  <main id="main" class="paper">
+    <header class="page-head" id="top">
+      <p class="mono eyebrow reveal">Catalogue &middot; Acrylic on canvas</p>
+      <h1 class="page-head__title reveal">Works</h1>
+      <div class="page-head__body mono reveal">
+        <p>{STATEMENT}</p>
+        <p>{STATEMENT_2}</p>
+        <p class="page-head__sig">&mdash; John Akande</p>
+      </div>
+    </header>
+
+    <section class="works" aria-label="All works">
+      <div class="toolbar reveal">
+        <div class="filters" role="group" aria-label="Filter works">
+          <button class="chip" aria-pressed="true" data-filter="all">All <span>{n_total}</span></button>
+          <button class="chip" aria-pressed="false" data-filter="available">Available <span>{n_avail}</span></button>
+          <button class="chip" aria-pressed="false" data-filter="sold">Sold <span>{n_sold}</span></button>
+        </div>
+{currency_switch()}
+      </div>
+      <div class="works__grid" data-works>
+{chr(10).join(works_cards)}
+      </div>
+    </section>
+  </main>
+""" + footer() + LIGHTBOX + END
+
+# ---------------------------------------------------------------- ABOUT
+about = head("About — John Akande",
+             "John Akande (b. Lagos, Nigeria) is a contemporary Nigerian figurative artist exploring human expression, cultural identity, music and everyday life.",
+             "about", ld=[PERSON_LD]) + nav("about.html") + f"""
+  <main id="main">
+    <div class="paper">
+    <header class="page-head" id="top">
+      <p class="mono eyebrow reveal">Artist biography</p>
+      <h1 class="page-head__title reveal">About</h1>
+      <p class="page-head__lede reveal">John Akande (b. Lagos, Nigeria) is a contemporary Nigerian figurative artist whose practice explores human expression, cultural identity, music and the complexities of everyday life.</p>
+      <figure class="page-head__portrait reveal">
+        {pic("john-akande", "Portrait of John Akande in a black-and-white tweed jacket, hand at his chin", "(max-width: 860px) 92vw, 26rem", lazy=False)}
+        <figcaption class="mono">John Akande</figcaption>
+      </figure>
+    </header>
+
+    <section class="bio" aria-label="Biography">
+      <div class="bio__side">
+        <dl class="bio__facts mono reveal">
+          <div><dt>Born</dt><dd>Lagos, Nigeria</dd></div>
+          <div><dt>Education</dt><dd>Yaba College of Technology, Lagos</dd></div>
+          <div><dt>Medium</dt><dd>Acrylic on canvas, mixed media</dd></div>
+          <div><dt>Exhibited</dt><dd>Nigeria &middot; Malta &middot; Online</dd></div>
+        </dl>
+      </div>
+      <div class="bio__text">
+          <p class="reveal">His artistic journey is rooted in his early exposure to the cultural richness of Lagos and a longstanding fascination with the ways people express, experience and connect with one another. He received his formal art education at Yaba College of Technology, Lagos, where he developed a foundation in visual art and figurative representation.</p>
+          <p class="reveal">Working primarily with acrylic on canvas, alongside mixed-media approaches, John Akande combines elements of realism and expressionism to construct emotionally engaging visual narratives. His paintings are distinguished by expressive brushwork, layered textures, vibrant yet deliberate colour relationships and a strong sensitivity to composition. Through the human figure, he explores themes of memory, identity, relationships, belonging and the emotional dimensions of human existence.</p>
+          <p class="reveal">Music holds a significant place in his practice, informed by his personal encounters with musical environments and his appreciation of its cultural and emotional significance. His paintings frequently examine musicians, musical instruments and shared moments of musical experience, using them as subjects through which to investigate human connection, heritage and the passage of personal and collective memories.</p>
+          <p class="reveal">Drawing from Nigerian cultural experiences while engaging with universal human themes, Akande seeks to create works that resonate beyond geographical and cultural boundaries. His practice reflects an ongoing commitment to storytelling through painting, using the visual language of the human figure to communicate experiences, emotions and narratives that connect people across cultures.</p>
+          <p class="reveal">His works have been exhibited in Nigeria and internationally, including Malta, and have featured in group exhibitions and online presentations.</p>
+          <div class="bio__cta reveal">
+            <a class="btn" href="works.html">See the works <span class="btn__arrow" aria-hidden="true"></span></a>
+            <a class="btn btn--ghost" href="commission.html">Commission a piece <span class="btn__arrow" aria-hidden="true"></span></a>
+          </div>
+      </div>
+    </section>
+    </div>
+
+    <!-- STUDIO FILM -->
+    <section class="film" aria-labelledby="film-title">
+      <div class="film__text reveal">
+        <p class="mono eyebrow">Studio film &middot; 0:58</p>
+        <h2 id="film-title">In the studio</h2>
+        <p class="mono">John at work in Lagos, talking about where the music in his paintings comes from: growing up without access to instruments, and the friend&rsquo;s home where he found them.</p>
+      </div>
+      <div class="phone film__video reveal">
+        <video data-story src="assets/video/studio-story.mp4" poster="assets/img/studio-poster.jpg" playsinline preload="none"></video>
+        <button class="play" data-play aria-label="Play the studio film">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <span class="mono">Play &middot; 0:58</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ARTIST STATEMENT -->
+    <section class="statement" id="statement" aria-labelledby="statement-title">
+      <header class="statement__head">
+        <p class="mono eyebrow reveal">In his own words</p>
+        <h2 class="reveal" id="statement-title">Artist Statement</h2>
+        <blockquote class="statement__pull reveal">&ldquo;I see painting as a means of giving visual form to experiences that words cannot always fully express.&rdquo;</blockquote>
+      </header>
+      <div class="statement__text">
+          <p class="reveal">My artistic practice explores the relationship between music, human expression, cultural identity and the experiences that shape everyday life. Working primarily through figurative painting, I am interested in the human figure as a vessel for stories, emotions and shared experiences. My paintings draw from observations of life, personal memories and cultural encounters, translating moments of human existence into visual narratives.</p>
+          <p class="reveal">Music occupies a central place in my practice, not merely as a subject to be represented but as a language through which I explore human connection, memory, emotion and belonging. My early encounters with musical environments and the cultural significance of music in everyday life have shaped my interest in the relationship between people, instruments and the spaces they inhabit. I am particularly drawn to the gestures, expressions and quiet interactions that surround musical experiences, often exploring what exists beyond the performance itself.</p>
+          <p class="reveal">Works such as <i>Rhythm of Our Heritage</i> (2026), <i>Little Dreamer II</i> (2025) and <i>My Father’s Footsteps II</i> examine different dimensions of this relationship. While some compositions capture the collective experience of music-making, others focus on individual moments of reflection, aspiration and rest. Through these narratives, I seek to reveal the emotional and human experiences that often remain beneath the surface of ordinary encounters.</p>
+          <p class="reveal">Rooted in my Nigerian background and influenced by the richness of African cultural life, my work also reflects a broader interest in the human condition. I draw upon the visual language of my environment, combining elements of expressionism and realism through expressive brushwork, vibrant yet considered colour relationships, texture and carefully constructed compositions.</p>
+          <p class="reveal">Ultimately, my practice is an ongoing exploration of how art can preserve memories, communicate emotions and create connections between people and cultures. I see painting as a means of giving visual form to experiences that words cannot always fully express, inviting viewers to recognise something of their own humanity within the stories I tell.</p>
+          <p class="statement__sig reveal">&mdash; John Akande</p>
+      </div>
+    </section>
+
+    <!-- IN HIS WORDS -->
+    <section class="words">
+      <header class="head">
+        <h2 class="reveal">From the Studio</h2>
+        <p class="mono head__note reveal">From the studio film &mdash; on where the music in the paintings comes from.</p>
+      </header>
+      <ol class="words__list">
+        <li class="reveal"><span class="mono n">01</span><q>I didn&rsquo;t have access to musical instruments for practice.</q><span class="mono who">John Akande<br /><i>Studio film</i></span></li>
+        <li class="reveal"><span class="mono n">02</span><q>I was fortunate to have a friend living nearby, whose family&rsquo;s mansion was filled with various instruments.</q><span class="mono who">John Akande<br /><i>Studio film</i></span></li>
+        <li class="reveal"><span class="mono n">03</span><q>I loved visiting her, and her family always welcomed me warmly.</q><span class="mono who">John Akande<br /><i>Studio film</i></span></li>
+        <li class="reveal"><span class="mono n">04</span><q>Those visits provided a nurturing environment.</q><span class="mono who">John Akande<br /><i>Studio film</i></span></li>
+      </ol>
+    </section>
+
+    <!-- THEMES -->
+    <section class="themes">
+      <h2 class="reveal">Themes &amp;<br />Practice</h2>
+      <ul class="themes__list mono">
+        <li class="reveal"><span>Music &amp; Sound</span><span>01</span></li>
+        <li class="reveal"><span>Identity</span><span>02</span></li>
+        <li class="reveal"><span>Heritage</span><span>03</span></li>
+        <li class="reveal"><span>Childhood &amp; Wonder</span><span>04</span></li>
+        <li class="reveal"><span>Live Painting</span><span>05</span></li>
+      </ul>
+    </section>
+
+    <!-- PRESS -->
+    <section class="press">
+      <h2 class="reveal">Features &amp;<br />Press</h2>
+      <div class="table mono">
+        <div class="row row--head"><span>Publication</span><span>Feature</span><span>Section</span></div>
+        <div class="row reveal"><span>Incongru Magazine</span><span>Little Dreamer II</span><span>Visual Art</span></div>
+        <div class="row reveal"><span>The Guardian Nigeria</span><span>How Nigeria&rsquo;s emerging artists are&hellip;</span><span>Life</span></div>
+      </div>
+    </section>
+  </main>
+""" + footer() + END
+
+# ---------------------------------------------------------------- CONTACT
+avail_opts = "\n".join(f'              <option>{e(r[1])}</option>' for r in paintings if not r[4])
+types = [("acquisition", "Acquiring a work"), ("commission", "A commission"),
+         ("exhibition", "An exhibition or press"), ("live", "Live painting")]
+type_html = "\n".join(
+    f'            <label class="chip"><input type="radio" name="type" value="{v}"{" checked" if i == 0 else ""} /> {lbl}</label>'
+    for i, (v, lbl) in enumerate(types))
+contact = head("Contact — John Akande",
+               "Enquire about acquiring a painting, a commission, an exhibition or live painting with John Akande.",
+               "contact") + nav("contact.html") + f"""
+  <main id="main" class="paper">
+    <header class="page-head" id="top">
+      <p class="mono eyebrow reveal">Contact &middot; Lagos, Nigeria</p>
+      <h1 class="page-head__title page-head__title--wide reveal">Get in <em>touch.</em></h1>
+      <p class="page-head__lede page-head__lede--sm reveal">Whether you&rsquo;d like to acquire a painting, commission a new work, or invite John to exhibit or paint live, he&rsquo;d love to hear from you. Fill in the form below and John will reply to you personally.</p>
+    </header>
+
+    <section class="enquire">
+      <form class="composer reveal" data-composer novalidate>
+        <fieldset>
+          <legend class="mono">01 &mdash; I&rsquo;m enquiring about</legend>
+          <div class="chips">
+{type_html}
+          </div>
+        </fieldset>
+        <label class="field" data-work-field>
+          <span class="mono">02 &mdash; Which work?</span>
+          <select name="work">
+              <option value="">Not sure yet</option>
+{avail_opts}
+          </select>
+        </label>
+        <label class="field">
+          <span class="mono">03 &mdash; Your name</span>
+          <input name="name" type="text" autocomplete="name" placeholder="Your name" />
+        </label>
+        <label class="field">
+          <span class="mono">04 &mdash; Your message</span>
+          <textarea name="message" rows="4" placeholder="Where you&rsquo;re based, timing, anything John should know"></textarea>
+        </label>
+        <div class="composer__preview">
+          <span class="mono">Your message</span>
+          <p data-preview></p>
+        </div>
+        <div class="composer__actions">
+          <button class="btn" type="submit">Send enquiry <span class="btn__arrow" aria-hidden="true"></span></button>
+          <p class="mono composer__status" data-status role="status" aria-live="polite"></p>
+        </div>
+      </form>
+
+      <aside class="enquire__side reveal">
+        <div>
+          <span class="mono eyebrow">Studio</span>
+          <p>Lagos, Nigeria</p>
+          <p class="mono"><span data-clock>--:--</span> WAT</p>
+        </div>
+        <div>
+          <span class="mono eyebrow">Direct</span>
+          <p><a class="link" href="https://ig.me/m/akandejjohn" target="_blank" rel="noopener">Message on Instagram &nearr;</a></p>
+          <p><a class="link" href="{TH}" target="_blank" rel="noopener">Threads &nearr;</a></p>
+        </div>
+        <div>
+          <span class="mono eyebrow">Available now</span>
+          <p>{n_avail} of {n_total} paintings</p>
+          <p><a class="link" href="works.html">Browse the catalogue &rarr;</a></p>
+        </div>
+      </aside>
+    </section>
+  </main>
+""" + footer(cta=False) + END
+
+
+# ---------------------------------------------------------------- COMMISSION
+offers = [
+    ("where-music-takes-root", "Where Music Takes Root, framed", "01", "A painting for your space",
+     "An original acrylic on canvas, scaled to your wall and built around a story that matters to you."),
+    ("young-virtuoso-iii", "Young Virtuoso III, framed", "02", "Portraits &amp; musicians",
+     "A person, a family or a performer, painted in John&rsquo;s figurative style of bold contrast and textured layers."),
+    ("studio", "John Akande at work in his Lagos studio", "03", "Live painting",
+     "John paints live at your event, turning the music and movement in the room into a finished canvas."),
+]
+offer_html = "\n".join(f"""        <article class="offer reveal">
+          <div class="offer__img">{pic(src, alt, "(max-width: 600px) 92vw, (max-width: 960px) 46vw, 31vw") if src != "studio" else f'<img src="assets/img/studio-poster.jpg" alt="{alt}" loading="lazy" decoding="async" />'}</div>
+          <span class="mono offer__n">{n}</span>
+          <h3>{t}</h3>
+          <p class="mono">{d}</p>
+        </article>""" for src, alt, n, t, d in offers)
+steps = [
+    ("Share your idea", "Tell John what you have in mind: the subject, the space it&rsquo;s for, and the size you imagine."),
+    ("Agree the details", "Size, price and timeline are agreed together before any paint touches the canvas."),
+    ("In the studio", "John paints the work by hand in his Lagos studio, in acrylic on canvas."),
+    ("Delivery", "Collection or shipping of the finished painting is arranged with you."),
+]
+steps_html = "\n".join(f"""        <li class="reveal"><span class="steps__n">0{i+1}</span><h3>{t}</h3><p class="mono">{d}</p></li>""" for i, (t, d) in enumerate(steps))
+sizes = sorted(paintings, key=lambda r: int(r[3].strip("$").replace(",", "")))
+commission = head("Commission — John Akande",
+                  "Commission an original painting, portrait or live painting from Lagos-based figurative artist John Akande.",
+                  "commission") + nav("commission.html") + f"""
+  <main id="main" class="paper">
+    <header class="page-head" id="top">
+      <p class="mono eyebrow reveal">Commissions</p>
+      <h1 class="page-head__title reveal">Commission</h1>
+      <p class="page-head__lede reveal">An original painting, made for you in John Akande&rsquo;s Lagos studio.</p>
+    </header>
+
+    <section class="offers" aria-label="What you can commission">
+      <div class="offers__grid">
+{offer_html}
+      </div>
+    </section>
+
+    <section class="process">
+      <header class="head">
+        <div>
+          <p class="mono eyebrow reveal">The process</p>
+          <h2 class="reveal">How it works</h2>
+        </div>
+        <p class="mono head__note reveal">For reference, catalogue works range from <b>{sizes[0][2]}</b> at {sizes[0][3]} to <b>{sizes[-1][2]}</b> at {sizes[-1][3]}.</p>
+      </header>
+      <ol class="steps">
+{steps_html}
+      </ol>
+      <div class="process__cta reveal">
+        <a class="btn" href="contact.html?type=commission">Start a commission <span class="btn__arrow" aria-hidden="true"></span></a>
+        <a class="btn btn--ghost" href="works.html">See the works <span class="btn__arrow" aria-hidden="true"></span></a>
+      </div>
+    </section>
+  </main>
+""" + footer() + END
+
+# ---------------------------------------------------------------- ARTWORK PAGES
+# Framed gallery mockups show the canvas inside a frame and wall; the scale view zooms
+# into the canvas so the drawn rectangle shows the painting, not the frame.
+UNFRAMED = {"quiet-beginning-i": (1.0, .5), "quiet-beginning-ii": (1.0, .5),
+            "when-time-was-simple": (1.28, .5), "my-fathers-footstep-i": (1.18, .5)}
+def zoom(slug):
+    return UNFRAMED.get(slug, (1.62, .36))
+
+def dims(size, w, h):
+    a, b = map(int, re.findall(r"\d+", size)[:2])
+    if "ft" in size:
+        a, b = a * 12, b * 12
+    long_, short = max(a, b), min(a, b)
+    return (long_, short) if w >= h else (short, long_)
+
+def series(title):
+    return re.sub(r"\s+[IVX]+$", "", title)
+
+ROOM_W, WALL_H, FLOOR = 200, 110, 14     # inches; the drawing is to scale
+SOFA_W, SOFA_H, PERSON_H = 84, 32, 69
+def scale_svg(slug, title, pw, ph):
+    cx = 88
+    bottom = max(SOFA_H + 12, 60 - ph / 2)
+    if bottom + ph > WALL_H - 4:
+        bottom = WALL_H - 4 - ph
+    x, y = cx - pw / 2, WALL_H - bottom - ph
+    z, oy = zoom(slug)
+    iw, ih = pw * z, ph * z
+    ix, iy = x - (iw - pw) / 2, y - (ih - ph) * oy
+    sx, floor_y = cx - SOFA_W / 2, WALL_H
+    px, top = 160, WALL_H - PERSON_H
+    return f"""<svg class="scale__svg" viewBox="0 0 {ROOM_W} {WALL_H + FLOOR}" role="img" aria-label="{e(title)} drawn to scale on a wall above a 7 foot sofa, beside a person 5 foot 9 inches tall">
+            <defs>
+              <clipPath id="canvas"><rect x="{x:.2f}" y="{y:.2f}" width="{pw}" height="{ph}" /></clipPath>
+              <filter id="drop" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="1.6" stdDeviation="1.6" flood-color="#1d1612" flood-opacity=".35" /></filter>
+              <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1ebe0" /><stop offset="1" stop-color="#e3dacb" /></linearGradient>
+            </defs>
+            <rect width="{ROOM_W}" height="{WALL_H}" fill="url(#wall)" />
+            <rect y="{WALL_H}" width="{ROOM_W}" height="{FLOOR}" fill="#d6cab6" />
+            <rect y="{WALL_H - 3}" width="{ROOM_W}" height="3" fill="#ddd2c1" />
+            <g filter="url(#drop)">
+              <rect x="{x:.2f}" y="{y:.2f}" width="{pw}" height="{ph}" fill="#2b1c14" />
+              <image href="{mid(slug)}" x="{ix:.2f}" y="{iy:.2f}" width="{iw:.2f}" height="{ih:.2f}" preserveAspectRatio="xMidYMid slice" clip-path="url(#canvas)" />
+            </g>
+            <g fill="#b8aa93">
+              <rect x="{sx}" y="{floor_y - SOFA_H}" width="{SOFA_W}" height="{SOFA_H - 4}" rx="3" />
+              <rect x="{sx - 4}" y="{floor_y - 22}" width="8" height="18" rx="3" />
+              <rect x="{sx + SOFA_W - 4}" y="{floor_y - 22}" width="8" height="18" rx="3" />
+              <rect x="{sx + 4}" y="{floor_y - 4}" width="3" height="4" /><rect x="{sx + SOFA_W - 7}" y="{floor_y - 4}" width="3" height="4" />
+            </g>
+            <rect x="{sx + 3}" y="{floor_y - 18}" width="{SOFA_W - 6}" height="1" fill="#a99a82" />
+            <g fill="#c3b59f">
+              <circle cx="{px}" cy="{top + 4.6}" r="4.6" />
+              <path d="M{px - 8} {top + 13} q8 -3.6 16 0 l2 26 h-3.4 l-1.4 -19 l-1 {PERSON_H - 13 - 7} h-4 l-1 -{PERSON_H - 13 - 26} l-1 {PERSON_H - 13 - 26} h-4 l-1 -{PERSON_H - 13 - 7} l-1.4 19 h-3.4 z" />
+            </g>
+          </svg>"""
+
+order = [r for r in META if not r[0].endswith("studio")]
+art_pages = {}
+for k, row in enumerate(order):
+    slug, title, size, price, sold, (w, h) = row
+    usd = price.strip("$").replace(",", "")
+    pw, ph = dims(size, IMGS[slug]["w"], IMGS[slug]["h"])
+    a_, b_ = [int(n) * (12 if "ft" in size else 1) for n in re.findall(r"\d+", size)[:2]]
+    cm = f"{round(a_ * 2.54)} × {round(b_ * 2.54)} cm"
+    prev_r, next_r = order[k - 1], order[(k + 1) % len(order)]
+    ser = series(title)
+    siblings = [r for r in order if series(r[1]) == ser and r[0] != slug]
+    pool = siblings + [r for r in order[k + 1:] + order[:k] if r not in siblings and r[0] != slug]
+    related = pool[:3]
+    related_html = "\n".join(work_card(r, sizes="(max-width: 760px) 92vw, 31vw") for r in related)
+    more_title = f"More from <em>{e(ser)}</em>" if siblings else "More from the <em>catalogue</em>"
+    status_pill = '<span class="art__status art__status--sold">Sold</span>' if sold else '<span class="art__status">Available</span>'
+    price_html = ('<dd class="art__sold">Sold</dd>' if sold else f'<dd><span class="art__price" data-usd="{usd}">{e(price)}</span></dd>')
+    actions = (f'''<a class="btn" href="contact.html?type=commission">Commission a similar work <span class="btn__arrow" aria-hidden="true"></span></a>''' if sold else
+               f'''<a class="btn" href="contact.html?work={e(title).replace(" ", "%20")}">Enquire about this work <span class="btn__arrow" aria-hidden="true"></span></a>''')
+    studio_extra = ""
+    if slug == "rhythm-of-our-heritage":
+        studio_extra = f"""
+          <figure class="art__alt">
+            <button class="art__zoom" data-lightbox data-src="{big('rhythm-of-our-heritage-studio')}" data-title="Rhythm of Our Heritage" data-meta="In the studio, before framing" data-note="">
+              {pic("rhythm-of-our-heritage-studio", "Rhythm of Our Heritage leaning against a white studio wall, before framing", "(max-width: 960px) 40vw, 18vw")}
+            </button>
+            <figcaption class="mono">In the studio, before framing</figcaption>
+          </figure>"""
+    ld = {
+        "@context": "https://schema.org", "@type": "VisualArtwork", "name": title,
+        "creator": {"@type": "Person", "name": "John Akande", "url": SITE + "/"},
+        "artform": "Painting", "artMedium": "Acrylic", "artworkSurface": "Canvas",
+        "width": {"@type": "Distance", "name": f"{pw} in"}, "height": {"@type": "Distance", "name": f"{ph} in"},
+        "image": f"{SITE}/{img_base(slug)}.jpg", "url": f"{SITE}/works/{slug}.html",
+        "offers": {"@type": "Offer", "price": usd, "priceCurrency": "USD", "url": f"{SITE}/works/{slug}.html",
+                   "availability": "https://schema.org/SoldOut" if sold else "https://schema.org/InStock"},
+    }
+    crumbs = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Works", "item": f"{SITE}/works.html"},
+        {"@type": "ListItem", "position": 2, "name": title, "item": f"{SITE}/works/{slug}.html"}]}
+    desc = f"{title}, {size} acrylic on canvas by Lagos-based figurative artist John Akande. {'Sold.' if sold else 'Available to acquire.'}"
+    doc = head(f"{e(title)} — John Akande", desc, "works", path=f"works/{slug}.html",
+               og=f"{SITE}/{img_base(slug)}.jpg", ld=[ld, crumbs], og_type="article") + nav("works.html") + f"""
+  <main id="main" class="paper">
+    <article class="art" id="top">
+      <nav class="art__crumbs mono" aria-label="Breadcrumb">
+        <a href="works.html">Works</a><span aria-hidden="true">/</span><span aria-current="page">{e(title)}</span>
+      </nav>
+      <div class="art__grid">
+        <div class="art__media">
+          <button class="art__zoom art__main" data-lightbox data-src="{big(slug)}" data-title="{e(title)}" data-meta="{e(size)} · Acrylic on canvas" data-note="" aria-label="View {e(title)} larger">
+            {pic(slug, f"{e(title)}, acrylic on canvas by John Akande", "(max-width: 960px) 92vw, 55vw", lazy=False)}
+            <span class="art__hint mono" aria-hidden="true">View larger</span>
+          </button>{studio_extra}
+        </div>
+        <div class="art__info">
+          <p class="mono eyebrow">Acrylic on canvas{f" &middot; {e(ser)} series" if siblings else ""}</p>
+          <h1 class="art__title">{e(title)}</h1>
+          {status_pill}
+          <dl class="art__facts mono">
+            <div><dt>Size</dt><dd>{e(size)} <span>({cm})</span></dd></div>
+            <div><dt>Medium</dt><dd>Acrylic on canvas</dd></div>
+            <div><dt>Price</dt>{price_html}</div>
+            <div><dt>Artist</dt><dd>John Akande, Lagos</dd></div>
+          </dl>
+{"" if sold else currency_switch(compact=True)}
+          <p class="art__note">Part of a body of work exploring music as a living force: how rhythm shapes identity, how performance reveals vulnerability, and how music functions as cultural memory and therapy.</p>
+          <div class="art__actions">
+            {actions}
+            <a class="btn btn--ghost" href="#scale">See it on a wall <span class="btn__arrow" aria-hidden="true"></span></a>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <section class="scale" id="scale" aria-labelledby="scale-title">
+      <header class="head">
+        <div>
+          <p class="mono eyebrow reveal">To scale</p>
+          <h2 class="reveal" id="scale-title">See it on a wall</h2>
+        </div>
+        <p class="mono head__note reveal"><b>{e(size)}</b> ({cm}), shown beside a 7&nbsp;ft (213&nbsp;cm) sofa and a person 5&nbsp;ft&nbsp;9&nbsp;in (175&nbsp;cm) tall. A guide to size, not an exact preview.</p>
+      </header>
+      <figure class="scale__room reveal">
+          {scale_svg(slug, title, pw, ph)}
+      </figure>
+    </section>
+
+    <section class="related" aria-labelledby="related-title">
+      <header class="head">
+        <h2 class="reveal" id="related-title">{more_title}</h2>
+        <a class="btn btn--ghost reveal" href="works.html">All works <span class="btn__arrow" aria-hidden="true"></span></a>
+      </header>
+      <div class="related__grid">
+{related_html}
+      </div>
+      <nav class="art__pager" aria-label="Previous and next work">
+        <a href="works/{prev_r[0]}.html" rel="prev"><span class="mono">Previous</span><strong>{e(prev_r[1])}</strong></a>
+        <a href="works/{next_r[0]}.html" rel="next"><span class="mono">Next</span><strong>{e(next_r[1])}</strong></a>
+      </nav>
+    </section>
+  </main>
+""" + footer() + LIGHTBOX + END
+    art_pages[f"works/{slug}.html"] = doc
+
+# ---------------------------------------------------------------- 404
+notfound = head("Page not found — John Akande", "This page could not be found.", "404", path="404.html", og=f"{SITE}/assets/og/og-home.jpg") + nav("") + f"""
+  <main id="main" class="paper nf">
+    <div class="nf__inner" id="top">
+      <p class="mono eyebrow">Error 404</p>
+      <h1 class="nf__title">This page has left <em>the gallery.</em></h1>
+      <p class="mono nf__text">The link may be old, or the page may have moved. The paintings are all still here.</p>
+      <div class="nf__actions">
+        <a class="btn" href="works.html">View the works <span class="btn__arrow" aria-hidden="true"></span></a>
+        <a class="btn btn--ghost" href="index.html">Back to home <span class="btn__arrow" aria-hidden="true"></span></a>
+      </div>
+    </div>
+    <div class="nf__art" aria-hidden="true">{pic("quiet-beginning-i", "", "(max-width: 860px) 70vw, 30vw", lazy=False)}</div>
+  </main>
+""" + footer(cta=False) + END
+notfound = notfound.replace('<meta name="description"', '<meta name="robots" content="noindex" />\n  <meta name="description"', 1)
+
+pages = {"index.html": home, "works.html": works, "about.html": about, "contact.html": contact,
+         "commission.html": commission, "404.html": notfound, **art_pages}
+os.makedirs(ROOT + "works", exist_ok=True)
+for name, doc in pages.items():
+    open(ROOT + name, "w").write(absolutize(doc))
+
+# sitemap + robots + web manifest
+urls = ["", "works.html", "about.html", "commission.html", "contact.html"] + [f"works/{r[0]}.html" for r in order]
+open(ROOT + "sitemap.xml", "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+    "".join(f"  <url><loc>{SITE}/{u}</loc><lastmod>{TODAY}</lastmod></url>\n" for u in urls) + "</urlset>\n")
+open(ROOT + "robots.txt", "w").write(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n")
+open(ROOT + "site.webmanifest", "w").write(json.dumps({
+    "name": "John Akande", "short_name": "John Akande", "start_url": "/", "display": "browser",
+    "background_color": "#f3eee4", "theme_color": "#f3eee4",
+    "icons": [{"src": "/assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png"},
+              {"src": "/assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png"}]}, indent=2) + "\n")
+print("ok", n_total, n_avail, n_sold, "pages", len(pages))
