@@ -373,6 +373,18 @@ home = head("John Akande — Figurative Artist, Lagos",
       </div>
 
       <div class="hero__stage" data-parallax>
+        <button class="float f1" data-speed="-0.35" style="--r:-6deg" data-lightbox data-src="{big("young-virtuoso-i")}" data-title="Young Virtuoso I" data-meta="30 × 40 in · Acrylic on canvas · Available" data-note="A girl in pink plays the violin among the instruments of a quiet interior." data-enquire="Young Virtuoso I">
+          {pic("young-virtuoso-i", "Young Virtuoso I: a girl in a pink dress plays the violin", "(max-width: 760px) 1px, 270px", lazy=False)}
+        </button>
+        <div class="float float--ghost f2" data-speed="0.12" style="--r:4deg" aria-hidden="true">
+          <img src="{mid("young-virtuoso-i")}" alt="" loading="lazy" decoding="async" />
+        </div>
+        <button class="float f3" data-speed="-0.5" style="--r:5deg" data-lightbox data-src="{big("my-fathers-footstep-i")}" data-title="My Father’s Footstep I" data-meta="42 × 60 in · Acrylic on canvas · Available" data-note="A boy rests beside a red cello in the warm light of a window." data-enquire="My Father’s Footstep I">
+          {pic("my-fathers-footstep-i", "My Father’s Footstep I: a boy asleep beside a red cello", "(max-width: 760px) 1px, 290px", lazy=False)}
+        </button>
+        <div class="float float--ghost f4" data-speed="0.1" style="--r:-4deg" aria-hidden="true">
+          <img src="{mid("my-fathers-footstep-i")}" alt="" loading="lazy" decoding="async" />
+        </div>
         <figure class="hero__media" data-hero-media>
           <video class="hero__video" src="assets/video/hero-loop.mp4" poster="assets/img/hero-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="John Akande painting in his studio"></video>
           <span class="hero__live mono"><i></i>In the studio, Lagos</span>
