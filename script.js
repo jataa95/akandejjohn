@@ -304,4 +304,73 @@
     addEventListener("load", measure);
     measure();
   }
+  // Currency: prices are set in US dollars; other currencies are converted at the day's rate
+  const priced = $$("[data-usd]");
+  if (priced.length) {
+    const CURRENCIES = {
+      USD: { locale: "en-US", round: 1 },
+      EUR: { locale: "en-IE", round: 10 },
+      GBP: { locale: "en-GB", round: 10 },
+      NGN: { locale: "en-NG", round: 1000 },
+    };
+    // used only if the live rates can't be loaded; approximate
+    const FALLBACK = { USD: 1, EUR: 0.87, GBP: 0.76, NGN: 1500 };
+    const RATES_KEY = "akande-rates", CUR_KEY = "akande-currency";
+    const store = {
+      get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+      set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+    };
+    let rates = null, live = false;
+    try {
+      const cached = JSON.parse(store.get(RATES_KEY) || "null");
+      if (cached && Date.now() - cached.t < 12 * 3600e3) { rates = cached.r; live = true; }
+    } catch {}
+    let current = store.get(CUR_KEY);
+    if (!CURRENCIES[current]) current = "USD";
+
+    const sw = $("[data-currency-switch]");
+    const note = $("[data-currency-note]");
+    const format = (usd, cur) => {
+      const c = CURRENCIES[cur];
+      const rate = (rates || FALLBACK)[cur] || FALLBACK[cur];
+      const value = Math.round((usd * rate) / c.round) * c.round;
+      const text = new Intl.NumberFormat(c.locale, { style: "currency", currency: cur, maximumFractionDigits: 0 }).format(value);
+      return cur === "USD" ? text : `≈ ${text}`;
+    };
+    const apply = (cur) => {
+      current = cur;
+      priced.forEach((el) => {
+        const text = format(+el.dataset.usd, cur);
+        if (el.matches("[data-lightbox]")) el.dataset.meta = `${el.dataset.size} · Acrylic on canvas · ${text}`;
+        else el.textContent = text;
+      });
+      if (sw) $$("[data-currency]", sw).forEach((b) => b.setAttribute("aria-pressed", b.dataset.currency === cur));
+      if (note) {
+        note.textContent = cur === "USD"
+          ? "Prices are set in US dollars."
+          : `Approximate, converted from US dollars at ${live ? "today’s" : "a recent"} rate. Final price is agreed in US dollars.`;
+      }
+    };
+    if (sw) sw.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-currency]");
+      if (!b) return;
+      store.set(CUR_KEY, b.dataset.currency);
+      apply(b.dataset.currency);
+    });
+    apply(current);
+
+    if (!live && (sw || current !== "USD")) {
+      fetch("https://open.er-api.com/v6/latest/USD")
+        .then((r) => (r.ok ? r.json() : Promise.reject()))
+        .then((d) => {
+          if (d && d.rates && d.rates.EUR && d.rates.GBP && d.rates.NGN) {
+            rates = { USD: 1, EUR: d.rates.EUR, GBP: d.rates.GBP, NGN: d.rates.NGN };
+            live = true;
+            store.set(RATES_KEY, JSON.stringify({ t: Date.now(), r: rates }));
+            apply(current);
+          }
+        })
+        .catch(() => {});
+    }
+  }
 })();

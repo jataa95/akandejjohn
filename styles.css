@@ -372,6 +372,30 @@ section + section { border-top: 1px solid var(--rule); }
 .chip:hover { border-color: var(--fg); }
 .chip[aria-pressed="true"], .chip:has(input:checked) { background: var(--fg); color: var(--on-fg); border-color: var(--fg); }
 .chip[aria-pressed="true"] span { color: inherit; opacity: .6; }
+/* works toolbar: filters on the left, currency switch on the right */
+.toolbar { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem 2rem; margin-bottom: clamp(2rem, 4vw, 3rem); padding-top: 1.5rem; border-top: 1px solid var(--rule); }
+.toolbar .filters { margin: 0; padding: 0; border: 0; }
+.currency { display: flex; flex-direction: column; align-items: flex-end; gap: .55rem; }
+.currency__label { text-transform: uppercase; letter-spacing: .2em; font-size: .6rem; color: var(--fg-dim); }
+.currency__switch { display: inline-flex; border: 1px solid var(--rule); }
+.currency__switch button {
+  font-family: var(--mono); font-size: .64rem; text-transform: uppercase; letter-spacing: .16em;
+  padding: .72rem 1rem; background: transparent; border: 0; border-left: 1px solid var(--rule); cursor: pointer;
+  color: var(--fg-dim); transition: background .3s, color .3s;
+}
+.currency__switch button:first-child { border-left: 0; }
+.currency__switch button b { font-weight: 500; color: var(--fg); margin-right: .2rem; transition: color .3s; }
+.currency__switch button:hover { color: var(--fg); }
+.currency__switch button[aria-pressed="true"] { background: var(--fg); color: var(--on-fg); }
+.currency__switch button[aria-pressed="true"] b { color: var(--gold-soft); }
+.currency__switch button:focus-visible { outline: 1px solid var(--fg); outline-offset: 2px; }
+.currency__note { margin: 0; color: var(--fg-dim); font-size: .66rem; max-width: 24rem; text-align: right; }
+@media (max-width: 760px) {
+  .currency { align-items: flex-start; width: 100%; }
+  .currency__switch { width: 100%; }
+  .currency__switch button { flex: 1; padding-inline: .4rem; letter-spacing: .1em; }
+  .currency__note { text-align: left; }
+}
 .works__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(2.5rem, 4.5vw, 4.5rem) clamp(1.25rem, 2.6vw, 2.75rem); align-items: start; }
 .work--feature { grid-column: span 2; }
 .works .work button { background: #d9d0c1; box-shadow: 0 24px 40px -28px rgba(29,22,18,.55); }

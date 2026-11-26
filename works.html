@@ -61,10 +61,22 @@
     </header>
 
     <section class="works" aria-label="All works">
-      <div class="filters reveal" role="group" aria-label="Filter works">
-        <button class="chip" aria-pressed="true" data-filter="all">All <span>16</span></button>
-        <button class="chip" aria-pressed="false" data-filter="available">Available <span>14</span></button>
-        <button class="chip" aria-pressed="false" data-filter="sold">Sold <span>2</span></button>
+      <div class="toolbar reveal">
+        <div class="filters" role="group" aria-label="Filter works">
+          <button class="chip" aria-pressed="true" data-filter="all">All <span>16</span></button>
+          <button class="chip" aria-pressed="false" data-filter="available">Available <span>14</span></button>
+          <button class="chip" aria-pressed="false" data-filter="sold">Sold <span>2</span></button>
+        </div>
+        <div class="currency">
+          <span class="mono currency__label" id="currency-label">Prices in</span>
+          <div class="currency__switch" role="group" aria-labelledby="currency-label" data-currency-switch>
+            <button type="button" aria-pressed="true" data-currency="USD"><b>$</b> USD</button>
+            <button type="button" aria-pressed="false" data-currency="EUR"><b>&euro;</b> EUR</button>
+            <button type="button" aria-pressed="false" data-currency="GBP"><b>&pound;</b> GBP</button>
+            <button type="button" aria-pressed="false" data-currency="NGN"><b>&#8358;</b> NGN</button>
+          </div>
+          <p class="mono currency__note" data-currency-note aria-live="polite">Prices are set in US dollars.</p>
+        </div>
       </div>
       <div class="works__grid" data-works>
         <figure class="work work--feature reveal" data-status="sold">
@@ -88,92 +100,92 @@
           </figcaption>
         </figure>
         <figure class="work reveal" data-status="available">
-          <button data-lightbox data-src="assets/img/works/young-virtuoso-i.jpg" data-title="Young Virtuoso I" data-meta="30 × 40 in · Acrylic on canvas · $3,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Young Virtuoso I">
+          <button data-lightbox data-src="assets/img/works/young-virtuoso-i.jpg" data-title="Young Virtuoso I" data-meta="30 × 40 in · Acrylic on canvas · $3,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Young Virtuoso I" data-size="30 × 40 in" data-usd="3000">
             <img src="assets/img/works/young-virtuoso-i.jpg" alt="Young Virtuoso I, acrylic on canvas by John Akande" width="901" height="1264" loading="lazy" decoding="async" />
           </button>
           <figcaption>
             <span class="work__title">Young Virtuoso I</span>
-            <span class="work__price">$3,000</span>
+            <span class="work__price" data-usd="3000">$3,000</span>
             <span class="work__meta mono">30 × 40 in · Acrylic on canvas</span>
           </figcaption>
         </figure>
         <figure class="work reveal" data-status="available">
-          <button data-lightbox data-src="assets/img/works/young-virtuoso-ii.jpg" data-title="Young Virtuoso II" data-meta="30 × 40 in · Acrylic on canvas · $3,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Young Virtuoso II">
+          <button data-lightbox data-src="assets/img/works/young-virtuoso-ii.jpg" data-title="Young Virtuoso II" data-meta="30 × 40 in · Acrylic on canvas · $3,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Young Virtuoso II" data-size="30 × 40 in" data-usd="3000">
             <img src="assets/img/works/young-virtuoso-ii.jpg" alt="Young Virtuoso II, acrylic on canvas by John Akande" width="937" height="1270" loading="lazy" decoding="async" />
           </button>
           <figcaption>
             <span class="work__title">Young Virtuoso II</span>
-            <span class="work__price">$3,000</span>
+            <span class="work__price" data-usd="3000">$3,000</span>
             <span class="work__meta mono">30 × 40 in · Acrylic on canvas</span>
           </figcaption>
         </figure>
         <figure class="work reveal" data-status="available">
-          <button data-lightbox data-src="assets/img/works/where-it-began-i.jpg" data-title="Where It Began I" data-meta="48 × 60 in · Acrylic on canvas · $8,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Where It Began I">
+          <button data-lightbox data-src="assets/img/works/where-it-began-i.jpg" data-title="Where It Began I" data-meta="48 × 60 in · Acrylic on canvas · $8,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Where It Began I" data-size="48 × 60 in" data-usd="8000">
             <img src="assets/img/works/where-it-began-i.jpg" alt="Where It Began I, acrylic on canvas by John Akande" width="930" height="1287" loading="lazy" decoding="async" />
           </button>
           <figcaption>
             <span class="work__title">Where It Began I</span>
-            <span class="work__price">$8,000</span>
+            <span class="work__price" data-usd="8000">$8,000</span>
             <span class="work__meta mono">48 × 60 in · Acrylic on canvas</span>
           </figcaption>
         </figure>
         <figure class="work reveal" data-status="available">
-          <button data-lightbox data-src="assets/img/works/rhythm-unites-us-i.jpg" data-title="Rhythm Unites Us I" data-meta="54 × 42 in · Acrylic on canvas · $6,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Rhythm Unites Us I">
+          <button data-lightbox data-src="assets/img/works/rhythm-unites-us-i.jpg" data-title="Rhythm Unites Us I" data-meta="54 × 42 in · Acrylic on canvas · $6,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Rhythm Unites Us I" data-size="54 × 42 in" data-usd="6000">
             <img src="assets/img/works/rhythm-unites-us-i.jpg" alt="Rhythm Unites Us I, acrylic on canvas by John Akande" width="890" height="1264" loading="lazy" decoding="async" />
           </button>
           <figcaption>
             <span class="work__title">Rhythm Unites Us I</span>
-            <span class="work__price">$6,000</span>
+            <span class="work__price" data-usd="6000">$6,000</span>
             <span class="work__meta mono">54 × 42 in · Acrylic on canvas</span>
           </figcaption>
         </figure>
         <figure class="work reveal" data-status="available">
-          <button data-lightbox data-src="assets/img/works/rhythm-unites-us-ii.jpg" data-title="Rhythm Unites Us II" data-meta="54 × 42 in · Acrylic on canvas · $6,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Rhythm Unites Us II">
+          <button data-lightbox data-src="assets/img/works/rhythm-unites-us-ii.jpg" data-title="Rhythm Unites Us II" data-meta="54 × 42 in · Acrylic on canvas · $6,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Rhythm Unites Us II" data-size="54 × 42 in" data-usd="6000">
             <img src="assets/img/works/rhythm-unites-us-ii.jpg" alt="Rhythm Unites Us II, acrylic on canvas by John Akande" width="922" height="1260" loading="lazy" decoding="async" />
           </button>
           <figcaption>
             <span class="work__title">Rhythm Unites Us II</span>
-            <span class="work__price">$6,000</span>
+            <span class="work__price" data-usd="6000">$6,000</span>
             <span class="work__meta mono">54 × 42 in · Acrylic on canvas</span>
           </figcaption>
         </figure>
         <figure class="work reveal" data-status="available">
-          <button data-lightbox data-src="assets/img/works/where-it-began-ii.jpg" data-title="Where It Began II" data-meta="36 × 48 in · Acrylic on canvas · $4,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Where It Began II">
+          <button data-lightbox data-src="assets/img/works/where-it-began-ii.jpg" data-title="Where It Began II" data-meta="36 × 48 in · Acrylic on canvas · $4,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Where It Began II" data-size="36 × 48 in" data-usd="4000">
             <img src="assets/img/works/where-it-began-ii.jpg" alt="Where It Began II, acrylic on canvas by John Akande" width="924" height="1304" loading="lazy" decoding="async" />
           </button>
           <figcaption>
             <span class="work__title">Where It Began II</span>
-            <span class="work__price">$4,000</span>
+            <span class="work__price" data-usd="4000">$4,000</span>
             <span class="work__meta mono">36 × 48 in · Acrylic on canvas</span>
           </figcaption>
         </figure>
         <figure class="work reveal" data-status="available">
-          <button data-lightbox data-src="assets/img/works/where-music-takes-root.jpg" data-title="Where Music Takes Root" data-meta="54 × 42 in · Acrylic on canvas · $6,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Where Music Takes Root">
+          <button data-lightbox data-src="assets/img/works/where-music-takes-root.jpg" data-title="Where Music Takes Root" data-meta="54 × 42 in · Acrylic on canvas · $6,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Where Music Takes Root" data-size="54 × 42 in" data-usd="6000">
             <img src="assets/img/works/where-music-takes-root.jpg" alt="Where Music Takes Root, acrylic on canvas by John Akande" width="966" height="1361" loading="lazy" decoding="async" />
           </button>
           <figcaption>
             <span class="work__title">Where Music Takes Root</span>
-            <span class="work__price">$6,000</span>
+            <span class="work__price" data-usd="6000">$6,000</span>
             <span class="work__meta mono">54 × 42 in · Acrylic on canvas</span>
           </figcaption>
         </figure>
         <figure class="work reveal" data-status="available">
-          <button data-lightbox data-src="assets/img/works/young-virtuoso-iii.jpg" data-title="Young Virtuoso III" data-meta="36 × 48 in · Acrylic on canvas · $4,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Young Virtuoso III">
+          <button data-lightbox data-src="assets/img/works/young-virtuoso-iii.jpg" data-title="Young Virtuoso III" data-meta="36 × 48 in · Acrylic on canvas · $4,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Young Virtuoso III" data-size="36 × 48 in" data-usd="4000">
             <img src="assets/img/works/young-virtuoso-iii.jpg" alt="Young Virtuoso III, acrylic on canvas by John Akande" width="981" height="1375" loading="lazy" decoding="async" />
           </button>
           <figcaption>
             <span class="work__title">Young Virtuoso III</span>
-            <span class="work__price">$4,000</span>
+            <span class="work__price" data-usd="4000">$4,000</span>
             <span class="work__meta mono">36 × 48 in · Acrylic on canvas</span>
           </figcaption>
         </figure>
         <figure class="work reveal" data-status="available">
-          <button data-lightbox data-src="assets/img/works/young-virtuoso-iv.jpg" data-title="Young Virtuoso IV" data-meta="36 × 48 in · Acrylic on canvas · $4,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Young Virtuoso IV">
+          <button data-lightbox data-src="assets/img/works/young-virtuoso-iv.jpg" data-title="Young Virtuoso IV" data-meta="36 × 48 in · Acrylic on canvas · $4,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Young Virtuoso IV" data-size="36 × 48 in" data-usd="4000">
             <img src="assets/img/works/young-virtuoso-iv.jpg" alt="Young Virtuoso IV, acrylic on canvas by John Akande" width="1130" height="1251" loading="lazy" decoding="async" />
           </button>
           <figcaption>
             <span class="work__title">Young Virtuoso IV</span>
-            <span class="work__price">$4,000</span>
+            <span class="work__price" data-usd="4000">$4,000</span>
             <span class="work__meta mono">36 × 48 in · Acrylic on canvas</span>
           </figcaption>
         </figure>
@@ -188,52 +200,52 @@
           </figcaption>
         </figure>
         <figure class="work reveal" data-status="available">
-          <button data-lightbox data-src="assets/img/works/where-music-takes-root-ii.jpg" data-title="Where Music Takes Root II" data-meta="54 × 42 in · Acrylic on canvas · $6,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Where Music Takes Root II">
+          <button data-lightbox data-src="assets/img/works/where-music-takes-root-ii.jpg" data-title="Where Music Takes Root II" data-meta="54 × 42 in · Acrylic on canvas · $6,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Where Music Takes Root II" data-size="54 × 42 in" data-usd="6000">
             <img src="assets/img/works/where-music-takes-root-ii.jpg" alt="Where Music Takes Root II, acrylic on canvas by John Akande" width="1071" height="1330" loading="lazy" decoding="async" />
           </button>
           <figcaption>
             <span class="work__title">Where Music Takes Root II</span>
-            <span class="work__price">$6,000</span>
+            <span class="work__price" data-usd="6000">$6,000</span>
             <span class="work__meta mono">54 × 42 in · Acrylic on canvas</span>
           </figcaption>
         </figure>
         <figure class="work reveal" data-status="available">
-          <button data-lightbox data-src="assets/img/works/quiet-beginning-i.jpg" data-title="Quiet Beginning I" data-meta="36 × 48 in · Acrylic on canvas · $4,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Quiet Beginning I">
+          <button data-lightbox data-src="assets/img/works/quiet-beginning-i.jpg" data-title="Quiet Beginning I" data-meta="36 × 48 in · Acrylic on canvas · $4,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Quiet Beginning I" data-size="36 × 48 in" data-usd="4000">
             <img src="assets/img/works/quiet-beginning-i.jpg" alt="Quiet Beginning I, acrylic on canvas by John Akande" width="1195" height="1600" loading="lazy" decoding="async" />
           </button>
           <figcaption>
             <span class="work__title">Quiet Beginning I</span>
-            <span class="work__price">$4,000</span>
+            <span class="work__price" data-usd="4000">$4,000</span>
             <span class="work__meta mono">36 × 48 in · Acrylic on canvas</span>
           </figcaption>
         </figure>
         <figure class="work reveal" data-status="available">
-          <button data-lightbox data-src="assets/img/works/quiet-beginning-ii.jpg" data-title="Quiet Beginning II" data-meta="36 × 48 in · Acrylic on canvas · $4,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Quiet Beginning II">
+          <button data-lightbox data-src="assets/img/works/quiet-beginning-ii.jpg" data-title="Quiet Beginning II" data-meta="36 × 48 in · Acrylic on canvas · $4,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Quiet Beginning II" data-size="36 × 48 in" data-usd="4000">
             <img src="assets/img/works/quiet-beginning-ii.jpg" alt="Quiet Beginning II, acrylic on canvas by John Akande" width="1184" height="1600" loading="lazy" decoding="async" />
           </button>
           <figcaption>
             <span class="work__title">Quiet Beginning II</span>
-            <span class="work__price">$4,000</span>
+            <span class="work__price" data-usd="4000">$4,000</span>
             <span class="work__meta mono">36 × 48 in · Acrylic on canvas</span>
           </figcaption>
         </figure>
         <figure class="work reveal" data-status="available">
-          <button data-lightbox data-src="assets/img/works/when-time-was-simple.jpg" data-title="When Time Was Simple" data-meta="54 × 48 in · Acrylic on canvas · $6,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="When Time Was Simple">
+          <button data-lightbox data-src="assets/img/works/when-time-was-simple.jpg" data-title="When Time Was Simple" data-meta="54 × 48 in · Acrylic on canvas · $6,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="When Time Was Simple" data-size="54 × 48 in" data-usd="6000">
             <img src="assets/img/works/when-time-was-simple.jpg" alt="When Time Was Simple, acrylic on canvas by John Akande" width="1600" height="1429" loading="lazy" decoding="async" />
           </button>
           <figcaption>
             <span class="work__title">When Time Was Simple</span>
-            <span class="work__price">$6,000</span>
+            <span class="work__price" data-usd="6000">$6,000</span>
             <span class="work__meta mono">54 × 48 in · Acrylic on canvas</span>
           </figcaption>
         </figure>
         <figure class="work reveal" data-status="available">
-          <button data-lightbox data-src="assets/img/works/my-fathers-footstep-i.jpg" data-title="My Father’s Footstep I" data-meta="42 × 60 in · Acrylic on canvas · $6,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="My Father’s Footstep I">
+          <button data-lightbox data-src="assets/img/works/my-fathers-footstep-i.jpg" data-title="My Father’s Footstep I" data-meta="42 × 60 in · Acrylic on canvas · $6,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="My Father’s Footstep I" data-size="42 × 60 in" data-usd="6000">
             <img src="assets/img/works/my-fathers-footstep-i.jpg" alt="My Father’s Footstep I, acrylic on canvas by John Akande" width="1088" height="1600" loading="lazy" decoding="async" />
           </button>
           <figcaption>
             <span class="work__title">My Father’s Footstep I</span>
-            <span class="work__price">$6,000</span>
+            <span class="work__price" data-usd="6000">$6,000</span>
             <span class="work__meta mono">42 × 60 in · Acrylic on canvas</span>
           </figcaption>
         </figure>
