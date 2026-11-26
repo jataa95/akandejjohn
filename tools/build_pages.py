@@ -119,7 +119,11 @@ def head(title, desc, page, path=None, og=None, ld=None, og_type="website"):
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body data-page="{page}">
-  <div class="intro-mark" aria-hidden="true"><span>JA</span><i></i></div>
+  <div class="loader" aria-hidden="true">
+    <div class="loader__name"><span style="--i:0">J</span><span style="--i:1">O</span><span style="--i:2">H</span><span style="--i:3">N</span><span style="--i:4">&nbsp;</span><span style="--i:5">A</span><span style="--i:6">K</span><span style="--i:7">A</span><span style="--i:8">N</span><span style="--i:9">D</span><span style="--i:10">E</span></div>
+    <i class="loader__line"></i>
+    <p class="loader__sub">Figurative artist &middot; Lagos</p>
+  </div>
   <a class="skip" href="#main">Skip to content</a>
 """
 
