@@ -293,7 +293,7 @@ def footer(cta=True, faq=False):
       </div>
     </div>
     <div class="foot__base mono">
-      <span>&copy; <span data-year>2026</span> John Akande. All artworks &copy; the artist.</span>
+      <span>&copy; <span data-year>2026</span> John Akande.</span>
       <nav class="foot__legal" aria-label="Legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav>
       <a href="#top" class="foot__top" aria-label="Back to top"><span>Top</span><i aria-hidden="true"></i></a>
     </div>
