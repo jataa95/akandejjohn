@@ -425,7 +425,7 @@ section + section { border-top: 1px solid var(--rule); }
 
 /* ============ Biography (About) ============ */
 .bio { padding-top: 0; display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: clamp(2.5rem, 7vw, 7rem); align-items: start; }
-.bio__side { position: sticky; top: 6.5rem; border-top: 1px solid var(--rule); padding-top: .5rem; }
+.bio__side { border-top: 1px solid var(--rule); padding-top: .5rem; }
 .bio .phone { max-width: 320px; }
 .bio__facts { margin: 0; display: grid; gap: 0; }
 .bio__facts div { display: grid; grid-template-columns: 6.5rem 1fr; gap: 1rem; padding: .75rem 0; border-bottom: 1px solid var(--rule); }
@@ -437,7 +437,6 @@ section + section { border-top: 1px solid var(--rule); }
 .bio__cta { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2.5rem; }
 @media (max-width: 860px) {
   .bio { grid-template-columns: 1fr; }
-  .bio__side { position: static; }
 }
 
 /* ============ Studio film (About) ============ */
