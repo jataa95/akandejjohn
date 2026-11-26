@@ -159,7 +159,46 @@ def nav(active):
 """
 
 
-def footer(cta=True):
+# Answers stick to what the site already states; add John's own policies here as they are confirmed.
+FAQS = [
+    ("How do I buy a painting?",
+     'Open any painting in the <a class="link" href="works.html">catalogue</a> and press &ldquo;Enquire about this work&rdquo;, or use the <a class="link" href="contact.html">contact form</a>. John replies personally to confirm availability, the final price and the next steps.'),
+    ("What currency are the prices in?",
+     "Prices are set in US dollars. The currency switch on the Works page shows approximate amounts in euros, pounds and naira, converted at the day&rsquo;s rate; the final price is agreed in US dollars."),
+    ("Can I commission a painting?",
+     'Yes. Share your idea, the space it&rsquo;s for and the size you imagine, and the size, price and timeline are agreed together before work begins. See <a class="link" href="commission.html">how commissions work</a>.'),
+    ("How is a painting delivered?",
+     "Collection or delivery is arranged with each collector. Tell John where you&rsquo;re based when you enquire, and he&rsquo;ll confirm the options and costs."),
+    ("What are the paintings made with, and how big are they?",
+     "John works primarily in acrylic on canvas. Catalogue works range from 28 &times; 24 in to 7 &times; 5 ft; each painting&rsquo;s page lists its size in inches and centimetres."),
+    ("Does John paint live at events?",
+     'Yes. Live painting turns the music and movement of an event into a finished canvas. Choose &ldquo;Live painting&rdquo; on the <a class="link" href="contact.html?type=live">contact form</a> to ask about a date.'),
+]
+FAQ_LD = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
+    {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": re.sub(r"<[^>]+>", "", html.unescape(a))}}
+    for q, a in FAQS]}
+
+def faq_section():
+    items = "\n".join(f"""        <details class="faq__item"{' open' if i == 0 else ''}>
+          <summary><span class="mono faq__n">{i + 1:02d}</span><span class="faq__q">{e(q)}</span><i aria-hidden="true"></i></summary>
+          <div class="faq__a"><p>{a}</p></div>
+        </details>""" for i, (q, a) in enumerate(FAQS))
+    return f"""
+  <!-- FAQ -->
+  <section class="faq paper" aria-labelledby="faq-title">
+    <div class="faq__head">
+      <p class="mono eyebrow reveal">Questions</p>
+      <h2 class="reveal" id="faq-title">Frequently <em>asked.</em></h2>
+      <p class="mono faq__more reveal">Can&rsquo;t find what you need? <a class="link" href="contact.html">Ask John directly</a>.</p>
+    </div>
+    <div class="faq__list reveal">
+{items}
+    </div>
+  </section>
+"""
+
+
+def footer(cta=True, faq=False):
     A = '<span class="btn__arrow" aria-hidden="true"></span>'
     ways = [("acquisition", "Acquire", "an available painting"), ("commission", "Commission", "a work made for you"),
             ("exhibition", "Exhibit", "shows, fairs &amp; press"), ("live", "Live painting", "at your event")]
@@ -187,7 +226,7 @@ def footer(cta=True):
     </div>
   </section>
 """ if cta else ""
-    return cta_html + f"""
+    return cta_html + (faq_section() if faq else "") + f"""
   <!-- FOOTER -->
   <footer class="foot">
     <a class="foot__mark" href="index.html" aria-label="John Akande, home">John Akande</a>
@@ -309,7 +348,7 @@ marq = "".join(f"<span>{e(t)}</span><i aria-hidden=\"true\">&#10022;</i>" for t 
 
 home = head("John Akande — Figurative Artist, Lagos",
             "John Akande (@akandejjohn) is a Nigerian figurative artist based in Lagos whose paintings explore the relationship between visual art and sound.",
-            "home", ld=[PERSON_LD, {"@context": "https://schema.org", "@type": "WebSite", "name": "John Akande", "url": SITE + "/"}]) + nav("index.html") + f"""
+            "home", ld=[PERSON_LD, {"@context": "https://schema.org", "@type": "WebSite", "name": "John Akande", "url": SITE + "/"}, FAQ_LD]) + nav("index.html") + f"""
   <main id="main">
     <!-- HERO -->
     <section class="hero paper" id="top">
@@ -401,7 +440,7 @@ home = head("John Akande — Figurative Artist, Lagos",
     </section>
 
   </main>
-""" + footer() + LIGHTBOX + END
+""" + footer(faq=True) + LIGHTBOX + END
 
 # ---------------------------------------------------------------- WORKS
 works_cards = [work_card(META[0], " work--feature", lazy=False), work_card(META[1], lazy=False)]
@@ -677,14 +716,8 @@ commission = head("Commission — John Akande",
 """ + footer() + END
 
 # ---------------------------------------------------------------- ARTWORK PAGES
-# Framed gallery mockups show the canvas inside a frame and wall; the scale view zooms
-# into the canvas so the drawn rectangle shows the painting, not the frame.
-UNFRAMED = {"quiet-beginning-i": (1.0, .5), "quiet-beginning-ii": (1.0, .5),
-            "when-time-was-simple": (1.28, .5), "my-fathers-footstep-i": (1.18, .5)}
-def zoom(slug):
-    return UNFRAMED.get(slug, (1.62, .36))
-
 def dims(size, w, h):
+    """Width and height in inches; the longer side follows the photo's orientation."""
     a, b = map(int, re.findall(r"\d+", size)[:2])
     if "ft" in size:
         a, b = a * 12, b * 12
@@ -693,45 +726,6 @@ def dims(size, w, h):
 
 def series(title):
     return re.sub(r"\s+[IVX]+$", "", title)
-
-ROOM_W, WALL_H, FLOOR = 200, 110, 14     # inches; the drawing is to scale
-SOFA_W, SOFA_H, PERSON_H = 84, 32, 69
-def scale_svg(slug, title, pw, ph):
-    cx = 88
-    bottom = max(SOFA_H + 12, 60 - ph / 2)
-    if bottom + ph > WALL_H - 4:
-        bottom = WALL_H - 4 - ph
-    x, y = cx - pw / 2, WALL_H - bottom - ph
-    z, oy = zoom(slug)
-    iw, ih = pw * z, ph * z
-    ix, iy = x - (iw - pw) / 2, y - (ih - ph) * oy
-    sx, floor_y = cx - SOFA_W / 2, WALL_H
-    px, top = 160, WALL_H - PERSON_H
-    return f"""<svg class="scale__svg" viewBox="0 0 {ROOM_W} {WALL_H + FLOOR}" role="img" aria-label="{e(title)} drawn to scale on a wall above a 7 foot sofa, beside a person 5 foot 9 inches tall">
-            <defs>
-              <clipPath id="canvas"><rect x="{x:.2f}" y="{y:.2f}" width="{pw}" height="{ph}" /></clipPath>
-              <filter id="drop" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="1.6" stdDeviation="1.6" flood-color="#1d1612" flood-opacity=".35" /></filter>
-              <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1ebe0" /><stop offset="1" stop-color="#e3dacb" /></linearGradient>
-            </defs>
-            <rect width="{ROOM_W}" height="{WALL_H}" fill="url(#wall)" />
-            <rect y="{WALL_H}" width="{ROOM_W}" height="{FLOOR}" fill="#d6cab6" />
-            <rect y="{WALL_H - 3}" width="{ROOM_W}" height="3" fill="#ddd2c1" />
-            <g filter="url(#drop)">
-              <rect x="{x:.2f}" y="{y:.2f}" width="{pw}" height="{ph}" fill="#2b1c14" />
-              <image href="{mid(slug)}" x="{ix:.2f}" y="{iy:.2f}" width="{iw:.2f}" height="{ih:.2f}" preserveAspectRatio="xMidYMid slice" clip-path="url(#canvas)" />
-            </g>
-            <g fill="#b8aa93">
-              <rect x="{sx}" y="{floor_y - SOFA_H}" width="{SOFA_W}" height="{SOFA_H - 4}" rx="3" />
-              <rect x="{sx - 4}" y="{floor_y - 22}" width="8" height="18" rx="3" />
-              <rect x="{sx + SOFA_W - 4}" y="{floor_y - 22}" width="8" height="18" rx="3" />
-              <rect x="{sx + 4}" y="{floor_y - 4}" width="3" height="4" /><rect x="{sx + SOFA_W - 7}" y="{floor_y - 4}" width="3" height="4" />
-            </g>
-            <rect x="{sx + 3}" y="{floor_y - 18}" width="{SOFA_W - 6}" height="1" fill="#a99a82" />
-            <g fill="#c3b59f">
-              <circle cx="{px}" cy="{top + 4.6}" r="4.6" />
-              <path d="M{px - 8} {top + 13} q8 -3.6 16 0 l2 26 h-3.4 l-1.4 -19 l-1 {PERSON_H - 13 - 7} h-4 l-1 -{PERSON_H - 13 - 26} l-1 {PERSON_H - 13 - 26} h-4 l-1 -{PERSON_H - 13 - 7} l-1.4 19 h-3.4 z" />
-            </g>
-          </svg>"""
 
 order = [r for r in META if not r[0].endswith("studio")]
 art_pages = {}
@@ -802,24 +796,11 @@ for k, row in enumerate(order):
           <p class="art__note">Part of a body of work exploring music as a living force: how rhythm shapes identity, how performance reveals vulnerability, and how music functions as cultural memory and therapy.</p>
           <div class="art__actions">
             {actions}
-            <a class="btn btn--ghost" href="#scale">See it on a wall <span class="btn__arrow" aria-hidden="true"></span></a>
           </div>
         </div>
       </div>
     </article>
 
-    <section class="scale" id="scale" aria-labelledby="scale-title">
-      <header class="head">
-        <div>
-          <p class="mono eyebrow reveal">To scale</p>
-          <h2 class="reveal" id="scale-title">See it on a wall</h2>
-        </div>
-        <p class="mono head__note reveal"><b>{e(size)}</b> ({cm}), shown beside a 7&nbsp;ft (213&nbsp;cm) sofa and a person 5&nbsp;ft&nbsp;9&nbsp;in (175&nbsp;cm) tall. A guide to size, not an exact preview.</p>
-      </header>
-      <figure class="scale__room reveal">
-          {scale_svg(slug, title, pw, ph)}
-      </figure>
-    </section>
 
     <section class="related" aria-labelledby="related-title">
       <header class="head">

@@ -8,9 +8,9 @@ A static site: plain HTML, `styles.css`, `script.js` and `assets/`. Nothing need
 
 | Page | File |
 | --- | --- |
-| Home | `index.html` |
+| Home (ends with a short FAQ; edit the questions in `FAQS` in the script) | `index.html` |
 | Works (the catalogue, with filters and a currency switch) | `works.html` |
-| One page per painting, with a to-scale "See it on a wall" view | `works/<painting>.html` |
+| One page per painting | `works/<painting>.html` |
 | About (biography, studio film, artist statement) | `about.html` |
 | Commission | `commission.html` |
 | Contact (enquiry form) | `contact.html` |
