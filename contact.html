@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Enquire — John Akande</title>
+  <meta name="description" content="Enquire about acquiring a painting, a commission, an exhibition or live painting with John Akande." />
+  <meta name="theme-color" content="#f3eee4" />
+  <meta property="og:title" content="Enquire — John Akande" />
+  <meta property="og:description" content="Enquire about acquiring a painting, a commission, an exhibition or live painting with John Akande." />
+  <meta property="og:image" content="assets/img/works/rhythm-of-our-heritage.jpg" />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+  <link href="https://api.fontshare.com/v2/css?f[]=gambarino@400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="contact">
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- NAVIGATION -->
+  <header class="nav" data-nav>
+    <div class="nav__inner">
+      <nav class="nav__links" aria-label="Primary">
+        <a href="works.html">Works</a>
+        <a href="about.html">About</a>
+        <a href="https://www.instagram.com/akandejjohn/" target="_blank" rel="noopener">Instagram</a>
+      </nav>
+      <a class="nav__brand" href="index.html">
+        <span class="nav__name">John Akande</span>
+        <span class="nav__sub">Figurative Artist &middot; Lagos</span>
+      </a>
+      <div class="nav__end">
+        <span class="nav__clock mono">Lagos <span data-clock>--:--</span></span>
+        <a class="nav__cta" href="contact.html" aria-current="page">Enquire <span aria-hidden="true">&rarr;</span></a>
+        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle>
+          <span class="nav__toggle-label">Menu</span><i aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="menu" id="menu" data-menu>
+    <ol class="menu__list">
+      <li><a href="index.html"><span class="mono">01</span>Home</a></li>
+      <li><a href="works.html"><span class="mono">02</span>Works</a></li>
+      <li><a href="about.html"><span class="mono">03</span>About</a></li>
+      <li><a href="contact.html" aria-current="page"><span class="mono">04</span>Enquire</a></li>
+    </ol>
+    <div class="menu__foot mono">
+      <span>Lagos, Nigeria &middot; <span data-clock>--:--</span> WAT</span>
+      <span><a href="https://www.instagram.com/akandejjohn/" target="_blank" rel="noopener">Instagram</a> &middot; <a href="https://www.threads.net/@akandejjohn" target="_blank" rel="noopener">Threads</a></span>
+    </div>
+  </div>
+
+  <main id="main" class="paper">
+    <header class="page-head" id="top">
+      <p class="mono eyebrow reveal">Acquisitions &middot; Commissions &middot; Exhibitions &middot; Live painting</p>
+      <h1 class="page-head__title reveal">Let&rsquo;s make something <em>that sings.</em></h1>
+      <p class="page-head__lede page-head__lede--sm reveal">Enquiries go to John directly by Instagram message. Write your note here, and we&rsquo;ll copy it and open the chat for you.</p>
+    </header>
+
+    <section class="enquire">
+      <form class="composer reveal" data-composer novalidate>
+        <fieldset>
+          <legend class="mono">01 &mdash; I&rsquo;m enquiring about</legend>
+          <div class="chips">
+            <label class="chip"><input type="radio" name="type" value="acquisition" checked /> Acquiring a work</label>
+            <label class="chip"><input type="radio" name="type" value="commission" /> A commission</label>
+            <label class="chip"><input type="radio" name="type" value="exhibition" /> An exhibition or press</label>
+            <label class="chip"><input type="radio" name="type" value="live" /> Live painting</label>
+          </div>
+        </fieldset>
+        <label class="field" data-work-field>
+          <span class="mono">02 &mdash; Which work?</span>
+          <select name="work">
+              <option value="">Not sure yet</option>
+              <option>Young Virtuoso I</option>
+              <option>Young Virtuoso II</option>
+              <option>Where It Began I</option>
+              <option>Rhythm Unites Us I</option>
+              <option>Rhythm Unites Us II</option>
+              <option>Where It Began II</option>
+              <option>Where Music Takes Root</option>
+              <option>Young Virtuoso III</option>
+              <option>Young Virtuoso IV</option>
+              <option>Where Music Takes Root II</option>
+              <option>Quiet Beginning I</option>
+              <option>Quiet Beginning II</option>
+              <option>When Time Was Simple</option>
+              <option>My Father’s Footstep I</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="mono">03 &mdash; Your name</span>
+          <input name="name" type="text" autocomplete="name" placeholder="Your name" />
+        </label>
+        <label class="field">
+          <span class="mono">04 &mdash; Your message</span>
+          <textarea name="message" rows="4" placeholder="Where you&rsquo;re based, timing, anything John should know"></textarea>
+        </label>
+        <div class="composer__preview">
+          <span class="mono">Your message</span>
+          <p data-preview></p>
+        </div>
+        <div class="composer__actions">
+          <button class="btn" type="submit">Copy &amp; open Instagram <span aria-hidden="true">&nearr;</span></button>
+          <p class="mono composer__status" data-status role="status" aria-live="polite"></p>
+        </div>
+      </form>
+
+      <aside class="enquire__side reveal">
+        <div>
+          <span class="mono eyebrow">Studio</span>
+          <p>Lagos, Nigeria</p>
+          <p class="mono"><span data-clock>--:--</span> WAT</p>
+        </div>
+        <div>
+          <span class="mono eyebrow">Direct</span>
+          <p><a class="link" href="https://ig.me/m/akandejjohn" target="_blank" rel="noopener">Message on Instagram &nearr;</a></p>
+          <p><a class="link" href="https://www.threads.net/@akandejjohn" target="_blank" rel="noopener">Threads &nearr;</a></p>
+        </div>
+        <div>
+          <span class="mono eyebrow">Available now</span>
+          <p>14 of 16 paintings</p>
+          <p><a class="link" href="works.html">Browse the catalogue &rarr;</a></p>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="foot">
+    <div class="foot__grid">
+      <div class="foot__about">
+        <a class="foot__brand" href="index.html">John Akande</a>
+        <p class="mono">Nigerian figurative artist painting music, identity and heritage in acrylic on canvas.</p>
+      </div>
+      <nav class="foot__col" aria-label="Footer">
+        <span class="mono foot__label">Explore</span>
+        <a href="index.html">Home</a>
+        <a href="works.html">Works</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Enquire</a>
+      </nav>
+      <div class="foot__col">
+        <span class="mono foot__label">Follow</span>
+        <a href="https://www.instagram.com/akandejjohn/" target="_blank" rel="noopener">Instagram &nearr;</a>
+        <a href="https://www.threads.net/@akandejjohn" target="_blank" rel="noopener">Threads &nearr;</a>
+      </div>
+      <div class="foot__col">
+        <span class="mono foot__label">Studio</span>
+        <span>Lagos, Nigeria</span>
+        <span class="mono foot__time"><span data-clock>--:--</span> WAT</span>
+      </div>
+    </div>
+    <div class="foot__base mono">
+      <span>&copy; <span data-year>2026</span> John Akande. All artworks &copy; the artist.</span>
+      <a href="#top" class="foot__top">Back to top &uarr;</a>
+    </div>
+    <p class="foot__mark" aria-hidden="true">JOHN AKANDE</p>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

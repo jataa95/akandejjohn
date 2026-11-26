@@ -2,7 +2,9 @@
 
 Portfolio website for **John Akande** (@akandejjohn), a figurative artist based in Lagos.
 
-A static site with no build step: `index.html`, `styles.css`, `script.js` and `assets/`.
+A static site with no build step. Pages: `index.html` (home), `works.html` (the catalogue), `about.html` and `contact.html` (enquiries). They share `styles.css`, `script.js` and `assets/`.
+
+The navigation and footer are repeated in each page, so a change to either needs making in all four files.
 
 ## Preview locally
 
@@ -18,4 +20,8 @@ Any static host works (Vercel, Netlify, GitHub Pages, Cloudflare Pages). Point i
 
 ## Editing works
 
-Each artwork is a `data-lightbox` button in `index.html`. Its `data-title`, `data-meta` and `data-note` attributes set the text shown in the viewer. Images live in `assets/img/` (the catalogue paintings in `assets/img/works/`) and video in `assets/video/`.
+Each artwork is a `data-lightbox` button in `works.html` (three are also featured on the home page). Its `data-title`, `data-meta` and `data-note` attributes set the text shown in the viewer. Images live in `assets/img/` (the catalogue paintings in `assets/img/works/`) and video in `assets/video/`.
+
+## Enquiries
+
+The enquiry form on `contact.html` has no server. It writes the visitor's message, copies it to the clipboard and opens an Instagram direct message to @akandejjohn, where they paste it. A painting's "Enquire about this work" link opens the form with that painting already chosen. To add or remove a painting from the form's list, edit the `<option>` list in `contact.html`.

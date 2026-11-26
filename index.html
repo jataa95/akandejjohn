@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>John Akande — Figurative Artist, Lagos</title>
   <meta name="description" content="John Akande (@akandejjohn) is a Nigerian figurative artist based in Lagos whose paintings explore the relationship between visual art and sound." />
-  <meta name="theme-color" content="#0b0908" />
-  <meta property="og:title" content="John Akande — Figurative Artist" />
-  <meta property="og:description" content="Expressing Black culture and its identity. Art births harmony." />
-  <meta property="og:image" content="assets/img/duo-trumpet-violin.jpg" />
+  <meta name="theme-color" content="#f3eee4" />
+  <meta property="og:title" content="John Akande — Figurative Artist, Lagos" />
+  <meta property="og:description" content="John Akande (@akandejjohn) is a Nigerian figurative artist based in Lagos whose paintings explore the relationship between visual art and sound." />
+  <meta property="og:image" content="assets/img/works/rhythm-of-our-heritage.jpg" />
   <meta property="og:type" content="website" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,70 +17,95 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
-  <a class="skip" href="#works">Skip to works</a>
+<body data-page="home">
+  <a class="skip" href="#main">Skip to content</a>
 
-  <!-- TOP BAR -->
-  <header class="bar" data-bar>
-    <a class="bar__brand" href="#top">John Akande</a>
-    <div class="bar__col bar__hide">
-      <span class="dim">Figurative Artist</span>
-      <span>Lagos, <span data-clock>--:--</span> WAT</span>
+  <!-- NAVIGATION -->
+  <header class="nav" data-nav>
+    <div class="nav__inner">
+      <nav class="nav__links" aria-label="Primary">
+        <a href="works.html">Works</a>
+        <a href="about.html">About</a>
+        <a href="https://www.instagram.com/akandejjohn/" target="_blank" rel="noopener">Instagram</a>
+      </nav>
+      <a class="nav__brand" href="index.html" aria-current="page">
+        <span class="nav__name">John Akande</span>
+        <span class="nav__sub">Figurative Artist &middot; Lagos</span>
+      </a>
+      <div class="nav__end">
+        <span class="nav__clock mono">Lagos <span data-clock>--:--</span></span>
+        <a class="nav__cta" href="contact.html">Enquire <span aria-hidden="true">&rarr;</span></a>
+        <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle>
+          <span class="nav__toggle-label">Menu</span><i aria-hidden="true"></i>
+        </button>
+      </div>
     </div>
-    <div class="bar__col bar__hide">
-      <span class="dim">Studio Enquiries</span>
-      <a href="https://www.instagram.com/akandejjohn/" target="_blank" rel="noopener">@akandejjohn</a>
-    </div>
-    <nav class="bar__nav" aria-label="Primary">
-      <a href="#works">Work</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </nav>
   </header>
 
-  <main id="top">
+  <div class="menu" id="menu" data-menu>
+    <ol class="menu__list">
+      <li><a href="index.html" aria-current="page"><span class="mono">01</span>Home</a></li>
+      <li><a href="works.html"><span class="mono">02</span>Works</a></li>
+      <li><a href="about.html"><span class="mono">03</span>About</a></li>
+      <li><a href="contact.html"><span class="mono">04</span>Enquire</a></li>
+    </ol>
+    <div class="menu__foot mono">
+      <span>Lagos, Nigeria &middot; <span data-clock>--:--</span> WAT</span>
+      <span><a href="https://www.instagram.com/akandejjohn/" target="_blank" rel="noopener">Instagram</a> &middot; <a href="https://www.threads.net/@akandejjohn" target="_blank" rel="noopener">Threads</a></span>
+    </div>
+  </div>
+
+  <main id="main">
     <!-- HERO -->
-    <section class="hero">
+    <section class="hero paper" id="top">
+      <p class="hero__eyebrow mono reveal">Figurative painter &middot; Lagos, Nigeria</p>
       <h1 class="hero__name" aria-label="John Akande">
         <span class="split" data-split>JOHN AKANDE</span>
       </h1>
       <p class="hero__tag mono reveal">Paintings where sound becomes colour &mdash;<br />expressing Black culture, its identity, and the music that carries it.</p>
+      <div class="hero__actions reveal">
+        <a class="btn" href="works.html">View the works <span aria-hidden="true">&rarr;</span></a>
+        <a class="btn btn--ghost" href="contact.html">Enquire</a>
+      </div>
 
       <div class="hero__stage" data-parallax>
-        <button class="float f1" data-speed="-0.35" style="--r:-6deg" data-lightbox data-src="assets/img/little-dreamer-ii.jpg" data-title="Little Dreamer II" data-meta="2025 · Acrylic on canvas · 42 × 60 in" data-note="Explores the deep connection between visual art and sound as vital elements of human existence.">
-          <img src="assets/img/little-dreamer-ii.jpg" alt="Little Dreamer II: a girl plays a cello beneath a staircase" />
+        <button class="float f1" data-speed="-0.35" style="--r:-6deg" data-lightbox data-src="assets/img/works/young-virtuoso-i.jpg" data-title="Young Virtuoso I" data-meta="30 × 40 in · Acrylic on canvas · $3,000" data-note="A girl in pink plays the violin among the instruments of a quiet interior." data-enquire="Young Virtuoso I">
+          <img src="assets/img/works/young-virtuoso-i.jpg" alt="Young Virtuoso I: a girl in a pink dress plays the violin" />
         </button>
         <div class="float float--ghost f2" data-speed="0.12" style="--r:4deg" aria-hidden="true">
-          <img src="assets/img/little-dreamer-ii.jpg" alt="" />
+          <img src="assets/img/works/young-virtuoso-i.jpg" alt="" />
         </div>
-        <button class="float f3" data-speed="-0.5" style="--r:5deg" data-lightbox data-src="assets/img/duo-trumpet-violin.jpg" data-title="Trumpet &amp; Violin" data-meta="2025 · Acrylic on canvas" data-note="Two children hold the stillness before the first note.">
-          <img src="assets/img/duo-trumpet-violin.jpg" alt="A boy with a trumpet beside a girl in pink playing violin" />
+        <button class="float f3" data-speed="-0.5" style="--r:5deg" data-lightbox data-src="assets/img/works/my-fathers-footstep-i.jpg" data-title="My Father’s Footstep I" data-meta="42 × 60 in · Acrylic on canvas · $6,000" data-note="A boy rests beside a red cello in the warm light of a window." data-enquire="My Father’s Footstep I">
+          <img src="assets/img/works/my-fathers-footstep-i.jpg" alt="My Father’s Footstep I: a boy asleep beside a red cello" />
         </button>
         <div class="float float--ghost f4" data-speed="0.1" style="--r:-4deg" aria-hidden="true">
-          <img src="assets/img/duo-trumpet-violin.jpg" alt="" />
+          <img src="assets/img/works/my-fathers-footstep-i.jpg" alt="" />
         </div>
         <figure class="hero__media" data-hero-media>
           <video class="hero__video" src="assets/video/hero-loop.mp4" poster="assets/img/hero-poster.jpg" autoplay muted loop playsinline preload="auto" aria-label="John Akande painting in his studio"></video>
           <span class="hero__live mono"><i></i>In the studio, Lagos</span>
-          <figcaption class="mono"><a class="link" href="#about">Watch the studio film &darr;</a></figcaption>
         </figure>
       </div>
+      <a class="hero__scroll mono" href="#featured">Scroll <span aria-hidden="true">&darr;</span></a>
     </section>
 
-    <!-- SELECTED WORKS -->
-    <section id="works" class="works">
-      <header class="head">
-        <h2 class="reveal">Selected Works</h2>
-        <div class="head__note mono reveal">
-          <p>This body of work explores music as a living force, embedded in human existence. In it, I investigate how <b>rhythm shapes identity</b>, how <b>performance reveals vulnerability</b>, and how music functions as <b>cultural memory and therapy</b>.</p>
-          <p>It contributes to contemporary African art discourse by positioning music not only as a subject matter but also as a conceptual framework, highlighting performance as vulnerability and sound as a cultural continuity.</p>
-          <p class="head__sig">&mdash; John Akande</p>
-        </div>
-      </header>
+    <!-- MARQUEE -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track"><span>Rhythm of Our Heritage</span><i aria-hidden="true">&#10022;</i><span>Young Virtuoso</span><i aria-hidden="true">&#10022;</i><span>Where It Began</span><i aria-hidden="true">&#10022;</i><span>Rhythm Unites Us</span><i aria-hidden="true">&#10022;</i><span>Where Music Takes Root</span><i aria-hidden="true">&#10022;</i><span>Quiet Beginning</span><i aria-hidden="true">&#10022;</i><span>When Time Was Simple</span><i aria-hidden="true">&#10022;</i><span>My Father’s Footstep</span><i aria-hidden="true">&#10022;</i><span>Rhythm of Our Heritage</span><i aria-hidden="true">&#10022;</i><span>Young Virtuoso</span><i aria-hidden="true">&#10022;</i><span>Where It Began</span><i aria-hidden="true">&#10022;</i><span>Rhythm Unites Us</span><i aria-hidden="true">&#10022;</i><span>Where Music Takes Root</span><i aria-hidden="true">&#10022;</i><span>Quiet Beginning</span><i aria-hidden="true">&#10022;</i><span>When Time Was Simple</span><i aria-hidden="true">&#10022;</i><span>My Father’s Footstep</span><i aria-hidden="true">&#10022;</i></div>
+    </div>
 
-      <div class="works__grid">
-        <figure class="work work--feature reveal">
-          <button data-lightbox data-src="assets/img/works/rhythm-of-our-heritage.jpg" data-title="Rhythm of Our Heritage" data-meta="7 × 5 ft · Acrylic on canvas · Sold" data-note="From the body of work exploring music as a living force — rhythm, identity, performance and memory.">
+    <!-- FEATURED -->
+    <section class="featured" id="featured">
+      <header class="head">
+        <div>
+          <p class="mono eyebrow reveal">The catalogue</p>
+          <h2 class="reveal">Selected Works</h2>
+        </div>
+        <p class="mono head__note reveal">16 paintings in acrylic on canvas &mdash; young musicians, warm interiors and the instruments that open a world. <b>14 available.</b></p>
+      </header>
+      <div class="featured__grid">
+        <figure class="work featured__main reveal" data-status="sold">
+          <button data-lightbox data-src="assets/img/works/rhythm-of-our-heritage.jpg" data-title="Rhythm of Our Heritage" data-meta="7 × 5 ft · Acrylic on canvas · Sold" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory.">
             <img src="assets/img/works/rhythm-of-our-heritage.jpg" alt="Rhythm of Our Heritage, acrylic on canvas by John Akande" width="1242" height="1063" loading="lazy" decoding="async" />
           </button>
           <figcaption>
@@ -89,18 +114,8 @@
             <span class="work__meta mono">7 × 5 ft · Acrylic on canvas</span>
           </figcaption>
         </figure>
-        <figure class="work reveal">
-          <button data-lightbox data-src="assets/img/works/rhythm-of-our-heritage-studio.jpg" data-title="Rhythm of Our Heritage — in the studio" data-meta="7 × 5 ft · Acrylic on canvas · Sold" data-note="Shown leaning against the studio wall before framing.">
-            <img src="assets/img/works/rhythm-of-our-heritage-studio.jpg" alt="Rhythm of Our Heritage leaning against a white studio wall, before framing" width="1200" height="1600" loading="lazy" decoding="async" />
-          </button>
-          <figcaption>
-            <span class="work__title">Rhythm of Our Heritage — in the studio</span>
-            <span class="work__sold">Sold</span>
-            <span class="work__meta mono">Before framing</span>
-          </figcaption>
-        </figure>
-        <figure class="work reveal">
-          <button data-lightbox data-src="assets/img/works/young-virtuoso-i.jpg" data-title="Young Virtuoso I" data-meta="30 × 40 in · Acrylic on canvas · $3,000" data-note="From the body of work exploring music as a living force — rhythm, identity, performance and memory.">
+        <figure class="work reveal" data-status="available">
+          <button data-lightbox data-src="assets/img/works/young-virtuoso-i.jpg" data-title="Young Virtuoso I" data-meta="30 × 40 in · Acrylic on canvas · $3,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="Young Virtuoso I">
             <img src="assets/img/works/young-virtuoso-i.jpg" alt="Young Virtuoso I, acrylic on canvas by John Akande" width="901" height="1264" loading="lazy" decoding="async" />
           </button>
           <figcaption>
@@ -109,138 +124,8 @@
             <span class="work__meta mono">30 × 40 in · Acrylic on canvas</span>
           </figcaption>
         </figure>
-        <figure class="work reveal">
-          <button data-lightbox data-src="assets/img/works/young-virtuoso-ii.jpg" data-title="Young Virtuoso II" data-meta="30 × 40 in · Acrylic on canvas · $3,000" data-note="From the body of work exploring music as a living force — rhythm, identity, performance and memory.">
-            <img src="assets/img/works/young-virtuoso-ii.jpg" alt="Young Virtuoso II, acrylic on canvas by John Akande" width="937" height="1270" loading="lazy" decoding="async" />
-          </button>
-          <figcaption>
-            <span class="work__title">Young Virtuoso II</span>
-            <span class="work__price">$3,000</span>
-            <span class="work__meta mono">30 × 40 in · Acrylic on canvas</span>
-          </figcaption>
-        </figure>
-        <figure class="work reveal">
-          <button data-lightbox data-src="assets/img/works/where-it-began-i.jpg" data-title="Where It Began I" data-meta="48 × 60 in · Acrylic on canvas · $8,000" data-note="From the body of work exploring music as a living force — rhythm, identity, performance and memory.">
-            <img src="assets/img/works/where-it-began-i.jpg" alt="Where It Began I, acrylic on canvas by John Akande" width="930" height="1287" loading="lazy" decoding="async" />
-          </button>
-          <figcaption>
-            <span class="work__title">Where It Began I</span>
-            <span class="work__price">$8,000</span>
-            <span class="work__meta mono">48 × 60 in · Acrylic on canvas</span>
-          </figcaption>
-        </figure>
-        <figure class="work reveal">
-          <button data-lightbox data-src="assets/img/works/rhythm-unites-us-i.jpg" data-title="Rhythm Unites Us I" data-meta="54 × 42 in · Acrylic on canvas · $6,000" data-note="From the body of work exploring music as a living force — rhythm, identity, performance and memory.">
-            <img src="assets/img/works/rhythm-unites-us-i.jpg" alt="Rhythm Unites Us I, acrylic on canvas by John Akande" width="890" height="1264" loading="lazy" decoding="async" />
-          </button>
-          <figcaption>
-            <span class="work__title">Rhythm Unites Us I</span>
-            <span class="work__price">$6,000</span>
-            <span class="work__meta mono">54 × 42 in · Acrylic on canvas</span>
-          </figcaption>
-        </figure>
-        <figure class="work reveal">
-          <button data-lightbox data-src="assets/img/works/rhythm-unites-us-ii.jpg" data-title="Rhythm Unites Us II" data-meta="54 × 42 in · Acrylic on canvas · $6,000" data-note="From the body of work exploring music as a living force — rhythm, identity, performance and memory.">
-            <img src="assets/img/works/rhythm-unites-us-ii.jpg" alt="Rhythm Unites Us II, acrylic on canvas by John Akande" width="922" height="1260" loading="lazy" decoding="async" />
-          </button>
-          <figcaption>
-            <span class="work__title">Rhythm Unites Us II</span>
-            <span class="work__price">$6,000</span>
-            <span class="work__meta mono">54 × 42 in · Acrylic on canvas</span>
-          </figcaption>
-        </figure>
-        <figure class="work reveal">
-          <button data-lightbox data-src="assets/img/works/where-it-began-ii.jpg" data-title="Where It Began II" data-meta="36 × 48 in · Acrylic on canvas · $4,000" data-note="From the body of work exploring music as a living force — rhythm, identity, performance and memory.">
-            <img src="assets/img/works/where-it-began-ii.jpg" alt="Where It Began II, acrylic on canvas by John Akande" width="924" height="1304" loading="lazy" decoding="async" />
-          </button>
-          <figcaption>
-            <span class="work__title">Where It Began II</span>
-            <span class="work__price">$4,000</span>
-            <span class="work__meta mono">36 × 48 in · Acrylic on canvas</span>
-          </figcaption>
-        </figure>
-        <figure class="work reveal">
-          <button data-lightbox data-src="assets/img/works/where-music-takes-root.jpg" data-title="Where Music Takes Root" data-meta="54 × 42 in · Acrylic on canvas · $6,000" data-note="From the body of work exploring music as a living force — rhythm, identity, performance and memory.">
-            <img src="assets/img/works/where-music-takes-root.jpg" alt="Where Music Takes Root, acrylic on canvas by John Akande" width="966" height="1361" loading="lazy" decoding="async" />
-          </button>
-          <figcaption>
-            <span class="work__title">Where Music Takes Root</span>
-            <span class="work__price">$6,000</span>
-            <span class="work__meta mono">54 × 42 in · Acrylic on canvas</span>
-          </figcaption>
-        </figure>
-        <figure class="work reveal">
-          <button data-lightbox data-src="assets/img/works/young-virtuoso-iii.jpg" data-title="Young Virtuoso III" data-meta="36 × 48 in · Acrylic on canvas · $4,000" data-note="From the body of work exploring music as a living force — rhythm, identity, performance and memory.">
-            <img src="assets/img/works/young-virtuoso-iii.jpg" alt="Young Virtuoso III, acrylic on canvas by John Akande" width="981" height="1375" loading="lazy" decoding="async" />
-          </button>
-          <figcaption>
-            <span class="work__title">Young Virtuoso III</span>
-            <span class="work__price">$4,000</span>
-            <span class="work__meta mono">36 × 48 in · Acrylic on canvas</span>
-          </figcaption>
-        </figure>
-        <figure class="work reveal">
-          <button data-lightbox data-src="assets/img/works/young-virtuoso-iv.jpg" data-title="Young Virtuoso IV" data-meta="36 × 48 in · Acrylic on canvas · $4,000" data-note="From the body of work exploring music as a living force — rhythm, identity, performance and memory.">
-            <img src="assets/img/works/young-virtuoso-iv.jpg" alt="Young Virtuoso IV, acrylic on canvas by John Akande" width="1130" height="1251" loading="lazy" decoding="async" />
-          </button>
-          <figcaption>
-            <span class="work__title">Young Virtuoso IV</span>
-            <span class="work__price">$4,000</span>
-            <span class="work__meta mono">36 × 48 in · Acrylic on canvas</span>
-          </figcaption>
-        </figure>
-        <figure class="work reveal">
-          <button data-lightbox data-src="assets/img/works/where-it-began-iii.jpg" data-title="Where It Began III" data-meta="28 × 24 in · Acrylic on canvas · Sold" data-note="From the body of work exploring music as a living force — rhythm, identity, performance and memory.">
-            <img src="assets/img/works/where-it-began-iii.jpg" alt="Where It Began III, acrylic on canvas by John Akande" width="1184" height="1328" loading="lazy" decoding="async" />
-          </button>
-          <figcaption>
-            <span class="work__title">Where It Began III</span>
-            <span class="work__sold">Sold</span>
-            <span class="work__meta mono">28 × 24 in · Acrylic on canvas</span>
-          </figcaption>
-        </figure>
-        <figure class="work reveal">
-          <button data-lightbox data-src="assets/img/works/where-music-takes-root-ii.jpg" data-title="Where Music Takes Root II" data-meta="54 × 42 in · Acrylic on canvas · $6,000" data-note="From the body of work exploring music as a living force — rhythm, identity, performance and memory.">
-            <img src="assets/img/works/where-music-takes-root-ii.jpg" alt="Where Music Takes Root II, acrylic on canvas by John Akande" width="1071" height="1330" loading="lazy" decoding="async" />
-          </button>
-          <figcaption>
-            <span class="work__title">Where Music Takes Root II</span>
-            <span class="work__price">$6,000</span>
-            <span class="work__meta mono">54 × 42 in · Acrylic on canvas</span>
-          </figcaption>
-        </figure>
-        <figure class="work reveal">
-          <button data-lightbox data-src="assets/img/works/quiet-beginning-i.jpg" data-title="Quiet Beginning I" data-meta="36 × 48 in · Acrylic on canvas · $4,000" data-note="From the body of work exploring music as a living force — rhythm, identity, performance and memory.">
-            <img src="assets/img/works/quiet-beginning-i.jpg" alt="Quiet Beginning I, acrylic on canvas by John Akande" width="1195" height="1600" loading="lazy" decoding="async" />
-          </button>
-          <figcaption>
-            <span class="work__title">Quiet Beginning I</span>
-            <span class="work__price">$4,000</span>
-            <span class="work__meta mono">36 × 48 in · Acrylic on canvas</span>
-          </figcaption>
-        </figure>
-        <figure class="work reveal">
-          <button data-lightbox data-src="assets/img/works/quiet-beginning-ii.jpg" data-title="Quiet Beginning II" data-meta="36 × 48 in · Acrylic on canvas · $4,000" data-note="From the body of work exploring music as a living force — rhythm, identity, performance and memory.">
-            <img src="assets/img/works/quiet-beginning-ii.jpg" alt="Quiet Beginning II, acrylic on canvas by John Akande" width="1184" height="1600" loading="lazy" decoding="async" />
-          </button>
-          <figcaption>
-            <span class="work__title">Quiet Beginning II</span>
-            <span class="work__price">$4,000</span>
-            <span class="work__meta mono">36 × 48 in · Acrylic on canvas</span>
-          </figcaption>
-        </figure>
-        <figure class="work reveal">
-          <button data-lightbox data-src="assets/img/works/when-time-was-simple.jpg" data-title="When Time Was Simple" data-meta="54 × 48 in · Acrylic on canvas · $6,000" data-note="From the body of work exploring music as a living force — rhythm, identity, performance and memory.">
-            <img src="assets/img/works/when-time-was-simple.jpg" alt="When Time Was Simple, acrylic on canvas by John Akande" width="1600" height="1429" loading="lazy" decoding="async" />
-          </button>
-          <figcaption>
-            <span class="work__title">When Time Was Simple</span>
-            <span class="work__price">$6,000</span>
-            <span class="work__meta mono">54 × 48 in · Acrylic on canvas</span>
-          </figcaption>
-        </figure>
-        <figure class="work reveal">
-          <button data-lightbox data-src="assets/img/works/my-fathers-footstep-i.jpg" data-title="My Father’s Footstep I" data-meta="42 × 60 in · Acrylic on canvas · $6,000" data-note="From the body of work exploring music as a living force — rhythm, identity, performance and memory.">
+        <figure class="work reveal" data-status="available">
+          <button data-lightbox data-src="assets/img/works/my-fathers-footstep-i.jpg" data-title="My Father’s Footstep I" data-meta="42 × 60 in · Acrylic on canvas · $6,000" data-note="From a body of work exploring music as a living force: rhythm, identity, performance and memory." data-enquire="My Father’s Footstep I">
             <img src="assets/img/works/my-fathers-footstep-i.jpg" alt="My Father’s Footstep I, acrylic on canvas by John Akande" width="1088" height="1600" loading="lazy" decoding="async" />
           </button>
           <figcaption>
@@ -250,44 +135,17 @@
           </figcaption>
         </figure>
       </div>
-
-      <p class="works__more"><a class="mono link" href="https://www.instagram.com/akandejjohn/" target="_blank" rel="noopener">Follow for more &mdash; @akandejjohn &nearr;</a></p>
+      <p class="featured__more reveal"><a class="btn btn--gold" href="works.html">View all 16 works <span aria-hidden="true">&rarr;</span></a></p>
     </section>
 
-    <!-- STATEMENT / ABOUT -->
-    <section id="about" class="about">
-      <p class="statement reveal">
-        John Akande is a Nigerian figurative artist based in Lagos whose work captures the essence of African culture through the relationship between visual art and sound.
-      </p>
-
-      <div class="about__grid">
-        <div class="phone reveal">
-          <video data-story src="assets/video/studio-story.mp4" poster="assets/img/studio-poster.jpg" playsinline preload="none"></video>
-          <button class="play" data-play aria-label="Play the studio film">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
-            <span class="mono">Studio film · 0:58</span>
-          </button>
-        </div>
-        <div class="about__text mono reveal">
-          <p>Largely <b>self-taught</b> before expanding his creative perspective at the <b>Yaba College of Technology</b>, his practice merges <b>expressionism</b> and <b>realism</b> to explore how music shapes identity, preserves heritage, and functions as a <b>universal language</b>.</p>
-          <p>Working primarily with <b>acrylic on canvas</b>, Akande uses bold contrasts, textured layers and vibrant palettes to translate the physical movement and emotional intensity of musicians into visual form.</p>
-          <a class="link" href="#contact">Let&rsquo;s Talk</a>
-        </div>
+    <!-- STATEMENT -->
+    <section class="quote">
+      <p class="mono eyebrow reveal">Artist statement</p>
+      <blockquote class="quote__text reveal">&ldquo;This body of work explores music as a living force, embedded in human existence.&rdquo;</blockquote>
+      <div class="quote__foot">
+        <p class="mono reveal">I investigate how rhythm shapes identity, how performance reveals vulnerability, and how music functions as cultural memory and therapy. <span class="quote__sig">&mdash; John Akande</span></p>
+        <a class="link reveal" href="about.html">About the artist &rarr;</a>
       </div>
-    </section>
-
-    <!-- IN HIS WORDS -->
-    <section class="words">
-      <header class="head">
-        <h2 class="reveal">In His Words</h2>
-        <p class="mono head__note reveal">From the studio film &mdash; on where the music in the paintings comes from.</p>
-      </header>
-      <ol class="words__list">
-        <li class="reveal"><span class="mono n">01</span><q>I didn&rsquo;t have access to musical instruments for practice.</q><span class="mono who">John Akande<br /><i>Studio film</i></span></li>
-        <li class="reveal"><span class="mono n">02</span><q>I was fortunate to have a friend living nearby, whose family&rsquo;s mansion was filled with various instruments.</q><span class="mono who">John Akande<br /><i>Studio film</i></span></li>
-        <li class="reveal"><span class="mono n">03</span><q>I loved visiting her, and her family always welcomed me warmly.</q><span class="mono who">John Akande<br /><i>Studio film</i></span></li>
-        <li class="reveal"><span class="mono n">04</span><q>Those visits provided a nurturing environment.</q><span class="mono who">John Akande<br /><i>Studio film</i></span></li>
-      </ol>
     </section>
 
     <!-- CLOSE-UP -->
@@ -296,52 +154,52 @@
       <p class="closeup__label">Brushwork, up close</p>
     </section>
 
-    <!-- THEMES -->
-    <section class="themes">
-      <h2 class="reveal">Themes &amp;<br />Practice</h2>
-      <ul class="themes__list mono">
-        <li class="reveal"><span>Music &amp; Sound</span><span>01</span></li>
-        <li class="reveal"><span>Identity</span><span>02</span></li>
-        <li class="reveal"><span>Heritage</span><span>03</span></li>
-        <li class="reveal"><span>Childhood &amp; Wonder</span><span>04</span></li>
-        <li class="reveal"><span>Live Painting</span><span>05</span></li>
-      </ul>
-    </section>
-
-    <!-- PRESS -->
-    <section class="press">
-      <h2 class="reveal">Features &amp;<br />Press</h2>
-      <div class="table mono">
-        <div class="row row--head"><span>Publication</span><span>Feature</span><span>Section</span></div>
-        <div class="row reveal"><span>Incongru Magazine</span><span>Little Dreamer II</span><span>Visual Art</span></div>
-        <div class="row reveal"><span>The Guardian Nigeria</span><span>How Nigeria&rsquo;s emerging artists are&hellip;</span><span>Life</span></div>
-      </div>
+    <!-- NUMBERS -->
+    <section class="stats-band">
       <div class="stats">
+        <div class="reveal"><strong data-count="16">0</strong><span class="mono">Paintings in the catalogue</span></div>
         <div class="reveal"><strong data-count="11" data-suffix="K+">0</strong><span class="mono">Instagram community</span></div>
-        <div class="reveal"><strong data-count="100" data-suffix="+">0</strong><span class="mono">Works &amp; studio posts</span></div>
-        <div class="reveal"><strong data-count="42" data-suffix="&times;60">0</strong><span class="mono">Inches, Little Dreamer II</span></div>
+        <div class="reveal"><strong data-count="7" data-suffix="&times;5 ft">0</strong><span class="mono">Rhythm of Our Heritage</span></div>
       </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" class="contact">
-      <p class="mono dim reveal">Acquisitions · Commissions · Exhibitions · Live painting</p>
-      <h2 class="reveal">Let&rsquo;s make something<br /><em>that sings.</em></h2>
-      <a class="pill reveal" href="https://www.instagram.com/akandejjohn/" target="_blank" rel="noopener">Message on Instagram &nearr;</a>
     </section>
   </main>
 
-  <footer class="footer">
-    <p class="footer__name" aria-hidden="true">JOHN AKANDE</p>
-    <nav class="footer__nav" aria-label="Footer">
-      <a href="#works">Work</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </nav>
-    <div class="footer__row mono">
-      <span class="social"><a href="https://www.instagram.com/akandejjohn/" target="_blank" rel="noopener">IG</a> &times; <a href="https://www.threads.net/@akandejjohn" target="_blank" rel="noopener">TH</a></span>
-      <span>&copy; <span data-year>2026</span> John Akande. All artworks &copy; the artist.</span>
+  <!-- FOOTER -->
+  <footer class="foot">
+    <div class="foot__cta">
+      <p class="mono foot__eyebrow">Acquisitions &middot; Commissions &middot; Exhibitions &middot; Live painting</p>
+      <h2 class="reveal">Own a work<br />that <em>sings.</em></h2>
+      <a class="btn btn--gold reveal" href="contact.html">Start an enquiry <span aria-hidden="true">&rarr;</span></a>
     </div>
+
+    <div class="foot__grid">
+      <div class="foot__about">
+        <a class="foot__brand" href="index.html">John Akande</a>
+        <p class="mono">Nigerian figurative artist painting music, identity and heritage in acrylic on canvas.</p>
+      </div>
+      <nav class="foot__col" aria-label="Footer">
+        <span class="mono foot__label">Explore</span>
+        <a href="index.html">Home</a>
+        <a href="works.html">Works</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Enquire</a>
+      </nav>
+      <div class="foot__col">
+        <span class="mono foot__label">Follow</span>
+        <a href="https://www.instagram.com/akandejjohn/" target="_blank" rel="noopener">Instagram &nearr;</a>
+        <a href="https://www.threads.net/@akandejjohn" target="_blank" rel="noopener">Threads &nearr;</a>
+      </div>
+      <div class="foot__col">
+        <span class="mono foot__label">Studio</span>
+        <span>Lagos, Nigeria</span>
+        <span class="mono foot__time"><span data-clock>--:--</span> WAT</span>
+      </div>
+    </div>
+    <div class="foot__base mono">
+      <span>&copy; <span data-year>2026</span> John Akande. All artworks &copy; the artist.</span>
+      <a href="#top" class="foot__top">Back to top &uarr;</a>
+    </div>
+    <p class="foot__mark" aria-hidden="true">JOHN AKANDE</p>
   </footer>
 
   <!-- LIGHTBOX -->
@@ -353,6 +211,7 @@
         <strong data-lb-title></strong>
         <span class="mono" data-lb-meta></span>
         <p data-lb-note></p>
+        <a class="link" data-lb-enquire hidden>Enquire about this work &rarr;</a>
       </figcaption>
     </figure>
   </dialog>
