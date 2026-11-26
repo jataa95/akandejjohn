@@ -554,11 +554,8 @@ section + section { border-top: 1px solid var(--rule); }
 .sel__now { font-size: 1.35rem; line-height: 1.15; }
 .sel__nowsize { color: var(--fg-dim); }
 
-.sel__more { display: none; }
-@media (max-width: 760px) {
-  .sel__extra { display: none; }
-  .sel__more { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem 2rem; margin-top: 2rem; }
-}
+.sel__more { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem 2rem; margin-top: clamp(2rem, 4vw, 3rem); }
+@media (max-width: 760px) { .sel__extra { display: none; } }
 .sel__more p { margin: 0; color: var(--fg-dim); }
 .sel__list { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--rule); counter-reset: sel; }
 .sel__row {
