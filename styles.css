@@ -256,7 +256,7 @@ section + section { border-top: 1px solid var(--rule); }
 
 .hero__media {
   position: relative; margin: 0; z-index: 3;
-  width: min(78vw, 380px); aspect-ratio: 720 / 1130;
+  width: min(78vw, 380px); aspect-ratio: 9 / 16;
   padding: 10px; border: 1px solid var(--rule);
   background: linear-gradient(160deg, rgba(184,154,98,.28), rgba(29,22,18,.06));
   box-shadow: 0 50px 90px -40px rgba(29,22,18,.55);
