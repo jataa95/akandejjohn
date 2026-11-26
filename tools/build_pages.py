@@ -131,7 +131,7 @@ def head(title, desc, page, path=None, og=None, ld=None, og_type="website"):
 def nav(active):
     cur = lambda f: ' aria-current="page"' if f == active else ""
     menu_links = "\n".join(
-        f'      <li><a href="{f}"{cur(f)}><span class="mono">0{i+1}</span>{label}</a></li>'
+        f'      <li style="--i:{i}"><a href="{f}"{cur(f)}><span class="mono">0{i+1}</span>{label}<i aria-hidden="true"></i></a></li>'
         for i, (f, label) in enumerate(PAGES)
     )
     return f"""
@@ -146,18 +146,22 @@ def nav(active):
         <a class="nav__cta" href="contact.html"{cur("contact.html")}><span>Contact</span></a>
       </nav>
       <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle>
-        <span class="nav__toggle-label">Menu</span><i aria-hidden="true"></i>
+        <span class="nav__toggle-label">Menu</span><span class="nav__toggle-icon" aria-hidden="true"><i></i><i></i></span>
       </button>
     </div>
   </header>
 
   <div class="menu" id="menu" data-menu>
+    <p class="menu__eyebrow mono">Menu</p>
     <ol class="menu__list">
 {menu_links}
     </ol>
-    <div class="menu__foot mono">
-      <span>Lagos, Nigeria &middot; <span data-clock>--:--</span> WAT</span>
-      <span><a href="{IG}" target="_blank" rel="noopener">Instagram</a> &middot; <a href="{TH}" target="_blank" rel="noopener">Threads</a></span>
+    <div class="menu__foot">
+      <a class="btn btn--light menu__cta" href="contact.html">Start an enquiry <span class="btn__arrow" aria-hidden="true"></span></a>
+      <div class="menu__meta mono">
+        <span><a href="{IG}" target="_blank" rel="noopener">Instagram</a> &middot; <a href="{TH}" target="_blank" rel="noopener">Threads</a></span>
+        <span>Lagos &middot; <span data-clock>--:--</span> WAT</span>
+      </div>
     </div>
   </div>
 """

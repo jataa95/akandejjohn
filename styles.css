@@ -175,38 +175,59 @@ section + section { border-top: 1px solid var(--rule); }
 .nav__cta:hover::before, .nav__cta[aria-current]::before { transform: scaleY(1); transform-origin: top; }
 
 .nav__toggle {
-  display: none; align-items: center; gap: .8rem; background: none; border: 0; padding: .5rem 0; cursor: pointer;
-  font-family: var(--mono); font-size: .66rem; text-transform: uppercase; letter-spacing: .24em;
+  display: none; position: relative; width: 2.9rem; height: 2.9rem; padding: 0; cursor: pointer;
+  border: 1px solid currentColor; border-radius: 50%; background: transparent; color: inherit;
+  transition: background .5s var(--ease), border-color .5s var(--ease), color .5s var(--ease), transform .5s var(--ease);
 }
-.nav__toggle i { position: relative; width: 24px; height: 8px; }
-.nav__toggle i::before, .nav__toggle i::after {
-  content: ""; position: absolute; right: 0; height: 1px; background: currentColor; transition: transform .5s var(--ease), top .5s var(--ease), width .5s var(--ease);
+.nav__toggle-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.nav__toggle-icon { position: absolute; inset: 0; display: grid; place-items: center; }
+.nav__toggle-icon i {
+  position: absolute; left: 50%; top: 50%; width: 1.05rem; height: 1px; background: currentColor;
+  transition: transform .55s var(--ease), width .55s var(--ease);
 }
-.nav__toggle i::before { top: 0; width: 100%; }
-.nav__toggle i::after { top: 7px; width: 60%; }
-.nav__toggle:hover i::after { width: 100%; }
-.menu-open .nav__toggle i::before { top: 4px; transform: rotate(45deg); }
-.menu-open .nav__toggle i::after { top: 4px; width: 100%; transform: rotate(-45deg); }
+.nav__toggle-icon i:first-child { transform: translate(-50%, calc(-50% - 3.5px)); }
+.nav__toggle-icon i:last-child { transform: translate(-50%, calc(-50% + 3.5px)); width: .7rem; margin-left: .175rem; }
+.nav__toggle:hover .nav__toggle-icon i:last-child { width: 1.05rem; margin-left: 0; }
+.nav__toggle:focus-visible { outline: 1px solid currentColor; outline-offset: 3px; }
+.menu-open .nav__toggle { background: var(--gold); border-color: var(--gold); color: var(--black); transform: rotate(90deg); }
+.menu-open .nav__toggle-icon i:first-child { transform: translate(-50%, -50%) rotate(45deg); }
+.menu-open .nav__toggle-icon i:last-child { transform: translate(-50%, -50%) rotate(-45deg); width: 1.05rem; margin-left: 0; }
 .menu-open .nav { color: var(--cream); background: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
 .menu-open .nav::after { transform: scaleX(0); }
 
 /* full-screen menu (phones and small tablets) */
 .menu {
   position: fixed; inset: 0; z-index: 55;
-  background: var(--black-2); color: var(--cream);
-  display: flex; flex-direction: column; justify-content: flex-end; gap: 3rem;
-  padding: 7rem var(--pad) 2rem;
-  clip-path: inset(0 0 100% 0); visibility: hidden;
-  transition: clip-path .8s var(--ease), visibility 0s .8s;
+  background: radial-gradient(90% 60% at 100% 0%, rgba(184,154,98,.14), transparent 60%), var(--black-2); color: var(--cream);
+  display: flex; flex-direction: column; justify-content: space-between; gap: 2rem;
+  padding: 6.5rem var(--pad) 2rem; overflow-y: auto;
+  clip-path: circle(0% at calc(100% - var(--pad) - 1.45rem) 2.6rem); visibility: hidden;
+  transition: clip-path .9s cubic-bezier(.76, 0, .24, 1), visibility 0s .9s;
 }
-.menu-open .menu { clip-path: inset(0 0 0 0); visibility: visible; transition: clip-path .8s var(--ease); }
-.menu__list { list-style: none; margin: 0; padding: 0; }
-.menu__list li { border-top: 1px solid rgba(184, 154, 98, .22); }
-.menu__list a { display: flex; align-items: baseline; gap: 1.2rem; padding: .9rem 0; font-size: clamp(2.4rem, 11vw, 4.5rem); line-height: 1; transition: color .3s, padding .5s var(--ease); }
-.menu__list a .mono { color: var(--gold); }
-.menu__list a:hover, .menu__list a[aria-current] { color: var(--gold-soft); padding-left: .5rem; }
-.menu__foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .75rem; color: var(--dim); text-transform: uppercase; }
-.menu__foot a:hover { color: var(--gold); }
+.menu-open .menu { clip-path: circle(150% at calc(100% - var(--pad) - 1.45rem) 2.6rem); visibility: visible; transition: clip-path .9s cubic-bezier(.76, 0, .24, 1); }
+.menu__eyebrow { margin: 0; text-transform: uppercase; letter-spacing: .3em; font-size: .6rem; color: var(--gold); }
+.menu__list { list-style: none; margin: 0; padding: 0; counter-reset: m; }
+.menu__list li { border-bottom: 1px solid rgba(184, 154, 98, .18); overflow: hidden; }
+.menu__list a {
+  position: relative; display: flex; align-items: baseline; gap: 1rem; padding: 1.05rem 0;
+  font-size: clamp(2.3rem, 10.5vw, 4.2rem); line-height: 1.05;
+  transform: translateY(105%); opacity: 0;
+  transition: transform .8s var(--ease), opacity .8s var(--ease), color .3s, padding .5s var(--ease);
+}
+.menu-open .menu__list a { transform: none; opacity: 1; transition-delay: calc(.25s + var(--i) * .07s), calc(.25s + var(--i) * .07s), 0s, 0s; }
+.menu__list a .mono { color: var(--gold); font-size: .66rem; letter-spacing: .14em; align-self: center; }
+.menu__list a i {
+  margin-left: auto; align-self: center; width: 1.4rem; height: 1px; background: currentColor; position: relative; opacity: 0;
+  transform: translateX(-8px); transition: opacity .4s, transform .5s var(--ease);
+}
+.menu__list a i::after { content: ""; position: absolute; right: 0; top: -4px; width: 8px; height: 8px; border-top: 1px solid currentColor; border-right: 1px solid currentColor; transform: rotate(45deg); }
+.menu__list a:hover, .menu__list a:focus-visible, .menu__list a[aria-current] { color: var(--gold-soft); padding-left: .5rem; }
+.menu__list a:hover i, .menu__list a:focus-visible i, .menu__list a[aria-current] i { opacity: 1; transform: none; }
+.menu__foot { display: flex; flex-direction: column; gap: 1.5rem; opacity: 0; transform: translateY(12px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
+.menu-open .menu__foot { opacity: 1; transform: none; transition-delay: .6s; }
+.menu__cta { align-self: stretch; }
+.menu__meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: .75rem; color: var(--dim); text-transform: uppercase; letter-spacing: .12em; font-size: .62rem; }
+.menu__meta a:hover { color: var(--gold); }
 
 @media (max-width: 860px) {
   .nav__links { display: none; }
