@@ -367,11 +367,6 @@ home = head("John Akande — Figurative Artist, Lagos",
         <span class="split" data-split>JOHN AKANDE</span>
       </h1>
       <p class="hero__tag mono reveal">Paintings where sound becomes colour &mdash;<br />expressing Black culture, its identity, and the music that carries it.</p>
-      <div class="hero__actions reveal">
-        <a class="btn" href="works.html">View the works <span class="btn__arrow" aria-hidden="true"></span></a>
-        <a class="btn btn--ghost" href="commission.html">Commission a piece <span class="btn__arrow" aria-hidden="true"></span></a>
-      </div>
-
       <div class="hero__stage" data-parallax>
         <button class="float f1" data-speed="-0.35" style="--r:-6deg" data-lightbox data-src="{big("young-virtuoso-i")}" data-title="Young Virtuoso I" data-meta="30 × 40 in · Acrylic on canvas · Available" data-note="A girl in pink plays the violin among the instruments of a quiet interior." data-enquire="Young Virtuoso I">
           {pic("young-virtuoso-i", "Young Virtuoso I: a girl in a pink dress plays the violin", "(max-width: 760px) 1px, 270px", lazy=False)}
@@ -394,6 +389,10 @@ home = head("John Akande — Figurative Artist, Lagos",
           </button>
           <audio data-hero-audio src="assets/video/hero-audio.m4a" loop preload="none"></audio>
         </figure>
+      </div>
+      <div class="hero__actions reveal">
+        <a class="btn" href="works.html">View the works <span class="btn__arrow" aria-hidden="true"></span></a>
+        <a class="btn btn--ghost" href="commission.html">Commission a piece <span class="btn__arrow" aria-hidden="true"></span></a>
       </div>
       <a class="hero__scroll mono" href="#about-brief">Scroll <span aria-hidden="true">&darr;</span></a>
     </section>
