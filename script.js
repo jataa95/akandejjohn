@@ -183,15 +183,18 @@
     form.addEventListener("input", render);
     form.addEventListener("change", render);
     render();
-    form.addEventListener("submit", async (e) => {
+    // Send: opens the visitor's email app with the enquiry addressed to John, ready to send
+    const subjects = { acquisition: "Acquisition enquiry", commission: "Commission enquiry", exhibition: "Exhibition / press enquiry", live: "Live painting enquiry" };
+    form.addEventListener("submit", (e) => {
       e.preventDefault();
-      const text = compose();
-      let copied = false;
-      try { await navigator.clipboard.writeText(text); copied = true; } catch {}
-      window.open("https://ig.me/m/akandejjohn", "_blank", "noopener");
-      status.textContent = copied
-        ? "Message copied. Paste it into the Instagram chat that just opened."
-        : "Copy the message above, then paste it into the Instagram chat.";
+      const email = form.dataset.email;
+      const type = F.type.value, work = F.work.value;
+      const subject = subjects[type] + (type === "acquisition" && work ? `: ${work}` : "");
+      location.href = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(compose())}`;
+      status.innerHTML = "";
+      status.append(`Your email app should open with the message ready to send. If it doesn’t, email John at `);
+      const a = document.createElement("a"); a.href = `mailto:${email}`; a.className = "link"; a.textContent = email;
+      status.append(a, ".");
     });
   }
   // Call to action: slow zoom-out of the background once on screen
@@ -316,4 +319,12 @@
     }
     document.addEventListener("visibilitychange", () => { if (document.hidden) heroAudio.pause(); else if (wantSound) heroAudio.play().catch(() => {}); });
   }
+  // Payment details: copy account numbers
+  $$("[data-copy]").forEach((btn) => btn.addEventListener("click", async () => {
+    const value = btn.parentElement.querySelector("[data-copy-value]")?.textContent.trim();
+    if (!value) return;
+    try { await navigator.clipboard.writeText(value); } catch { return; }
+    btn.textContent = "Copied"; btn.classList.add("is-done");
+    setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("is-done"); }, 1800);
+  }));
 })();

@@ -14,6 +14,15 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..") + "/"
 META = json.load(open(os.path.join(os.path.dirname(__file__), "works.json")))
 e = lambda s: html.escape(s, quote=True)
 IG = "https://www.instagram.com/akandejjohn/"
+# Enquiries and print requests open an email to this address.
+EMAIL = "johnakande23@gmail.com"
+BANK_ACCOUNTS = [
+    ("Naira account", "NGN", [("Account number", "1845785745"), ("Account name", "JOHN TOBI AKANDE"),
+                              ("Account type", "Premier Savings"), ("Bank", "Access Bank Nigeria")]),
+    ("Domiciliary account", "Foreign currency", [("Account number", "1846380972"), ("Account name", "JOHN TOBI AKANDE"),
+                                                 ("Account type", "Dom Savings Classic"), ("Bank", "Access Bank Nigeria"),
+                                                 ("SWIFT code", "ABNGNGLA")]),
+]
 TH = "https://www.threads.net/@akandejjohn"
 SITE = "https://akandejjohn.vercel.app"
 IMGS = json.load(open(os.path.join(os.path.dirname(__file__), "imgs.json")))
@@ -179,6 +188,8 @@ FAQS = [
      "Collection or delivery is arranged with each collector. Tell John where you&rsquo;re based when you enquire, and he&rsquo;ll confirm the options and costs."),
     ("What are the paintings made with, and how big are they?",
      "John works primarily in acrylic on canvas. Catalogue works range from 28 &times; 24 in to 7 &times; 5 ft; each painting&rsquo;s page lists its size in inches and centimetres."),
+    ("How do I pay for a painting?",
+     'By bank transfer to John&rsquo;s Access Bank accounts: the naira account for payments in naira, or the domiciliary account (with its SWIFT code) for international payments. Please confirm availability and the final price with John before paying. <a class="link" href="contact.html#payment">See payment details</a>.'),
     ("Does John paint live at events?",
      'Yes. Live painting turns the music and movement of an event into a finished canvas. Choose &ldquo;Live painting&rdquo; on the <a class="link" href="contact.html?type=live">contact form</a> to ask about a date.'),
 ]
@@ -599,6 +610,18 @@ about = head("About — John Akande",
 """ + footer() + END
 
 # ---------------------------------------------------------------- CONTACT
+def pay_card(title, cur, rows):
+    lines = "\n".join(
+        f"""            <div><dt>{e(k)}</dt><dd>{f'<span data-copy-value>{e(v)}</span><button class="pay__copy mono" type="button" data-copy aria-label="Copy {e(k.lower())} {e(v)}">Copy</button>' if k in ("Account number", "SWIFT code") else e(v)}</dd></div>"""
+        for k, v in rows)
+    return f"""        <article class="pay__card reveal">
+          <header><h3>{e(title)}</h3><span class="mono">{e(cur)}</span></header>
+          <dl class="mono">
+{lines}
+          </dl>
+        </article>"""
+pay_cards = "\n".join(pay_card(*a) for a in BANK_ACCOUNTS)
+
 avail_opts = "\n".join(f'              <option>{e(r[1])}</option>' for r in paintings if not r[4])
 types = [("acquisition", "Acquiring a work"), ("commission", "A commission"),
          ("exhibition", "An exhibition or press"), ("live", "Live painting")]
@@ -616,7 +639,7 @@ contact = head("Contact — John Akande",
     </header>
 
     <section class="enquire">
-      <form class="composer reveal" data-composer novalidate>
+      <form class="composer reveal" data-composer data-email="{EMAIL}" novalidate>
         <fieldset>
           <legend class="mono">01 &mdash; I&rsquo;m enquiring about</legend>
           <div class="chips">
@@ -643,7 +666,7 @@ contact = head("Contact — John Akande",
           <p data-preview></p>
         </div>
         <div class="composer__actions">
-          <button class="btn" type="submit">Send enquiry <span class="btn__arrow" aria-hidden="true"></span></button>
+          <button class="btn" type="submit">Send enquiry by email <span class="btn__arrow" aria-hidden="true"></span></button>
           <p class="mono composer__status" data-status role="status" aria-live="polite"></p>
         </div>
       </form>
@@ -656,7 +679,8 @@ contact = head("Contact — John Akande",
         </div>
         <div>
           <span class="mono eyebrow">Direct</span>
-          <p><a class="link" href="https://ig.me/m/akandejjohn" target="_blank" rel="noopener">Message on Instagram &nearr;</a></p>
+          <p><a class="link" href="mailto:{EMAIL}">{EMAIL}</a></p>
+          <p><a class="link" href="{IG}" target="_blank" rel="noopener">Instagram &nearr;</a></p>
           <p><a class="link" href="{TH}" target="_blank" rel="noopener">Threads &nearr;</a></p>
         </div>
         <div>
@@ -665,6 +689,18 @@ contact = head("Contact — John Akande",
           <p><a class="link" href="works.html">Browse the catalogue &rarr;</a></p>
         </div>
       </aside>
+    </section>
+
+    <!-- PAYMENT -->
+    <section class="pay" id="payment" aria-labelledby="pay-title">
+      <header class="pay__head">
+        <p class="mono eyebrow reveal">Payment</p>
+        <h2 class="reveal" id="pay-title">Payment <em>details.</em></h2>
+        <p class="mono pay__note reveal">Payment is by bank transfer. Please confirm the painting&rsquo;s availability and final price with John <b>before</b> paying, and send him your transfer receipt afterwards.</p>
+      </header>
+      <div class="pay__grid">
+{pay_cards}
+      </div>
     </section>
   </main>
 """ + footer(cta=False) + END
@@ -761,6 +797,14 @@ for k, row in enumerate(order):
     actions = (f'''<a class="btn" href="contact.html?type=commission">Commission a similar work <span class="btn__arrow" aria-hidden="true"></span></a>''' if sold else
                f'''<a class="btn" href="contact.html?work={e(title).replace(" ", "%20")}">Enquire about this work <span class="btn__arrow" aria-hidden="true"></span></a>''')
     studio_extra = ""
+    if EMAIL:
+        subj = f"Print request: {title}"
+        body = (f"Hello John,\n\nI'd like to request a print of \"{title}\" ({size}, acrylic on canvas).\n\n"
+                f"Preferred print size:\nWhere I'm based (for delivery):\n\nThank you.\n\n{SITE}/works/{slug}.html")
+        from urllib.parse import quote
+        print_btn = f'<a class="btn btn--ghost" href="mailto:{EMAIL}?subject={quote(subj)}&amp;body={quote(body)}">Request a print <span class="btn__arrow" aria-hidden="true"></span></a>'
+    else:
+        print_btn = ""
     if slug == "rhythm-of-our-heritage":
         studio_extra = f"""
           <figure class="art__alt">
@@ -810,7 +854,9 @@ for k, row in enumerate(order):
           <p class="art__note">Part of a body of work exploring music as a living force: how rhythm shapes identity, how performance reveals vulnerability, and how music functions as cultural memory and therapy.</p>
           <div class="art__actions">
             {actions}
+            {print_btn}
           </div>
+          {"" if sold else '<p class="art__pay mono">Payment by bank transfer. <a class="link" href="contact.html#payment">See payment details</a></p>'}
         </div>
       </div>
     </article>

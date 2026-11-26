@@ -531,6 +531,30 @@ section + section { border-top: 1px solid var(--rule); }
 .enquire__side p.mono { font-size: .74rem; color: var(--fg-dim); }
 @media (max-width: 860px) { .enquire { grid-template-columns: 1fr; } }
 
+/* ============ Payment details (Contact) ============ */
+.pay { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(2rem, 6vw, 6rem); align-items: start; border-top: 1px solid var(--rule); }
+.pay__head h2 { font-size: clamp(2.4rem, 4.6vw, 4.2rem); }
+.pay__note { color: var(--fg-dim); margin: 1.4rem 0 0; max-width: 24rem; }
+.pay__grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1rem, 2vw, 1.75rem); align-items: start; }
+.pay__card { border: 1px solid var(--rule); background: rgba(255,255,255,.28); padding: 1.5rem 1.6rem .5rem; }
+.pay__card header { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--rule); }
+.pay__card h3 { margin: 0; font-weight: 400; font-size: 1.45rem; }
+.pay__card header .mono { text-transform: uppercase; letter-spacing: .18em; font-size: .6rem; color: var(--accent); }
+.pay__card dl { margin: 0; }
+.pay__card dl div { display: grid; grid-template-columns: 8.5rem 1fr; gap: 1rem; align-items: center; padding: .8rem 0; border-bottom: 1px solid var(--rule); }
+.pay__card dl div:last-child { border-bottom: 0; }
+.pay__card dt { text-transform: uppercase; letter-spacing: .16em; font-size: .58rem; color: var(--fg-dim); }
+.pay__card dd { margin: 0; color: var(--fg); display: flex; align-items: center; justify-content: space-between; gap: .75rem; font-size: .8rem; }
+.pay__card [data-copy-value] { font-weight: 500; letter-spacing: .06em; font-size: .9rem; }
+.pay__copy {
+  flex: none; cursor: pointer; padding: .35rem .7rem; border: 1px solid var(--rule); background: transparent; color: var(--fg-dim);
+  text-transform: uppercase; letter-spacing: .14em; font-size: .56rem; transition: background .3s, color .3s, border-color .3s;
+}
+.pay__copy:hover, .pay__copy.is-done { background: var(--fg); color: var(--paper); border-color: var(--fg); }
+.art__pay { color: var(--fg-dim); margin: 1.4rem 0 0; }
+@media (max-width: 960px) { .pay { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .pay__grid { grid-template-columns: 1fr; } .pay__card dl div { grid-template-columns: 7rem 1fr; } }
+
 /* ============ Commission ============ */
 .offers { padding-top: 0; }
 .offers__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(1.5rem, 3vw, 3rem); border-top: 1px solid var(--rule); padding-top: clamp(2rem, 4vw, 3rem); }

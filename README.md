@@ -52,9 +52,13 @@ Pages edited by hand will be overwritten the next time the script runs, so make 
 
 Pages load Vercel Web Analytics. To start collecting data, open the project on vercel.com, go to **Analytics** and click **Enable**. Until then the script does nothing.
 
-## Enquiries
+## Enquiries, print requests and payment
 
-The enquiry form on `contact.html` has no server. It writes the visitor's message, copies it to the clipboard and opens an Instagram direct message to @akandejjohn, where they paste it. A painting's "Enquire about this work" button opens the form with that painting already chosen.
+- **Contact form** (`contact.html`): there's no server. Pressing "Send enquiry by email" opens the visitor's email app with the message addressed to John (johnakande23@gmail.com), the subject and their note already filled in.
+- **Request a print** (each painting page): opens an email to John asking for a print of that painting.
+- **Payment details**: John's bank accounts are on `contact.html#payment`, and each available painting's page links to them.
+
+The email address and bank details are set at the top of `tools/build_pages.py` (`EMAIL`, `BANK_ACCOUNTS`); change them there and rebuild.
 
 ## Deploy
 
