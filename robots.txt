@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://johnakandestudio.com/sitemap.xml
+Sitemap: https://johnakande.studio/sitemap.xml

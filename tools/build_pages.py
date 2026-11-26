@@ -24,7 +24,7 @@ BANK_ACCOUNTS = [
                                                  ("SWIFT code", "ABNGNGLA")]),
 ]
 TH = "https://www.threads.net/@akandejjohn"
-SITE = "https://johnakandestudio.com"
+SITE = "https://johnakande.studio"
 IMGS = json.load(open(os.path.join(os.path.dirname(__file__), "imgs.json")))
 TODAY = datetime.date.today().isoformat()
 
@@ -50,16 +50,26 @@ def pic(slug, alt, sizes, cls="", lazy=True, attrs=""):
 def page_slug(slug):
     return "rhythm-of-our-heritage" if slug == "rhythm-of-our-heritage-studio" else slug
 
+def clean(url):
+    """Drop ".html" from page links (the host serves /works/x from works/x.html); /index becomes /."""
+    url = re.sub(r"\.html(?=$|[?#])", "", url)
+    return re.sub(r"(^|/)index(?=$|[?#])", r"\1", url)
+
 def absolutize(doc):
-    """Root-relative URLs, so pages in /works/ resolve assets and links the same way."""
+    """Root-relative, clean URLs, so pages in /works/ resolve assets and links the same way."""
     def fix(url):
-        if re.match(r"^(https?:|mailto:|tel:|data:|#|/)", url) or not url:
+        if re.match(r"^(https?:|mailto:|tel:|data:|#)", url) or not url:
             return url
-        return "/" + url
+        return clean(url if url.startswith("/") else "/" + url)
     doc = re.sub(r'\b(href|src|data-src|poster)="([^"]*)"', lambda m: f'{m.group(1)}="{fix(m.group(2))}"', doc)
     doc = re.sub(r'\bsrcset="([^"]*)"', lambda m: 'srcset="' + ", ".join(
         fix(p.strip().split(" ")[0]) + (" " + p.strip().split(" ", 1)[1] if " " in p.strip() else "")
         for p in m.group(1).split(",")) + '"', doc)
+    # absolute links to this site (canonical, share and structured data) use clean URLs too
+    doc = re.sub(re.escape(SITE) + r'(/[^"\s<]*)', lambda m: SITE + clean(m.group(1)), doc)
+    # make the email address harder for spam bots to harvest: write it as HTML character codes
+    if EMAIL:
+        doc = doc.replace(EMAIL, "".join(f"&#{ord(c)};" for c in EMAIL))
     return doc
 
 def currency_switch(compact=False):
@@ -94,9 +104,12 @@ STATEMENT_2 = (
 PAGES = [("about.html", "About"), ("works.html", "Works"), ("commission.html", "Commission"), ("contact.html", "Contact")]
 
 
-def head(title, desc, page, path=None, og=None, ld=None, og_type="website"):
+def head(title, desc, page, path=None, og=None, ld=None, og_type="website", og_alt=None):
     path = path if path is not None else ("" if page == "home" else f"{page}.html")
     url = f"{SITE}/{path}"
+    og_dims = ""
+    if not og and os.path.exists(f"{ROOT}assets/og/og-{page}.jpg"):
+        og_dims = '\n  <meta property="og:image:width" content="1200" />\n  <meta property="og:image:height" content="630" />'
     og = og or f"{SITE}/assets/og/og-{page}.jpg"
     ld_html = "".join(f'\n  <script type="application/ld+json">{json.dumps(x, ensure_ascii=False)}</script>' for x in (ld or []))
     return f"""<!DOCTYPE html>
@@ -111,7 +124,9 @@ def head(title, desc, page, path=None, og=None, ld=None, og_type="website"):
   <meta property="og:site_name" content="John Akande" />
   <meta property="og:title" content="{title}" />
   <meta property="og:description" content="{e(desc)}" />
-  <meta property="og:image" content="{og}" />
+  <meta property="og:image" content="{og}" />{og_dims}
+  <meta property="og:image:alt" content="{e(og_alt or title)}" />
+  <meta property="og:locale" content="en_GB" />
   <meta property="og:url" content="{url}" />
   <meta property="og:type" content="{og_type}" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -279,7 +294,7 @@ def footer(cta=True, faq=False):
     </div>
     <div class="foot__base mono">
       <span>&copy; <span data-year>2026</span> John Akande. All artworks &copy; the artist.</span>
-      <span class="foot__tag">Paintings where sound becomes colour</span>
+      <nav class="foot__legal" aria-label="Legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav>
       <a href="#top" class="foot__top" aria-label="Back to top"><span>Top</span><i aria-hidden="true"></i></a>
     </div>
   </footer>
@@ -373,7 +388,7 @@ titles = ["Rhythm of Our Heritage", "Fear of the Unknown", "Young Virtuoso", "Wh
           "Where Music Takes Root", "Quiet Beginning", "When Time Was Simple", "My Father’s Footstep"]
 marq = "".join(f"<span>{e(t)}</span><i aria-hidden=\"true\">&#10022;</i>" for t in titles)
 
-home = head("John Akande — Figurative Artist, Lagos",
+home = head("John Akande — Nigerian Figurative Artist & Painter, Lagos",
             "John Akande (@akandejjohn) is a Nigerian figurative artist based in Lagos whose paintings explore the relationship between visual art and sound.",
             "home", ld=[PERSON_LD, {"@context": "https://schema.org", "@type": "WebSite", "name": "John Akande", "url": SITE + "/"}, FAQ_LD]) + nav("index.html") + f"""
   <main id="main">
@@ -475,8 +490,8 @@ home = head("John Akande — Figurative Artist, Lagos",
 # ---------------------------------------------------------------- WORKS
 works_cards = [work_card(META[0], " work--feature", lazy=False), work_card(META[1], lazy=False)]
 works_cards += [work_card(r) for r in META[2:]]
-works = head("Works — John Akande",
-             f"The catalogue: {n_total} paintings in acrylic on canvas by John Akande, with sizes, prices and availability.",
+works = head("Paintings for Sale — John Akande, Acrylic on Canvas",
+             f"Browse {n_total} original acrylic paintings by Nigerian artist John Akande, on music, heritage and memory. Sizes, prices in USD, EUR, GBP or NGN, and availability.",
              "works") + nav("works.html") + f"""
   <main id="main" class="paper">
     <header class="page-head" id="top">
@@ -506,7 +521,7 @@ works = head("Works — John Akande",
 """ + footer() + LIGHTBOX + END
 
 # ---------------------------------------------------------------- ABOUT
-about = head("About — John Akande",
+about = head("About John Akande — Nigerian Figurative Artist, Lagos",
              "John Akande (b. Lagos, Nigeria) is a contemporary Nigerian figurative artist exploring human expression, cultural identity, music and everyday life.",
              "about", ld=[PERSON_LD]) + nav("about.html") + f"""
   <main id="main">
@@ -634,8 +649,8 @@ types = [("acquisition", "Acquiring a work"), ("commission", "A commission"),
 type_html = "\n".join(
     f'            <label class="chip"><input type="radio" name="type" value="{v}"{" checked" if i == 0 else ""} /> {lbl}</label>'
     for i, (v, lbl) in enumerate(types))
-contact = head("Contact — John Akande",
-               "Enquire about acquiring a painting, a commission, an exhibition or live painting with John Akande.",
+contact = head("Contact John Akande — Enquiries, Commissions & Payment",
+               "Contact Lagos-based artist John Akande to buy a painting, commission a new work, request a print, or book an exhibition or live painting. Payment details included.",
                "contact") + nav("contact.html") + f"""
   <main id="main" class="paper">
     <header class="page-head" id="top">
@@ -660,12 +675,13 @@ contact = head("Contact — John Akande",
           </select>
         </label>
         <label class="field">
-          <span class="mono">03 &mdash; Your name</span>
-          <input name="name" type="text" autocomplete="name" placeholder="Your name" />
+          <span class="mono">03 &mdash; Your name <b class="field__req" aria-hidden="true">*</b></span>
+          <input name="name" type="text" autocomplete="name" placeholder="Your name" required minlength="2" maxlength="80" aria-describedby="name-error" />
+          <span class="field__error mono" id="name-error" data-error-for="name" hidden>Please add your name so John knows who he&rsquo;s replying to.</span>
         </label>
         <label class="field">
           <span class="mono">04 &mdash; Your message</span>
-          <textarea name="message" rows="4" placeholder="Where you&rsquo;re based, timing, anything John should know"></textarea>
+          <textarea name="message" rows="4" maxlength="2000" placeholder="Where you&rsquo;re based, timing, anything John should know"></textarea>
         </label>
         <div class="composer__preview">
           <span class="mono">Your message</span>
@@ -735,7 +751,7 @@ steps = [
 ]
 steps_html = "\n".join(f"""        <li class="reveal"><span class="steps__n">0{i+1}</span><h3>{t}</h3><p class="mono">{d}</p></li>""" for i, (t, d) in enumerate(steps))
 sizes = sorted([r for r in paintings if r[3]], key=lambda r: int(r[3].strip("$").replace(",", "")))
-commission = head("Commission — John Akande",
+commission = head("Commission a Painting — John Akande, Lagos",
                   "Commission an original painting, portrait or live painting from Lagos-based figurative artist John Akande.",
                   "commission") + nav("commission.html") + f"""
   <main id="main" class="paper">
@@ -745,7 +761,8 @@ commission = head("Commission — John Akande",
       <p class="page-head__lede reveal">An original painting, made for you in John Akande&rsquo;s Lagos studio.</p>
     </header>
 
-    <section class="offers" aria-label="What you can commission">
+    <section class="offers" aria-labelledby="offers-title">
+      <h2 class="visually-hidden" id="offers-title">What you can commission</h2>
       <div class="offers__grid">
 {offer_html}
       </div>
@@ -831,9 +848,11 @@ for k, row in enumerate(order):
     crumbs = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
         {"@type": "ListItem", "position": 1, "name": "Works", "item": f"{SITE}/works.html"},
         {"@type": "ListItem", "position": 2, "name": title, "item": f"{SITE}/works/{slug}.html"}]}
-    desc = f"{title}, {size} acrylic on canvas by Lagos-based figurative artist John Akande. {'Sold.' if sold else 'Available to acquire.'}"
-    doc = head(f"{e(title)} — John Akande", desc, "works", path=f"works/{slug}.html",
-               og=f"{SITE}/{img_base(slug)}.jpg", ld=[ld, crumbs], og_type="article") + nav("works.html") + f"""
+    desc = (f"{title} by Nigerian artist John Akande: an original {size} acrylic on canvas painting. "
+            + ("Sold; prints and similar commissions available." if sold else f"Available{', ' + price if price else ''}. Enquire or request a print."))
+    doc = head(f"{e(title)} — Painting by John Akande", desc, "works", path=f"works/{slug}.html",
+               og=f"{SITE}/{img_base(slug)}.jpg", ld=[ld, crumbs], og_type="article",
+               og_alt=f"{title}, acrylic on canvas by John Akande") + nav("works.html") + f"""
   <main id="main" class="paper">
     <article class="art" id="top">
       <nav class="art__crumbs mono" aria-label="Breadcrumb">
@@ -902,14 +921,112 @@ notfound = head("Page not found — John Akande", "This page could not be found.
 """ + footer(cta=False) + END
 notfound = notfound.replace('<meta name="description"', '<meta name="robots" content="noindex" />\n  <meta name="description"', 1)
 
-pages = {"index.html": home, "works.html": works, "about.html": about, "contact.html": contact,
+# ---------------------------------------------------------------- PRIVACY + TERMS
+# Plain-language summaries of what the site actually does. They are a starting point for John
+# to review, not legal advice; update them if the site starts collecting anything new.
+LEGAL_UPDATED = "26 November 2026"
+
+def legal_page(slug, title, lede, sections, desc):
+    toc = "\n".join(f'          <li><a href="{slug}.html#{sid}">{e(h)}</a></li>' for sid, h, _ in sections)
+    body = "\n".join(f"""        <section class="legal__sec" id="{sid}" aria-labelledby="{sid}-h">
+          <h2 id="{sid}-h">{e(h)}</h2>
+{html_}
+        </section>""" for sid, h, html_ in sections)
+    return head(f"{title} — John Akande", desc, slug, og=f"{SITE}/assets/og/og-home.jpg") + nav("") + f"""
+  <main id="main" class="paper">
+    <header class="page-head" id="top">
+      <p class="mono eyebrow reveal">Last updated {LEGAL_UPDATED}</p>
+      <h1 class="page-head__title reveal">{title}</h1>
+      <p class="page-head__lede page-head__lede--sm reveal">{lede}</p>
+    </header>
+    <div class="legal">
+      <nav class="legal__toc mono" aria-label="On this page">
+        <p class="eyebrow">On this page</p>
+        <ol>
+{toc}
+        </ol>
+      </nav>
+      <div class="legal__body">
+{body}
+      </div>
+    </div>
+  </main>
+""" + footer(cta=False) + END
+
+P = lambda *ps: "\n".join(f"          <p>{p}</p>" for p in ps)
+UL = lambda *xs: "          <ul>\n" + "\n".join(f"            <li>{x}</li>" for x in xs) + "\n          </ul>"
+
+privacy = legal_page("privacy", "Privacy Policy",
+    "How this website handles information about you. In short: it has no accounts, sets no cookies and does not sell or share your details.",
+    [
+        ("who", "Who we are", P(
+            "This website, johnakande.studio, is the portfolio of John Tobi Akande, a figurative artist based in Lagos, Nigeria. In this policy, &ldquo;we&rdquo; and &ldquo;John&rdquo; mean him.",
+            f'For any question about your information, email <a class="link" href="mailto:{EMAIL}">{EMAIL}</a>.')),
+        ("collect", "What we collect", P(
+            "You can browse the whole site without giving us any personal information. The only personal information John receives is what you choose to send him:")
+            + "\n" + UL(
+            "<b>Enquiries and print requests.</b> The contact form and the &ldquo;Request a print&rdquo; button do not send anything through this website. They open your own email app with a message already written; nothing is sent until you press send there. John then receives your email, which includes your email address, your name if you give it, and your message.",
+            "<b>Payments.</b> If you buy a painting, John receives the bank transfer details your bank shares with him and any receipt you send.")),
+        ("use", "How we use it", P(
+            "John uses your messages only to reply to you, to arrange a sale, commission, print, exhibition or live painting, and to keep records of sales. He does not sell, rent or trade your information, and he does not add you to a mailing list without asking.")),
+        ("cookies", "Cookies and browser storage", P(
+            "This website does not set cookies, so there is no cookie banner. It saves three small preferences in your own browser, which never leave your device:")
+            + "\n" + UL(
+            "the currency you chose for prices on the Works page;",
+            "the day&rsquo;s exchange rates, so they are not downloaded again for 12 hours;",
+            "a note that the opening animation has already played during this visit.")
+            + "\n" + P("You can clear these at any time by clearing your browser&rsquo;s site data.")),
+        ("others", "Services that help run the site", P(
+            "Like any website, loading these pages means your browser connects to the services below. They receive technical information such as your IP address and browser type, under their own privacy policies:")
+            + "\n" + UL(
+            "<b>Vercel</b>, which hosts the website and keeps standard server logs. Vercel Web Analytics may also count page visits; it does not use cookies and reports only totals, not individual visitors.",
+            "<b>Google Fonts</b> and <b>Fontshare</b>, which provide the typefaces.",
+            "<b>open.er-api.com</b>, which provides exchange rates when prices are shown in another currency.",
+            "<b>Instagram</b> and <b>Threads</b>, only if you follow a link to them.")),
+        ("keep", "How long we keep it", P(
+            "Emails are kept for as long as they are useful for replying to you and for John&rsquo;s sales and tax records, and are then deleted.")),
+        ("rights", "Your choices", P(
+            f'You can ask John to see the information he holds about you, to correct it, or to delete it, by emailing <a class="link" href="mailto:{EMAIL}">{EMAIL}</a>. He will reply as soon as he can.')),
+        ("changes", "Changes to this policy", P(
+            "If this policy changes, the new version will be posted on this page with a new &ldquo;last updated&rdquo; date.")),
+    ],
+    "How johnakande.studio handles your information: no accounts, no cookies, and enquiries go straight to John by email.")
+
+terms = legal_page("terms", "Terms of Use",
+    "The terms for using this website and for enquiring about, commissioning or buying John Akande&rsquo;s work.",
+    [
+        ("site", "Using this website", P(
+            "By using johnakande.studio you agree to these terms. The website is provided so you can view John Akande&rsquo;s work and contact him. Please don&rsquo;t misuse it, for example by trying to disrupt it or by copying its content in bulk.")),
+        ("copyright", "Artwork and copyright", P(
+            "All paintings, photographs, videos and text on this website are &copy; John Akande unless stated otherwise. You may share links to the website and its pages. You may not copy, print, sell or reuse the images, or use them to train software, without John&rsquo;s written permission.",
+            "Buying a painting gives you ownership of that physical painting. The copyright stays with John unless you both agree otherwise in writing.")),
+        ("prices", "Prices and availability", P(
+            "Prices on this website are set in US dollars. Amounts shown in euros, pounds or naira are approximate conversions at the day&rsquo;s exchange rate, for guidance only. The final price is the one John confirms to you.",
+            "Prices and availability can change, and a painting shown as available may already be reserved. A painting is only reserved for you once John has confirmed it in writing.")),
+        ("buying", "Buying a painting", P(
+            "To buy a painting, enquire first. John will confirm the price, availability and arrangements before you pay. Payment is by bank transfer to the accounts on the Contact page; please only pay after John has confirmed the sale, and send him your receipt.",
+            f'John will only ever ask you to pay into the accounts listed on this website. If you are asked to pay anywhere else, or by anyone else, do not pay and email <a class="link" href="mailto:{EMAIL}">{EMAIL}</a>.',
+            "Collection, delivery, shipping costs and any returns are agreed with John for each sale.")),
+        ("commissions", "Commissions and prints", P(
+            "For a commissioned painting, the subject, size, price, timeline and payment stages are agreed with John in writing before work begins.",
+            "Prints are made on request. The available sizes, price and delivery are confirmed by John when you ask.")),
+        ("links", "Other websites", P(
+            "This website links to other services, such as Instagram and Threads. John is not responsible for their content or how they handle your information.")),
+        ("liability", "Accuracy of information", P(
+            "John takes care to describe each work accurately. Colours on screen can differ from the painting itself, and sizes are approximate. If anything matters to your decision, ask John before you buy.")),
+        ("contact", "Contact and changes", P(
+            f'Questions about these terms: <a class="link" href="mailto:{EMAIL}">{EMAIL}</a>. If these terms change, the new version will be posted here with a new &ldquo;last updated&rdquo; date.')),
+    ],
+    "Terms for using johnakande.studio and for enquiring about, commissioning or buying John Akande's paintings and prints.")
+
+pages = {"privacy.html": privacy, "terms.html": terms, "index.html": home, "works.html": works, "about.html": about, "contact.html": contact,
          "commission.html": commission, "404.html": notfound, **art_pages}
 os.makedirs(ROOT + "works", exist_ok=True)
 for name, doc in pages.items():
     open(ROOT + name, "w").write(absolutize(doc))
 
 # sitemap + robots + web manifest
-urls = ["", "works.html", "about.html", "commission.html", "contact.html"] + [f"works/{r[0]}.html" for r in order]
+urls = ["", "works", "about", "commission", "contact", "privacy", "terms"] + [f"works/{r[0]}" for r in order]
 open(ROOT + "sitemap.xml", "w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
     "".join(f"  <url><loc>{SITE}/{u}</loc><lastmod>{TODAY}</lastmod></url>\n" for u in urls) + "</urlset>\n")
 open(ROOT + "robots.txt", "w").write(f"User-agent: *\nAllow: /\n\nSitemap: {SITE}/sitemap.xml\n")
@@ -919,3 +1036,43 @@ open(ROOT + "site.webmanifest", "w").write(json.dumps({
     "icons": [{"src": "/assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png"},
               {"src": "/assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png"}]}, indent=2) + "\n")
 print("ok", n_total, n_avail, n_sold, "pages", len(pages))
+
+# vercel.json: clean URLs, HTTPS only, and security headers. The script hash lets only this
+# site's own inline script run; it is recomputed here so it always matches the pages.
+import base64, glob, hashlib
+inline = set()
+for f in glob.glob(ROOT + "*.html") + glob.glob(ROOT + "works/*.html"):
+    for m in re.finditer(r'<script(?![^>]*\bsrc=)(?![^>]*application/ld\+json)[^>]*>(.*?)</script>', open(f).read(), re.S):
+        inline.add(m.group(1))
+hashes = " ".join(sorted("'sha256-" + base64.b64encode(hashlib.sha256(s.encode()).digest()).decode() + "'" for s in inline))
+CSP = "; ".join([
+    "default-src 'self'",
+    f"script-src 'self' {hashes}",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://api.fontshare.com",
+    "font-src 'self' https://fonts.gstatic.com https://cdn.fontshare.com",
+    "img-src 'self' data:",
+    "media-src 'self'",
+    "connect-src 'self' https://open.er-api.com",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+    "upgrade-insecure-requests",
+])
+vercel = {
+    "$schema": "https://openapi.vercel.sh/vercel.json",
+    "cleanUrls": True,
+    "trailingSlash": False,
+    "headers": [{"source": "/(.*)", "headers": [
+        {"key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains"},
+        {"key": "Content-Security-Policy", "value": CSP},
+        {"key": "X-Content-Type-Options", "value": "nosniff"},
+        {"key": "X-Frame-Options", "value": "DENY"},
+        {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"},
+        {"key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=()"},
+        {"key": "Cross-Origin-Opener-Policy", "value": "same-origin"},
+    ]}],
+}
+with open(ROOT + "vercel.json", "w") as f:
+    json.dump(vercel, f, indent=2)
+    f.write("\n")

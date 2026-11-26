@@ -1,6 +1,6 @@
 # akandejjohn
 
-Portfolio website for **John Akande** (@akandejjohn), a figurative artist based in Lagos: https://johnakandestudio.com
+Portfolio website for **John Akande** (@akandejjohn), a figurative artist based in Lagos: https://johnakande.studio
 
 A static site: plain HTML, `styles.css`, `script.js` and `assets/`. Nothing needs building to deploy it.
 
@@ -14,17 +14,18 @@ A static site: plain HTML, `styles.css`, `script.js` and `assets/`. Nothing need
 | About (biography, studio film, artist statement) | `about.html` |
 | Commission | `commission.html` |
 | Contact (enquiry form) | `contact.html` |
+| Privacy Policy and Terms of Use | `privacy.html`, `terms.html` |
 | Page not found | `404.html` |
 
-Links and asset paths start with `/`, so preview the site through a local server (below), not by opening the files directly.
+Pages are linked without `.html` (for example `/works/young-virtuoso-i`); Vercel serves the matching file, as set by `cleanUrls` in `vercel.json`.
 
 ## Preview locally
 
 ```bash
-python3 -m http.server 8000
+python3 tools/serve.py
 ```
 
-Then open http://localhost:8000.
+Then open http://localhost:8000. This preview behaves like Vercel: clean addresses, the security headers from `vercel.json`, and the custom 404 page. Use it rather than opening the files directly.
 
 ## Editing pages and adding paintings
 
@@ -56,12 +57,18 @@ Pages load Vercel Web Analytics. To start collecting data, open the project on v
 
 ## Enquiries, print requests and payment
 
-- **Contact form** (`contact.html`): there's no server. Pressing "Send enquiry by email" opens the visitor's email app with the message addressed to John (johnakande23@gmail.com), the subject and their note already filled in.
+- **Contact form** (`contact.html`): there's no server. The name is required. Pressing "Send enquiry by email" opens the visitor's email app with the message addressed to John (johnakande23@gmail.com), the subject and their note already filled in.
 - **Request a print** (each painting page): opens an email to John asking for a print of that painting.
 - **Payment details**: John's bank accounts are on `contact.html#payment`, and each available painting's page links to them.
 
 The email address and bank details are set at the top of `tools/build_pages.py` (`EMAIL`, `BANK_ACCOUNTS`); change them there and rebuild.
 
+## Security and hosting
+
+`vercel.json` (written by `tools/build_pages.py`) turns on clean URLs and sends security headers with every page: HTTPS only (HSTS), a Content Security Policy that only allows this site's own scripts plus the font and exchange-rate services it uses, and protections against framing and content sniffing. If you add a new outside service (for example a different font host), add it to the policy in the script, or the browser will block it.
+
+The site has no server code, database, logins or secret keys. The email address on the site is written as HTML character codes so simple spam bots can't read it.
+
 ## Deploy
 
-Any static host works (Vercel, Netlify, GitHub Pages, Cloudflare Pages). Point it at the repo root. `404.html` is used automatically for missing pages on Vercel and Netlify.
+Hosted on Vercel from the `main` branch, at https://johnakande.studio. `404.html` is used automatically for missing pages.

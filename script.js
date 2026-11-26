@@ -128,7 +128,7 @@
       lbNote.textContent = btn.dataset.note || "";
       if (lbEnquire) {
         lbEnquire.hidden = !btn.dataset.enquire;
-        if (btn.dataset.enquire) lbEnquire.href = `/contact.html?work=${encodeURIComponent(btn.dataset.enquire)}`;
+        if (btn.dataset.enquire) lbEnquire.href = `/contact?work=${encodeURIComponent(btn.dataset.enquire)}`;
       }
       dialog.showModal();
     }));
@@ -185,8 +185,16 @@
     render();
     // Send: opens the visitor's email app with the enquiry addressed to John, ready to send
     const subjects = { acquisition: "Acquisition enquiry", commission: "Commission enquiry", exhibition: "Exhibition / press enquiry", live: "Live painting enquiry" };
+    const nameErr = $("[data-error-for=name]", form);
+    const validName = () => F.name.value.trim().length >= 2;
+    const showNameError = (show) => {
+      nameErr.hidden = !show;
+      F.name.setAttribute("aria-invalid", show ? "true" : "false");
+    };
+    F.name.addEventListener("input", () => { if (!nameErr.hidden && validName()) showNameError(false); });
     form.addEventListener("submit", (e) => {
       e.preventDefault();
+      if (!validName()) { showNameError(true); F.name.focus(); return; }
       const email = form.dataset.email;
       const type = F.type.value, work = F.work.value;
       const subject = subjects[type] + (type === "acquisition" && work ? `: ${work}` : "");
