@@ -8,7 +8,8 @@ never stretched.
     python3 tools/frame_artwork.py <painting.jpg> <width> <height> <out.jpg>
 
 <width> and <height> are the painting's real size in any unit (e.g. 36 48), used for
-its proportions. White margins around the painting photo are trimmed first.
+its proportions; pass 0 0 to use the photo's own proportions, so nothing is cropped.
+White margins around the painting photo are trimmed first.
 Needs Pillow and NumPy.
 """
 import sys
@@ -52,19 +53,22 @@ def plain_bands(arr, axis, lo, hi, band_lo, band_hi, need):
 
 
 def resize_axis(arr, axis, lo, hi, band_lo, band_hi, delta):
-    """Remove (delta < 0) or repeat (delta > 0) plain lines along one axis."""
+    """Remove (delta < 0) or repeat (delta > 0) plain lines along one axis.
+
+    Growing repeats only the plainest stretch of moulding (several times if needed), so a
+    much longer frame is extended with plain moulding and the ornaments stay untouched.
+    """
     if delta == 0:
         return arr
-    picks = plain_bands(arr, axis, lo, hi, band_lo, band_hi, abs(delta))
     n = arr.shape[axis]
+    if delta < 0:
+        drop = set(plain_bands(arr, axis, lo, hi, band_lo, band_hi, -delta))
+        return np.take(arr, [i for i in range(n) if i not in drop], axis=axis)
+    picks = plain_bands(arr, axis, lo, hi, band_lo, band_hi, min(delta, 24))
+    reps = {i: delta // len(picks) + (1 if k < delta % len(picks) else 0) for k, i in enumerate(picks)}
     keep = []
-    pick = set(picks)
     for i in range(n):
-        if delta < 0 and i in pick:
-            continue
-        keep.append(i)
-        if delta > 0 and i in pick:
-            keep.append(i)
+        keep.extend([i] * (1 + reps.get(i, 0)))
     return np.take(arr, keep, axis=axis)
 
 
@@ -72,12 +76,18 @@ def frame(painting_path, pw, ph, out_path):
     tpl = Image.open(TEMPLATE).convert("RGB")
     L, T, R, B = OPEN
     ow, oh = R - L, B - T
-    ratio = pw / ph
-    # keep whichever opening side changes least, adjust the other to the painting's proportions
+    p = trim_white(Image.open(painting_path).convert("RGB"))
+    ratio = pw / ph if pw and ph else p.width / p.height     # 0 0 = use the photo's own proportions
+    # keep whichever opening side changes least; but never shrink a side by more than a quarter,
+    # because only short runs of plain moulding can be cut - grow the other side instead
     if ratio >= ow / oh:
         tw, th = ow, round(ow / ratio)
+        if th < oh * 0.75:
+            tw, th = round(oh * ratio), oh
     else:
         tw, th = round(oh * ratio), oh
+        if tw < ow * 0.75:
+            tw, th = ow, round(ow / ratio)
     arr = np.asarray(tpl)
     # width: plain columns between the frame's corners, read from the top and bottom moulding
     arr = resize_axis(arr, 1, L + 20, R - 20, (T - 90, T - 10), (B + 10, B + 90), tw - ow)
@@ -90,7 +100,6 @@ def frame(painting_path, pw, ph, out_path):
     # painting, cropped to the stated proportions and placed in the opening
     x0, y0 = round(L * SCALE), round(T * SCALE)
     w, h = round(tw * SCALE), round(th * SCALE)
-    p = trim_white(Image.open(painting_path).convert("RGB"))
     pr = p.width / p.height
     if pr > w / h:
         nw = round(p.height * w / h)

@@ -136,18 +136,53 @@
     dialog.addEventListener("click", (e) => { if (e.target === dialog || e.target.tagName === "FIGURE") dialog.close(); });
   }
 
-  // Works filters
+  // Works: filter by period and availability, sort by price
   const grid = $("[data-works]");
-  const chips = $$("[data-filter]");
-  if (grid && chips.length) {
-    chips.forEach((chip) => chip.addEventListener("click", () => {
-      const f = chip.dataset.filter;
-      chips.forEach((c) => c.setAttribute("aria-pressed", c === chip));
-      $$(".work", grid).forEach((w) => {
-        w.classList.toggle("is-hidden", f !== "all" && w.dataset.status !== f);
+  if (grid) {
+    const cards = $$(".work", grid);
+    const original = cards.slice();
+    const sortSel = $("[data-sort]");
+    const count = $("[data-works-count]");
+    const state = { period: "all", status: "all", sort: "featured" };
+    const apply = () => {
+      const custom = state.period !== "all" || state.status !== "all" || state.sort !== "featured";
+      let shown = 0;
+      cards.forEach((w) => {
+        const studioShot = w.hasAttribute("data-studio");
+        const hide = (state.period !== "all" && w.dataset.period !== state.period)
+          || (state.status !== "all" && w.dataset.status !== state.status)
+          || (studioShot && custom);
+        w.classList.toggle("is-hidden", hide);
         w.classList.add("is-in");
+        if (!hide && !studioShot) shown++;
       });
-    }));
+      const order = original.slice();
+      if (state.sort !== "featured") {
+        const dir = state.sort === "price-asc" ? 1 : -1;
+        // sold works (and any without a price) go last either way
+        order.sort((x, y) => {
+          const px = x.dataset.status === "sold" ? 0 : +x.dataset.usdSort, py = y.dataset.status === "sold" ? 0 : +y.dataset.usdSort;
+          if (!px || !py) return (px ? 0 : 1) - (py ? 0 : 1);
+          return (px - py) * dir;
+        });
+      }
+      order.forEach((w) => grid.appendChild(w));
+      // the large first card only makes sense in the default view
+      grid.classList.toggle("is-filtered", custom);
+      if (count) {
+        const label = { all: "", recent: "recent ", old: "earlier " }[state.period] + { all: "", available: "available ", sold: "sold " }[state.status];
+        count.textContent = shown ? `Showing ${shown} ${label}work${shown === 1 ? "" : "s"}` : "No works match these filters";
+      }
+    };
+    $$("[data-filter-group]").forEach((group) => {
+      const key = group.dataset.filterGroup;
+      $$("[data-filter]", group).forEach((chip) => chip.addEventListener("click", () => {
+        state[key] = chip.dataset.filter;
+        $$("[data-filter]", group).forEach((c) => c.setAttribute("aria-pressed", c === chip));
+        apply();
+      }));
+    });
+    if (sortSel) sortSel.addEventListener("change", () => { state.sort = sortSel.value; apply(); });
   }
 
   // Enquiry composer: build the message, copy it, open the Instagram chat

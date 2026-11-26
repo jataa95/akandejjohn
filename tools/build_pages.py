@@ -332,16 +332,17 @@ END = """
 
 
 def work_card(row, extra_cls="", lazy=True, sizes="(max-width: 760px) 92vw, (max-width: 1000px) 46vw, 31vw"):
-    slug, title, size, price, sold, (w, h) = row
+    slug, title, size, price, sold, (w, h) = row[:6]
     studio = slug.endswith("studio")
+    period, year = extra(row).get("period", "recent"), extra(row).get("year", "")
     usd = price.strip("$").replace(",", "")
     status = ('<span class="work__sold">Sold</span>' if sold else
               f'<span class="work__price" data-usd="{usd}">{e(price)}</span>' if price else '<span class="work__price">Price on request</span>')
     alt = ("Rhythm of Our Heritage leaning against a white studio wall, before framing" if studio
            else f"{title}, acrylic on canvas by John Akande")
-    cap = "Before framing" if studio else f"{size} · Acrylic on canvas"
+    cap = "Before framing" if studio else f"{size} · Acrylic on canvas" + (f" · {year}" if year else "")
     href = f"works/{page_slug(slug)}.html"
-    return f"""        <figure class="work{extra_cls} reveal" data-status="{'sold' if sold else 'available'}">
+    return f"""        <figure class="work{extra_cls} reveal" data-status="{'sold' if sold else 'available'}" data-period="{period}" data-usd-sort="{usd_of(row)}"{' data-studio' if studio else ''}>
           <a class="work__media" href="{href}" tabindex="-1" aria-hidden="true">
             {pic(slug, e(alt), sizes, lazy=lazy)}
           </a>
@@ -353,11 +354,20 @@ def work_card(row, extra_cls="", lazy=True, sizes="(max-width: 760px) 92vw, (max
         </figure>"""
 
 
+def extra(row):
+    """Optional 7th field of a works.json row: {"period": "recent" | "old", "year": "2025"}."""
+    return row[6] if len(row) > 6 else {}
+
+def usd_of(row):
+    return int(row[3].strip("$").replace(",", "")) if row[3] else 0
+
 by_slug = {r[0]: r for r in META}
 paintings = [r for r in META if not r[0].endswith("studio")]
 n_total = len(paintings)
 n_sold = sum(1 for r in paintings if r[4])
 n_avail = n_total - n_sold
+n_old = sum(1 for r in paintings if extra(r).get("period") == "old")
+n_recent = n_total - n_old
 N_AVAIL_WORD = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'][n_avail - 1].capitalize() if n_avail <= 20 else str(n_avail)
 
 
@@ -365,7 +375,7 @@ HS = ["rhythm-of-our-heritage", "young-virtuoso-i", "where-it-began-i", "where-m
       "rhythm-unites-us-i", "young-virtuoso-iii", "quiet-beginning-i", "when-time-was-simple"]
 HS_MOBILE = 5  # phones show only the first five, then a button to the Works page
 def sel_row(i, slug):
-    slug_, title, size, price, sold, (w, h) = by_slug[slug]
+    slug_, title, size, price, sold, (w, h) = by_slug[slug][:6]
     status = '<span class="sel__sold">Sold</span>' if sold else '<span class="sel__price">Available</span>'
     return f"""          <li{' class="sel__extra"' if i >= HS_MOBILE else ''}>
             <a class="sel__row" data-sel="{i}" data-title="{e(title)}" href="works/{slug}.html">
@@ -506,13 +516,31 @@ works = head("Paintings for Sale — John Akande, Acrylic on Canvas",
 
     <section class="works" aria-label="All works">
       <div class="toolbar reveal">
-        <div class="filters" role="group" aria-label="Filter works">
-          <button class="chip" aria-pressed="true" data-filter="all">All <span>{n_total}</span></button>
-          <button class="chip" aria-pressed="false" data-filter="available">Available <span>{n_avail}</span></button>
-          <button class="chip" aria-pressed="false" data-filter="sold">Sold <span>{n_sold}</span></button>
+        <div class="toolbar__filters">
+          <div class="filters" role="group" aria-label="Show works from" data-filter-group="period">
+            <span class="mono filters__label">Works</span>
+            <button class="chip" aria-pressed="true" data-filter="all">All <span>{n_total}</span></button>
+            <button class="chip" aria-pressed="false" data-filter="recent">Recent <span>{n_recent}</span></button>
+            <button class="chip" aria-pressed="false" data-filter="old">Earlier <span>{n_old}</span></button>
+          </div>
+          <div class="filters" role="group" aria-label="Filter by availability" data-filter-group="status">
+            <span class="mono filters__label">Status</span>
+            <button class="chip" aria-pressed="true" data-filter="all">All</button>
+            <button class="chip" aria-pressed="false" data-filter="available">Available <span>{n_avail}</span></button>
+            <button class="chip" aria-pressed="false" data-filter="sold">Sold <span>{n_sold}</span></button>
+          </div>
+          <label class="sort">
+            <span class="mono filters__label">Sort</span>
+            <select data-sort>
+              <option value="featured">Featured</option>
+              <option value="price-asc">Price: low to high</option>
+              <option value="price-desc">Price: high to low</option>
+            </select>
+          </label>
         </div>
 {currency_switch()}
       </div>
+      <p class="mono works__count" data-works-count aria-live="polite">Showing all {n_total} works</p>
       <div class="works__grid" data-works>
 {chr(10).join(works_cards)}
       </div>
@@ -799,10 +827,15 @@ def dims(size, w, h):
 def series(title):
     return re.sub(r"\s+[IVX]+$", "", title)
 
+NOTE_RECENT = ("Part of a body of work exploring music as a living force: how rhythm shapes identity, how performance "
+               "reveals vulnerability, and how music functions as cultural memory and therapy.")
+NOTE_OLD = ("An earlier work from John Akande&rsquo;s studio in Lagos, painted in acrylic on canvas with the expressive brushwork "
+            "and layered colour that run through his figurative practice.")
 order = [r for r in META if not r[0].endswith("studio")]
 art_pages = {}
 for k, row in enumerate(order):
-    slug, title, size, price, sold, (w, h) = row
+    slug, title, size, price, sold, (w, h) = row[:6]
+    year = extra(row).get("year", "")
     usd = price.strip("$").replace(",", "")
     pw, ph = dims(size, IMGS[slug]["w"], IMGS[slug]["h"])
     a_, b_ = [int(n) * (12 if "ft" in size else 1) for n in re.findall(r"\d+", size)[:2]]
@@ -839,7 +872,7 @@ for k, row in enumerate(order):
     ld = {
         "@context": "https://schema.org", "@type": "VisualArtwork", "name": title,
         "creator": {"@type": "Person", "name": "John Akande", "url": SITE + "/"},
-        "artform": "Painting", "artMedium": "Acrylic", "artworkSurface": "Canvas",
+        "artform": "Painting", "artMedium": "Acrylic", "artworkSurface": "Canvas", **({"dateCreated": year} if year else {}),
         "width": {"@type": "Distance", "name": f"{pw} in"}, "height": {"@type": "Distance", "name": f"{ph} in"},
         "image": f"{SITE}/{img_base(slug)}.jpg", "url": f"{SITE}/works/{slug}.html",
         "offers": {"@type": "Offer", **({"price": usd, "priceCurrency": "USD"} if price else {}), "url": f"{SITE}/works/{slug}.html",
@@ -866,17 +899,17 @@ for k, row in enumerate(order):
           </button>{studio_extra}
         </div>
         <div class="art__info">
-          <p class="mono eyebrow">Acrylic on canvas{f" &middot; {e(ser)} series" if siblings else ""}</p>
+          <p class="mono eyebrow">Acrylic on canvas{f" &middot; {e(ser)} series" if siblings else ""}{f" &middot; {year}" if year else ""}</p>
           <h1 class="art__title">{e(title)}</h1>
           {status_pill}
           <dl class="art__facts mono">
             <div><dt>Size</dt><dd>{e(size)} <span>({cm})</span></dd></div>
-            <div><dt>Medium</dt><dd>Acrylic on canvas</dd></div>
+            <div><dt>Medium</dt><dd>Acrylic on canvas</dd></div>{f'<div><dt>Year</dt><dd>{year}</dd></div>' if year else ""}
             <div><dt>Price</dt>{price_html}</div>
             <div><dt>Artist</dt><dd>John Akande, Lagos</dd></div>
           </dl>
 {"" if sold or not price else currency_switch(compact=True)}
-          <p class="art__note">Part of a body of work exploring music as a living force: how rhythm shapes identity, how performance reveals vulnerability, and how music functions as cultural memory and therapy.</p>
+          <p class="art__note">{NOTE_OLD if extra(row).get("period") == "old" else NOTE_RECENT}</p>
           <div class="art__actions">
             {actions}
             {print_btn}
