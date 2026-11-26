@@ -521,7 +521,7 @@ works = head("Paintings for Sale — John Akande, Acrylic on Canvas",
             <span class="mono filters__label">Works</span>
             <button class="chip" aria-pressed="true" data-filter="all">All <span>{n_total}</span></button>
             <button class="chip" aria-pressed="false" data-filter="recent">Recent <span>{n_recent}</span></button>
-            <button class="chip" aria-pressed="false" data-filter="old">Earlier <span>{n_old}</span></button>
+            <button class="chip" aria-pressed="false" data-filter="old">Old <span>{n_old}</span></button>
           </div>
           <div class="filters" role="group" aria-label="Filter by availability" data-filter-group="status">
             <span class="mono filters__label">Status</span>

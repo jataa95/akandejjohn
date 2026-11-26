@@ -170,7 +170,7 @@
       // the large first card only makes sense in the default view
       grid.classList.toggle("is-filtered", custom);
       if (count) {
-        const label = { all: "", recent: "recent ", old: "earlier " }[state.period] + { all: "", available: "available ", sold: "sold " }[state.status];
+        const label = { all: "", recent: "recent ", old: "old " }[state.period] + { all: "", available: "available ", sold: "sold " }[state.status];
         count.textContent = shown ? `Showing ${shown} ${label}work${shown === 1 ? "" : "s"}` : "No works match these filters";
       }
     };
