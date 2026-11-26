@@ -307,11 +307,10 @@ section + section { border-top: 1px solid var(--rule); }
 .hero__scroll { margin-top: 3rem; text-transform: uppercase; letter-spacing: .3em; font-size: .6rem; color: var(--fg-dim); display: flex; flex-direction: column; align-items: center; gap: .4rem; }
 .hero__scroll span { animation: nudge 2s var(--ease) infinite; }
 @keyframes nudge { 50% { transform: translateY(5px); } }
-/* phones: the whole tall video across the full width of the screen, no paintings beside it */
+/* phones: the whole tall video, lined up with the page margins, no paintings beside it */
 @media (max-width: 760px) {
   .hero { min-height: auto; }
   .float { display: none; }
-  .hero__stage { width: calc(100% + 2 * var(--pad)); margin-inline: calc(-1 * var(--pad)); max-width: none; }
   .hero__media { width: 100%; padding: 0; border: 0; box-shadow: none; transform: translateY(40px); }
   .hero__media.is-in { transform: none; }
 }
