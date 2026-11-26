@@ -18,4 +18,4 @@ Any static host works (Vercel, Netlify, GitHub Pages, Cloudflare Pages). Point i
 
 ## Editing works
 
-Each artwork is a `data-lightbox` button in `index.html`. Its `data-title`, `data-meta` and `data-note` attributes set the text shown in the viewer. Images live in `assets/img/` and video in `assets/video/`.
+Each artwork is a `data-lightbox` button in `index.html`. Its `data-title`, `data-meta` and `data-note` attributes set the text shown in the viewer. Images live in `assets/img/` (the catalogue paintings in `assets/img/works/`) and video in `assets/video/`.
