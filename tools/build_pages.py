@@ -283,6 +283,12 @@ def footer(cta=True, faq=False):
       <a href="#top" class="foot__top" aria-label="Back to top"><span>Top</span><i aria-hidden="true"></i></a>
     </div>
   </footer>
+
+  <!-- CREDIT -->
+  <div class="ojdzn-credit">
+    <span>Built by</span>
+    <a href="https://ojdzn.vercel.app/?ref=akandejjohn" target="_blank" rel="noopener" aria-label="oj.dzn, view portfolio (opens in a new tab)"><img src="/assets/img/ojdzn-logo.webp" alt="oj.dzn" width="91" height="24" loading="lazy" decoding="async" /></a>
+  </div>
 """
 
 
