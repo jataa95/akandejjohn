@@ -212,6 +212,51 @@ FAQ_LD = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
     {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": re.sub(r"<[^>]+>", "", html.unescape(a))}}
     for q, a in FAQS]}
 
+# Testimonials: lightly edited from messages collectors sent John (Instagram and WhatsApp).
+# Wording is tidied but the meaning is theirs; names are kept short. No contact details.
+TESTIMONIALS_FEATURED = (
+    "I really admire your work. The way you use colour, texture and emotion is captivating. You&rsquo;re the first "
+    "artist whose pieces have such a distinctive presence to me, and I can genuinely imagine living with one of them "
+    "someday. It&rsquo;s a pleasure to discover more of your work.",
+    "Derek U.", "On discovering the work")
+TESTIMONIALS = [
+    ("What a great feeling to unpack this painting! I feel blessed to finally have it. It&rsquo;s bigger than I "
+     "thought, and I love it.", "Nzambi", "Collector, on receiving a painting"),
+    ("I love looking at it. It is beautiful.", "Mrs Adeola", "Collector, on living with her painting"),
+    ("Dear Mr Akande, eureka! The print of your artwork has arrived. I am so chuffed, and I&rsquo;m sending it off "
+     "to be framed on Monday.", "Print collector", "On receiving a signed print"),
+    ("Amazing work! A pleasure doing business with you.", "Nineteen85", "Collector"),
+    ("You&rsquo;ve been added to my art collection dream album. I really love the phases of your work: when a "
+     "painting sits around half underpainting and half detail, it gives a very unique perspective.",
+     "Emily Tayman", "Artist, Emily Tayman Studios"),
+    ("My wife and I are collectors. We just watched your post on the painting of an ensemble and are keen to see "
+     "the finished work.", "Reginald I.", "Collector, on a painting in progress"),
+]
+
+def testimonials_section():
+    q, who, ctx = TESTIMONIALS_FEATURED
+    cards = "\n".join(f"""        <figure class="testi__card reveal">
+          <blockquote><p>&ldquo;{t}&rdquo;</p></blockquote>
+          <figcaption><span class="testi__name">{n}</span><span class="mono testi__ctx">{c}</span></figcaption>
+        </figure>""" for t, n, c in TESTIMONIALS)
+    return f"""
+    <!-- TESTIMONIALS -->
+    <section class="testi" aria-labelledby="testi-title">
+      <header class="testi__head">
+        <p class="mono eyebrow reveal">Collectors &amp; admirers</p>
+        <h2 class="reveal" id="testi-title">In their <em>words.</em></h2>
+      </header>
+      <figure class="testi__feature reveal">
+        <span class="testi__mark" aria-hidden="true">&ldquo;</span>
+        <blockquote><p>{q}</p></blockquote>
+        <figcaption><span class="testi__name">{who}</span><span class="mono testi__ctx">{ctx}</span></figcaption>
+      </figure>
+      <div class="testi__grid">
+{cards}
+      </div>
+    </section>
+"""
+
 def faq_section():
     items = "\n".join(f"""        <details class="faq__item"{' open' if i == 0 else ''}>
           <summary><span class="mono faq__n">{i + 1:02d}</span><span class="faq__q">{e(q)}</span><i aria-hidden="true"></i></summary>
@@ -493,7 +538,7 @@ home = head("John Akande — Nigerian Figurative Artist & Painter, Lagos",
         </div>
       </div>
     </section>
-
+""" + testimonials_section() + """
   </main>
 """ + footer(faq=True) + LIGHTBOX + END
 

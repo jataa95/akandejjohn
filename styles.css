@@ -677,6 +677,30 @@ section + section { border-top: 1px solid var(--rule); }
   .sel__row::before { display: none; }
 }
 
+/* ============ Testimonials (home) ============ */
+.testi { background: radial-gradient(70% 60% at 50% 0%, rgba(61,42,30,.55), transparent 70%), var(--black); color: var(--cream); padding-block: clamp(5rem, 10vw, 8.5rem); }
+.testi__head { text-align: center; margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+.testi__head .eyebrow { color: var(--gold); }
+.testi__head h2 { font-size: clamp(2.8rem, 6vw, 5.4rem); }
+.testi__head h2 em { color: var(--gold-soft); font-style: italic; }
+.testi__feature { margin: 0 auto clamp(3.5rem, 7vw, 5.5rem); max-width: 980px; text-align: center; }
+.testi__mark { display: block; font-size: clamp(6rem, 11vw, 9rem); line-height: .7; height: .42em; color: var(--gold); margin-bottom: 1rem; }
+.testi__feature blockquote { margin: 0; }
+.testi__feature p { margin: 0; font-size: clamp(1.6rem, 3vw, 2.6rem); line-height: 1.22; letter-spacing: -.005em; }
+.testi__feature figcaption { margin-top: 2rem; display: flex; flex-direction: column; align-items: center; gap: .35rem; }
+.testi__grid { columns: 3 300px; column-gap: clamp(1rem, 2vw, 1.5rem); max-width: 1240px; margin: 0 auto; }
+.testi__card {
+  break-inside: avoid; margin: 0 0 clamp(1rem, 2vw, 1.5rem); padding: 1.9rem 1.8rem 1.6rem;
+  border: 1px solid rgba(184,154,98,.22); background: linear-gradient(160deg, rgba(236,228,214,.05), rgba(236,228,214,.015));
+  transition: border-color .5s var(--ease), transform .6s var(--ease);
+}
+.testi__card:hover { border-color: rgba(184,154,98,.55); transform: translateY(-3px); }
+.testi__card blockquote { margin: 0 0 1.5rem; }
+.testi__card p { margin: 0; font-size: 1.35rem; line-height: 1.38; color: var(--cream); }
+.testi__card figcaption { display: flex; flex-direction: column; gap: .3rem; padding-top: 1.1rem; border-top: 1px solid rgba(184,154,98,.2); }
+.testi__name { font-size: 1.15rem; color: var(--gold-soft); }
+.testi__ctx { text-transform: uppercase; letter-spacing: .16em; font-size: .6rem; color: var(--dim); }
+
 /* ============ Call to action ============ */
 .cta { position: relative; overflow: hidden; isolation: isolate; padding-block: clamp(6rem, 12vw, 10rem); border-top: 1px solid var(--rule); color: var(--cream); }
 .cta__bg { position: absolute; inset: 0; z-index: -1; }
