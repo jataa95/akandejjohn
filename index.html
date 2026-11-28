@@ -265,41 +265,67 @@
     </section>
 
     <!-- TESTIMONIALS -->
-    <section class="testi" aria-labelledby="testi-title">
+    <section class="testi" aria-labelledby="testi-title" data-testi>
       <header class="testi__head">
-        <p class="mono eyebrow reveal">Collectors &amp; admirers</p>
-        <h2 class="reveal" id="testi-title">In their <em>words.</em></h2>
+        <p class="mono testi__eyebrow">Collectors &amp; admirers</p>
+        <h2 id="testi-title"><span class="testi__line"><span>In their</span></span> <span class="testi__line"><em>words.</em></span></h2>
+        <i class="testi__rule" aria-hidden="true"></i>
       </header>
-      <figure class="testi__feature reveal">
-        <span class="testi__mark" aria-hidden="true">&ldquo;</span>
-        <blockquote><p>I really admire your work. The way you use colour, texture and emotion is captivating. You&rsquo;re the first artist whose pieces have such a distinctive presence to me, and I can genuinely imagine living with one of them someday. It&rsquo;s a pleasure to discover more of your work.</p></blockquote>
-        <figcaption><span class="testi__name">Derek U.</span><span class="mono testi__ctx">On discovering the work</span></figcaption>
-      </figure>
       <div class="testi__grid">
-        <figure class="testi__card reveal">
-          <blockquote><p>&ldquo;What a great feeling to unpack this painting! I feel blessed to finally have it. It&rsquo;s bigger than I thought, and I love it.&rdquo;</p></blockquote>
-          <figcaption><span class="testi__name">Nzambi</span><span class="mono testi__ctx">Collector, on receiving a painting</span></figcaption>
-        </figure>
-        <figure class="testi__card reveal">
-          <blockquote><p>&ldquo;I love looking at it. It is beautiful.&rdquo;</p></blockquote>
-          <figcaption><span class="testi__name">Mrs Adeola</span><span class="mono testi__ctx">Collector, on living with her painting</span></figcaption>
-        </figure>
-        <figure class="testi__card reveal">
-          <blockquote><p>&ldquo;Dear Mr Akande, eureka! The print of your artwork has arrived. I am so chuffed, and I&rsquo;m sending it off to be framed on Monday.&rdquo;</p></blockquote>
-          <figcaption><span class="testi__name">Ms Cole</span><span class="mono testi__ctx">Collector, on receiving a signed print</span></figcaption>
-        </figure>
-        <figure class="testi__card reveal">
-          <blockquote><p>&ldquo;Amazing work! A pleasure doing business with you.&rdquo;</p></blockquote>
-          <figcaption><span class="testi__name">Nineteen85</span><span class="mono testi__ctx">Collector</span></figcaption>
-        </figure>
-        <figure class="testi__card reveal">
-          <blockquote><p>&ldquo;You&rsquo;ve been added to my art collection dream album. I really love the phases of your work: when a painting sits around half underpainting and half detail, it gives a very unique perspective.&rdquo;</p></blockquote>
-          <figcaption><span class="testi__name">Emily Tayman</span><span class="mono testi__ctx">Artist, Emily Tayman Studios</span></figcaption>
-        </figure>
-        <figure class="testi__card reveal">
-          <blockquote><p>&ldquo;My wife and I are collectors. We just watched your post on the painting of an ensemble and are keen to see the finished work.&rdquo;</p></blockquote>
-          <figcaption><span class="testi__name">Reginald I.</span><span class="mono testi__ctx">Collector, on a painting in progress</span></figcaption>
-        </figure>
+          <figure class="tcard" style="--i:0">
+            <span class="tcard__mark" aria-hidden="true">&ldquo;</span>
+            <span class="tcard__n mono" aria-hidden="true">01 / 07</span>
+            <blockquote><p>I really admire your work. The way you use colour, texture and emotion is captivating. You&rsquo;re the first artist whose pieces have such a distinctive presence to me, and I can genuinely imagine living with one of them someday.</p></blockquote>
+            <figcaption><span class="tcard__name">Derek U.</span><span class="mono tcard__ctx">On discovering the work</span></figcaption>
+          </figure>
+          <figure class="tcard" style="--i:1">
+            <span class="tcard__mark" aria-hidden="true">&ldquo;</span>
+            <span class="tcard__n mono" aria-hidden="true">02 / 07</span>
+            <blockquote><p>What a great feeling to unpack this painting! I feel blessed to finally have it. It&rsquo;s bigger than I thought, and I love it.</p></blockquote>
+            <figcaption><span class="tcard__name">Nzambi</span><span class="mono tcard__ctx">Collector, on receiving a painting</span></figcaption>
+          </figure>
+          <figure class="tcard" style="--i:2">
+            <span class="tcard__mark" aria-hidden="true">&ldquo;</span>
+            <span class="tcard__n mono" aria-hidden="true">03 / 07</span>
+            <blockquote><p>Dear Mr Akande, eureka! The print of your artwork has arrived. I am so chuffed, and I&rsquo;m sending it off to be framed on Monday.</p></blockquote>
+            <figcaption><span class="tcard__name">Ms Cole</span><span class="mono tcard__ctx">Collector, on receiving a signed print</span></figcaption>
+          </figure>
+      </div>
+      <div class="testi__more" id="testi-more" data-testi-more>
+        <div class="testi__more-inner">
+          <div class="testi__grid testi__grid--more">
+          <figure class="tcard tcard--sm" style="--i:0">
+            <span class="tcard__mark" aria-hidden="true">&ldquo;</span>
+            <span class="tcard__n mono" aria-hidden="true">04 / 07</span>
+            <blockquote><p>I love looking at it. It is beautiful.</p></blockquote>
+            <figcaption><span class="tcard__name">Mrs Adeola</span><span class="mono tcard__ctx">Collector, on living with her painting</span></figcaption>
+          </figure>
+          <figure class="tcard tcard--sm" style="--i:1">
+            <span class="tcard__mark" aria-hidden="true">&ldquo;</span>
+            <span class="tcard__n mono" aria-hidden="true">05 / 07</span>
+            <blockquote><p>Amazing work! A pleasure doing business with you.</p></blockquote>
+            <figcaption><span class="tcard__name">Nineteen85</span><span class="mono tcard__ctx">Collector</span></figcaption>
+          </figure>
+          <figure class="tcard tcard--sm" style="--i:2">
+            <span class="tcard__mark" aria-hidden="true">&ldquo;</span>
+            <span class="tcard__n mono" aria-hidden="true">06 / 07</span>
+            <blockquote><p>You&rsquo;ve been added to my art collection dream album. I really love the phases of your work: when a painting sits around half underpainting and half detail, it gives a very unique perspective.</p></blockquote>
+            <figcaption><span class="tcard__name">Emily Tayman</span><span class="mono tcard__ctx">Artist, Emily Tayman Studios</span></figcaption>
+          </figure>
+          <figure class="tcard tcard--sm" style="--i:3">
+            <span class="tcard__mark" aria-hidden="true">&ldquo;</span>
+            <span class="tcard__n mono" aria-hidden="true">07 / 07</span>
+            <blockquote><p>My wife and I are collectors. We just watched your post on the painting of an ensemble and are keen to see the finished work.</p></blockquote>
+            <figcaption><span class="tcard__name">Reginald I.</span><span class="mono tcard__ctx">Collector, on a painting in progress</span></figcaption>
+          </figure>
+          </div>
+        </div>
+      </div>
+      <div class="testi__actions">
+        <button class="testi__toggle" type="button" aria-expanded="false" aria-controls="testi-more" data-testi-toggle>
+          <span class="testi__toggle-label" data-label-closed="Read 4 more" data-label-open="Show less">Read 4 more</span>
+          <i class="testi__toggle-icon" aria-hidden="true"></i>
+        </button>
       </div>
     </section>
 

@@ -214,17 +214,16 @@ FAQ_LD = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
 
 # Testimonials: lightly edited from messages collectors sent John (Instagram and WhatsApp).
 # Wording is tidied but the meaning is theirs; names are kept short. No contact details.
-TESTIMONIALS_FEATURED = (
-    "I really admire your work. The way you use colour, texture and emotion is captivating. You&rsquo;re the first "
-    "artist whose pieces have such a distinctive presence to me, and I can genuinely imagine living with one of them "
-    "someday. It&rsquo;s a pleasure to discover more of your work.",
-    "Derek U.", "On discovering the work")
+# The first TESTI_SHOWN are visible; the rest open with "Read more".
 TESTIMONIALS = [
+    ("I really admire your work. The way you use colour, texture and emotion is captivating. You&rsquo;re the first "
+     "artist whose pieces have such a distinctive presence to me, and I can genuinely imagine living with one of them "
+     "someday.", "Derek U.", "On discovering the work"),
     ("What a great feeling to unpack this painting! I feel blessed to finally have it. It&rsquo;s bigger than I "
      "thought, and I love it.", "Nzambi", "Collector, on receiving a painting"),
-    ("I love looking at it. It is beautiful.", "Mrs Adeola", "Collector, on living with her painting"),
     ("Dear Mr Akande, eureka! The print of your artwork has arrived. I am so chuffed, and I&rsquo;m sending it off "
      "to be framed on Monday.", "Ms Cole", "Collector, on receiving a signed print"),
+    ("I love looking at it. It is beautiful.", "Mrs Adeola", "Collector, on living with her painting"),
     ("Amazing work! A pleasure doing business with you.", "Nineteen85", "Collector"),
     ("You&rsquo;ve been added to my art collection dream album. I really love the phases of your work: when a "
      "painting sits around half underpainting and half detail, it gives a very unique perspective.",
@@ -232,27 +231,43 @@ TESTIMONIALS = [
     ("My wife and I are collectors. We just watched your post on the painting of an ensemble and are keen to see "
      "the finished work.", "Reginald I.", "Collector, on a painting in progress"),
 ]
+TESTI_SHOWN = 3
 
 def testimonials_section():
-    q, who, ctx = TESTIMONIALS_FEATURED
-    cards = "\n".join(f"""        <figure class="testi__card reveal">
-          <blockquote><p>&ldquo;{t}&rdquo;</p></blockquote>
-          <figcaption><span class="testi__name">{n}</span><span class="mono testi__ctx">{c}</span></figcaption>
-        </figure>""" for t, n, c in TESTIMONIALS)
+    total = len(TESTIMONIALS)
+    def card(i, t, n, c, extra=False):
+        return f"""          <figure class="tcard{' tcard--sm' if extra else ''}" style="--i:{i if not extra else i - TESTI_SHOWN}">
+            <span class="tcard__mark" aria-hidden="true">&ldquo;</span>
+            <span class="tcard__n mono" aria-hidden="true">{i + 1:02d} / {total:02d}</span>
+            <blockquote><p>{t}</p></blockquote>
+            <figcaption><span class="tcard__name">{n}</span><span class="mono tcard__ctx">{c}</span></figcaption>
+          </figure>"""
+    shown = "\n".join(card(i, *x) for i, x in enumerate(TESTIMONIALS[:TESTI_SHOWN]))
+    more = "\n".join(card(i, *x, extra=True) for i, x in enumerate(TESTIMONIALS) if i >= TESTI_SHOWN)
+    n_more = total - TESTI_SHOWN
     return f"""
     <!-- TESTIMONIALS -->
-    <section class="testi" aria-labelledby="testi-title">
+    <section class="testi" aria-labelledby="testi-title" data-testi>
       <header class="testi__head">
-        <p class="mono eyebrow reveal">Collectors &amp; admirers</p>
-        <h2 class="reveal" id="testi-title">In their <em>words.</em></h2>
+        <p class="mono testi__eyebrow">Collectors &amp; admirers</p>
+        <h2 id="testi-title"><span class="testi__line"><span>In their</span></span> <span class="testi__line"><em>words.</em></span></h2>
+        <i class="testi__rule" aria-hidden="true"></i>
       </header>
-      <figure class="testi__feature reveal">
-        <span class="testi__mark" aria-hidden="true">&ldquo;</span>
-        <blockquote><p>{q}</p></blockquote>
-        <figcaption><span class="testi__name">{who}</span><span class="mono testi__ctx">{ctx}</span></figcaption>
-      </figure>
       <div class="testi__grid">
-{cards}
+{shown}
+      </div>
+      <div class="testi__more" id="testi-more" data-testi-more>
+        <div class="testi__more-inner">
+          <div class="testi__grid testi__grid--more">
+{more}
+          </div>
+        </div>
+      </div>
+      <div class="testi__actions">
+        <button class="testi__toggle" type="button" aria-expanded="false" aria-controls="testi-more" data-testi-toggle>
+          <span class="testi__toggle-label" data-label-closed="Read {n_more} more" data-label-open="Show less">Read {n_more} more</span>
+          <i class="testi__toggle-icon" aria-hidden="true"></i>
+        </button>
       </div>
     </section>
 """

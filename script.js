@@ -370,4 +370,26 @@
     btn.textContent = "Copied"; btn.classList.add("is-done");
     setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("is-done"); }, 1800);
   }));
+  // Testimonials: animate in on scroll; "Read more" unfolds the rest
+  const testi = $("[data-testi]");
+  if (testi) {
+    if ("IntersectionObserver" in window && !reduce) {
+      const tio = new IntersectionObserver(([e]) => { if (e.isIntersecting) { testi.classList.add("is-in"); tio.disconnect(); } }, { threshold: 0.18 });
+      tio.observe(testi);
+    } else testi.classList.add("is-in");
+    const tBtn = $("[data-testi-toggle]", testi), tMore = $("[data-testi-more]", testi);
+    const tLabel = $(".testi__toggle-label", tBtn);
+    tMore.inert = true;
+    tBtn.addEventListener("click", () => {
+      const open = tBtn.getAttribute("aria-expanded") !== "true";
+      tBtn.setAttribute("aria-expanded", open);
+      tMore.classList.toggle("is-open", open);
+      tMore.inert = !open;
+      tLabel.textContent = open ? tLabel.dataset.labelOpen : tLabel.dataset.labelClosed;
+      if (!open) {
+        const top = testi.getBoundingClientRect().top;
+        if (top < 0) testi.scrollIntoView({ behavior: reduce ? "auto" : "smooth" });
+      }
+    });
+  }
 })();
