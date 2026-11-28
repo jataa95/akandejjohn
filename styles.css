@@ -732,18 +732,9 @@ section + section { border-top: 1px solid var(--rule); }
 .testi__more.is-open { grid-template-rows: 1fr; }
 .testi__more-inner { overflow: hidden; min-height: 0; }
 .testi__actions { display: flex; justify-content: center; margin-top: clamp(2.5rem, 5vw, 3.5rem); }
-.testi__toggle {
-  position: relative; isolation: isolate; overflow: hidden; display: inline-flex; align-items: center; gap: 1rem; cursor: pointer;
-  padding: 1rem 1.3rem 1rem 1.9rem; border: 1px solid rgba(184,154,98,.55); border-radius: 999px; background: transparent; color: var(--gold-soft);
-  font-family: var(--mono); font-size: .66rem; text-transform: uppercase; letter-spacing: .24em;
-  transition: color .5s var(--ease), border-color .5s;
-}
-.testi__toggle::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--gold); transform: scaleY(0); transform-origin: bottom; transition: transform .55s var(--ease); }
-.testi__toggle:hover { color: var(--black); border-color: var(--gold); }
-.testi__toggle:hover::before { transform: scaleY(1); }
-.testi__toggle:focus-visible { outline: 1px solid var(--gold); outline-offset: 4px; }
-.testi__toggle-icon { position: relative; width: 1.9rem; height: 1.9rem; border-radius: 50%; border: 1px solid currentColor; transition: transform .7s var(--ease); }
-.testi__toggle-icon::before, .testi__toggle-icon::after { content: ""; position: absolute; left: 50%; top: 50%; width: 10px; height: 1px; margin: 0 0 0 -5px; background: currentColor; transition: transform .7s var(--ease); }
+/* toggle uses the site's .btn--gold; only its +/- icon is specific */
+.testi__toggle-icon { position: relative; flex: none; width: 12px; height: 12px; transition: transform .7s var(--ease); }
+.testi__toggle-icon::before, .testi__toggle-icon::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: currentColor; transition: transform .7s var(--ease); }
 .testi__toggle-icon::after { transform: rotate(90deg); }
 .testi__toggle[aria-expanded="true"] .testi__toggle-icon { transform: rotate(180deg); }
 .testi__toggle[aria-expanded="true"] .testi__toggle-icon::after { transform: rotate(0deg); }

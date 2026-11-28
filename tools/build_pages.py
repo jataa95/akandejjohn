@@ -264,7 +264,7 @@ def testimonials_section():
         </div>
       </div>
       <div class="testi__actions">
-        <button class="testi__toggle" type="button" aria-expanded="false" aria-controls="testi-more" data-testi-toggle>
+        <button class="btn btn--gold testi__toggle" type="button" aria-expanded="false" aria-controls="testi-more" data-testi-toggle>
           <span class="testi__toggle-label" data-label-closed="Read {n_more} more" data-label-open="Show less">Read {n_more} more</span>
           <i class="testi__toggle-icon" aria-hidden="true"></i>
         </button>
