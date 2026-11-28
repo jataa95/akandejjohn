@@ -224,7 +224,7 @@ TESTIMONIALS = [
      "thought, and I love it.", "Nzambi", "Collector, on receiving a painting"),
     ("I love looking at it. It is beautiful.", "Mrs Adeola", "Collector, on living with her painting"),
     ("Dear Mr Akande, eureka! The print of your artwork has arrived. I am so chuffed, and I&rsquo;m sending it off "
-     "to be framed on Monday.", "Miss Cole", "Collector, on receiving a signed print"),
+     "to be framed on Monday.", "Ms Cole", "Collector, on receiving a signed print"),
     ("Amazing work! A pleasure doing business with you.", "Nineteen85", "Collector"),
     ("You&rsquo;ve been added to my art collection dream album. I really love the phases of your work: when a "
      "painting sits around half underpainting and half detail, it gives a very unique perspective.",
